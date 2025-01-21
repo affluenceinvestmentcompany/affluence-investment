@@ -1,0 +1,484 @@
+{% load static %} 
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        {% block title %}
+            <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon"/>
+            <title>Chain pay</title>
+        {% endblock %}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet"/>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+        
+
+        <!-- Bootstrap core CSS -->
+        <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
+
+        <!-- Fontawesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css" integrity="sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <!-- Additional CSS Files -->
+        <link rel="stylesheet" href="{% static 'css/templatemo-chain-app-dev.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/animated.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/owl.css' %}" />
+    </head>
+
+    <body>
+        {% comment %} Messages alert {% endcomment %}
+        {% for message in messages %}
+            <div class="msgs_info py-2">
+                <p class="dj_err_msg">{{message}}</p>
+                <div class="close_error position-absolute text-light fs-5" style="top:5px;right:5px;cursor:pointer;"><i class="fas fa-times"></i></div>
+            </div>
+        {% endfor %}
+
+
+        <!-- ***** Preloader Start ***** -->
+        <div id="js-preloader" class="js-preloader">
+            <div class="preloader-inner">
+                <span class="dot"></span>
+                <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+                </div>
+            </div>
+        </div>
+        <!-- ***** Preloader End ***** -->
+
+        <!-- ***** Header Area Start ***** -->
+        <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+            <div class="container">
+                <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                    <a href="{% url 'index' %}" class="logo">
+                        <img src="{% static "images/logo.png" %}" alt="Chain App Dev" />
+                    </a>
+                    
+                    <ul class="nav">
+                        <li class="scroll-to-section"><a href="{% url 'index' %}">Home</a></li>
+                        {% if request.user.is_authenticated %}
+                            <li><a href="{% url 'manage_card' %}">Manage Cards</a></li>
+                        {% else %}
+                            <li><a href="#modal" class="modal_trigger">Manage Cards</a></li>
+                        {% endif %}
+                        <li>
+                            <div class="gradient-button mt-wrp d-md-flex">
+                                {% if request.user.is_authenticated %}
+                                    {% block makePayment %}
+                                        <a class="modal_trig text-dark me-2" href="{% url 'manage_card' %}" style="color:black !important;">Payments  &nbsp; <i class="fas fa-credit-card"></i></a>
+                                    {% endblock %}
+                                    <span class="d-block d-md-none w-100"><a class="text-danger fw-bold w-100" href="{% url 'logout' %}" style="color:red !important;">Logout &nbsp;<i class="fas fa-sign-out-alt"></i></a></span>
+                                    <span class="d-none d-md-block"><a class="d-none d-md-block text-danger fw-bold" href="{% url 'logout' %}" style="color:red !important;"><i class="fas fa-sign-out-alt"></i></a></span>
+                                {% else %}
+                                    <a class="modal_trigger modal_trig text-dark" href="#modal" style="color:black !important;">Get Started &nbsp; <i class="fa fa-sign-in-alt"></i></a>
+                                {% endif %}
+                            </div>
+                        </li>
+                    </ul>
+                    <a class="menu-trigger">
+                        <span>Menu</span>
+                    </a>
+                    </nav>
+                </div>
+                </div>
+            </div>
+        </header>
+
+
+        <div id="modal" class="popupContainer" style="display: none">
+            <div class="popupHeader">
+                <i class="fas fa-arrow-left text-primary gsba back_btn"></i> &nbsp;&nbsp; <span class="header_title">Register or Login</span>
+                <span class="modal_close"><i class="fas fa-times"></i></span>
+            </div>
+
+            <section class="popupBody">
+                <!-- Social Login -->
+                <div class="social_login">
+                <div class="action_btns">
+                    <div class="one_half">
+                    <a href="#" id="register_form" class="btn">Sign up</a>
+                    </div>
+                    <div class="one_half last">
+                    <a href="#" id="login_form" class="btn">Login</a>
+                    </div>
+                </div>
+                </div>
+
+                <div class="user_register frm_wrp">
+                <form id="reg_form">
+                    {% csrf_token %}
+                    <label>Full Name</label>
+                    <input name="full_name" type="text" placeholder="Enter your full name" />
+                    <p id="fnerr">.</p>
+
+                    <label>Email Address</label>
+                    <input name="email" type="email" placeholder="Enter your email" />
+                    <p id="emerr">.</p>
+
+                    <label>Password</label>
+                    <input name="password" type="password" placeholder="Enter your password" />
+                    <p id="pwderr">.</p>
+
+                    <div class="checkbox">
+                    <input id="send_updates" type="checkbox" />
+                    <label for="send_updates">Send me occasional email updates</label>
+                    </div>
+
+                    <div class="action_btns mb-3">
+                        <input type="submit" value="Signup" id="regBtn" class="btn btn_red w-100" />
+                        <input value="Loading..." class="loadingBtn btn btn_red w-100" disabled />
+                    </div>
+                </form>
+                </div>
+
+                <div class="user_login frm_wrp">
+                <form id="login_form">
+                    {% csrf_token %}
+                    <p id="invaliderr" class="p-0 m-0 mb-2 lh-md text-danger fs-6 text-center" style="font-weight:400;"></p>
+                    <label>Email</label>
+                    <input name="login_email" type="text" placeholder="Enter your email" />
+                    <p id="login_emerr">.</p>
+
+                    <label>Password</label>
+                    <input name="login_password" type="password" placeholder="Enter your password" />
+                    <p id="login_pwderr">.</p>
+
+                    <div class="checkbox">
+                    <input id="remember" type="checkbox" />
+                    <label for="remember">Remember me</label>
+                    </div>
+
+                    <div class="action_btns mb-3">
+                        <input type="submit" value="Login" id="loginBtn" class="btn btn_red w-100" />
+                        <input value="Loading..." class="loadingBtn2 btn btn_red w-100" disabled />
+                    </div>
+                </form>
+                </div>
+
+                <div class="verify_email">
+                <h5 class="text-center primary-color border-bottom pb-2">Please verify your email</h5>
+                <p class="fs-6 text-center mt-2">
+                    A verification link have been sent to <br>
+                    <b id="reg_email"></b>, <br>
+                    please check your email <br>
+                    and click on the link to <br>
+                    complete your registration.
+                </p>
+                </div>
+            </section>
+        </div>
+
+        {% block modal2 %}
+        {% endblock %}
+
+        <div id="modal3" class="popupContainer" style="display: none">
+            <div class="popupHeader">
+                {% if request.user.is_verified %}
+                <i class="fas fa-arrow-left text-primary gsba back_btn"></i> &nbsp;&nbsp; <span class="header_title">Add payment Card</span>
+                {% else %}
+                <i class="fas fa-arrow-left text-primary gsba back_btn"></i> &nbsp;&nbsp; <span class="header_title">Verification</span>
+                {% endif %}
+                <span class="modal_close"><i class="fas fa-times"></i></span>
+            </div>
+
+            <section class="popupBody">
+                {% if request.user.is_verified %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="row mb-3 py-2">
+                                <img width="400px" class="img-responsive cc-img" src="{% static 'images/cards.png' %}">
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <form role="form" id="add_card">
+                                {% csrf_token %}
+                                <input type="hidden" id="card_type" name="card_type" value=""/>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label>Name On Card</label>
+                                            <input name="card_owner" type="text" class="form-control" placeholder="name on card" />
+                                            <p id="cownerr">.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label>Card Number</label>
+                                            <div class="card-num">
+                                                <input id="cardNumber" name="card_number" type="text" class="form-control" maxlength="19" placeholder="0000 0000 0000 0000" oninput="cardNumberFunction(event)"/>
+                                                <img id="cardType" src="{% static 'images/blank-card.png' %}" alt="card type"/>
+                                            </div>
+                                            <p id="cnumerr">.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-7">
+                                        <div class="form-group">
+                                            <label class="hidden-xs">Exp Date</label>
+                                            <input name="card_exp" type="text" id="cardExp" class="form-control" maxlength="5" placeholder="MM / YY" onkeyup="formatExpDate(event)";>
+                                            <p id="cexperr">.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-5 pull-right">
+                                        <div class="form-group">
+                                            <label>CVV Code</label>
+                                            <input name="card_cvv" type="password" class="form-control" maxlength="3" placeholder="CVV" oninput="cvvFunction(event)"/>
+                                            <p id="ccvverr">.</p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label>Set Transaction Pin</label>
+                                                <input name="card_pin" type="password" class="form-control" placeholder="create a 4 digit pin" maxlength="4" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
+                                                <p id="cpinerr">.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row my-3">
+                                    <div class="col-12">
+                                        <input type="submit" value="Add Card" id="addCardBtn" class="btn btn-lg btn-block w-100 border-0" />
+                                        <input value="Loading..." class="loadingBtn3 btn btn-lg btn-block w-100 border-0" disabled/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="verify_email d-block text-center">
+                    <h5 class="text-center primary-color border-bottom pb-2">Please verify your email</h5>
+                    <p class="fs-6 text-center mt-2 lh-sm">
+                        A verification link have been <br>
+                        sent to your email please check <br>
+                        your email and click on the link to <br>
+                        complete your registration.
+                    </p>
+                    {% comment %} <a href="{% url 'resend_link' %}" class="btn btn-round btn-md py-1 px-2 mt-4">Resend link</a> {% endcomment %}
+                    </div>
+                {% endif %}
+            </section>
+        </div>
+
+        {% block content %}
+
+        {% endblock content %}
+
+        <footer id="newsletter">
+            <div class="container footer-wrp">
+                <div class="row mx-auto">
+                <div class="col-12 col-md-6 col-lg-4 text-left">
+                    <div class="footer-widget footer-about-us">
+                    <h4>About Our Company</h4>
+                    <div class="logo mt-2">
+                        <img src="{% static "images/white-logo.png" %}" alt=""/>
+                    </div>
+                    <p>
+                        We aim to provide a secure, reliable and distinctive payment
+                        experience. Our primary target is your premium satisfaction.
+                    </p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="footer-widget">
+                    <h4>Useful Links</h4>
+                    <ul class="text-center">
+                        <li><a href="{% url 'index' %}">Services</a></li>
+                        <li><a href="{% url 'manage_card' %}">Manage card</a></li>
+                        <li><a class="modal2_trigger" href="#modal2" >Make payment</a></li>
+                    </ul>
+                    </div>
+                </div>
+                <div class="col-12 mt-sm-5 mt-lg-0 col-lg-4">
+                    <div class="footer-widget">
+                    <h4>Contact Us</h4>
+                    <p>Ikeja City Mall, Ikeja, Lagos, Nigeria</p>
+                    <p><a href="">+2348012345667</a></p>
+                    <p><a href="">info@chain.co</a></p>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="copyright-text">
+                    <p>Copyright © Chain 2024. All Rights Reserved.</p>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Scripts -->
+        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+        <script src="{% static 'jquery/jquery.min.js' %} "></script>
+        <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %} "></script>
+        <script src="{% static 'js/owl-carousel.js' %} "></script>
+        <script src="{% static 'js/animation.js' %} "></script>
+        <script src="{% static 'js/imagesloaded.js' %} "></script>
+        <script src="{% static 'js/popup.js' %} "></script>
+        <script src="{% static 'js/custom.js' %} "></script>
+        <script>
+            $('.msgs_info').fadeIn().delay(5000).fadeOut();
+            $('.dj_err_msg').fadeIn().delay(5000).fadeOut();
+
+            $('.close_error').click(function () {
+                $('.msgs_info').hide()
+                $('.dj_err_msg').hide()
+            })
+        </script>
+        <script>
+            let cardNumber = $("#cardNumber").val();
+            let imgElem = document.getElementById("cardType");
+
+            function validateLuhnAlgorithm(cardNumber) {
+                let sum = 0;
+                let isEven = false;
+
+                for (let i = cardNumber.length - 1; i >= 0; i--) {
+                    let digit = parseInt(cardNumber.charAt(i), 10);
+
+                    if (isEven) {
+                        digit *= 2;
+                        if (digit > 9) {
+                            digit -= 9;
+                        }
+                    }
+                    sum += digit;
+                    isEven = !isEven;
+                }
+                detectCardType(cardNumber);
+                return sum % 10 === 0;
+            }
+
+            function cardNumberFunction(e) {
+                var inputChar = String.fromCharCode(event.keyCode);
+                var code = event.keyCode;
+                var allowedKeys = [8];
+                if (allowedKeys.indexOf(code) !== -1) {
+                    return;
+                }
+                event.target.value = event.target.value.replace(/[^0-9.]/g, '')
+                /*
+                const formatNumber = (number) => number.split("").reduce((seed, next, index) => {
+                    if (index !== 0 && !(index % 4)) seed += " ";
+                    return seed + next;
+                }, "");
+                event.target.value = formatNumber(event.target.value.replaceAll(" ", ""))
+                */
+                if (!validateLuhnAlgorithm(e.target.value)) {
+                    document.getElementById('cnumerr').innerHTML = 'invalid card number'
+                    return false
+                } else {
+                    document.getElementById('cnumerr').innerHTML = '.'
+                }
+            
+                const cardType = detectCardType(e.target.value);
+                if (cardType != "Unknown") {
+                    imgElem.src = `/static/images/${cardType}.png`;
+                } else {
+                    imgElem.src = `/static/images/blank-card.png`;
+                }
+                document.getElementById('card_type').value = cardType
+            };
+
+            function detectCardType(cardNumber) {
+                const patterns = {
+                    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+                    master: /^5[1-5][0-9]{14}$/,
+                    verve: /^(?:50[067][180]|6500)(?:[0-9]{15})$/,
+                    amex: /^3[47][0-9]{13}$/,
+                    discover: /^6(?:011|5[0-9]{2})[0-9]{12}$/,
+                };
+
+                for (const cardType in patterns) {
+                    if (patterns[cardType].test(cardNumber)) {
+                        return cardType;
+                    }
+                }
+                return "Unknown";
+            }
+
+            function cvvFunction(e) {
+                var inputChar = String.fromCharCode(event.keyCode);
+                var code = event.keyCode;
+                var allowedKeys = [8];
+                if (allowedKeys.indexOf(code) !== -1) {
+                    return;
+                }
+                event.target.value = event.target.value.replace(/[^0-9.]/g, '')
+            };
+
+            function validateExpirationDate(expirationMonth, expirationYear) {
+                const currentDate = new Date();
+                const currentYear = currentDate.getFullYear();
+                const currentMonth = currentDate.getMonth() + 1; // January is 0
+            
+                if (expirationYear > currentYear) {
+                    return true;
+                } else if (expirationYear === currentYear && expirationMonth >= currentMonth) {
+                    return true;
+                }
+            
+                return false;
+            }
+
+            function expDateFunction(e) {
+                const dateExpression = new RegExp("^(0[1-9]|1[0-2])\/?([0-9]{2})$");
+                if (dateExpression.test(e.target.value)) {
+                    expireDateWarning.classList.add("hidden");
+                    let data = e.target.value.split("/");
+                    let expirationMonth = data[0];
+                    let expirationYear = '20' + data[1];
+                    // Validate expiration date
+                    if (!validateExpirationDate(expirationMonth, expirationYear)) {
+                        //expireDateWarning.classList.remove("hidden");
+                        //return "Card has expired";
+                        console.log("Card has expired")
+                    } else {
+                        //expireDateWarning.classList.add("hidden");
+                        console.log("Card is invalid")
+                    }
+                } else {
+                    //expireDateWarning.classList.remove("hidden");
+                    console.log("Card valid")
+                }
+            };
+
+            function formatExpDate(e) {
+                var inputChar = String.fromCharCode(event.keyCode);
+                var code = event.keyCode;
+                var allowedKeys = [8];
+                if (allowedKeys.indexOf(code) !== -1) {
+                    return;
+                }
+                event.target.value = event.target.value.replace(
+                    /^([1-9]\/|[2-9])$/g, '0$1/'
+                ).replace(
+                    /^(0[1-9]|1[0-2])$/g, '$1/'
+                ).replace(
+                    /^(0?[1-9]|1[0-2])([0-9]{2})$/g, '$1/$2'
+                ).replace(
+                    /^([0]+)\/|[0]+$/g, '0'
+                ).replace(
+                    /[^\d\/]|^[\/]*$/g, '' 
+                ).replace(
+                    /\/\//g, '/' );
+            }
+        </script>
+    </body>
+</html>
+
+
+
