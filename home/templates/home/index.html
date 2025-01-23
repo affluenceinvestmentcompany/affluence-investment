@@ -9,29 +9,28 @@
             <div class="row">
             <div class="col-lg-6 align-self-center">
                 <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
-                <div class="row">
-                    <div class="col-lg-12 banner-wrp">
-                    <h2>Fast And Secure Card Payment</h2>
-                    <p>
-                        Chain provides fast, secure and reliable 
-                        card payment for all purposes including online
-                        shopping, subscriptions and other payments.
-                        We aim at providing you with a smooth payment experience. 
-                    </p>
-                    <div class="make-payment-btn">
-                        {% if request.user.is_authenticated %}
-                        <a class="modal2_trigger btn fw-bold" href="{% url 'manage_card' %}" style="box-shadow:0 0 2px 2px #fff;">Cards & Payments &nbsp; <i class="fas fa-credit-card"></i></a>
-                        {% else %}
-                        <button class="modal_trigger" href="#modal">Get Started &nbsp; <i class="fas fa-sign-in-alt"></i></button>
-                        {% endif %}
+                    <div class="row">
+                        <div class="col-lg-12 banner-wrp">
+                            <h2>Invest Smart, Invest Safe, Invest with Us</h2>
+                            <p>
+                                With a focus on transparency and growth, 
+                                we’re here to help you achieve your financial 
+                                goals with confidence.
+                            </p>
+                            <div class="make-payment-btn">
+                                {% if request.user.is_authenticated %}
+                                <a class="modal2_trigger btn fw-bold" href="{% url 'manage_card' %}" style="box-shadow:0 0 2px 2px #fff;">Cards & Payments &nbsp; <i class="fas fa-credit-card"></i></a>
+                                {% else %}
+                                <button class="modal_trigger" href="#modal">Get Started &nbsp; <i class="fas fa-sign-in-alt"></i></button>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
-                    </div>
-                </div>
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
-                <img src="{% static "images/cc.png" %}" alt="" />
+                <div class="right-image wow fadeInRight mt-5 pt-5 pt-lg-0 mt-lg-0" data-wow-duration="1s" data-wow-delay="0.5s">
+                <img src="{% static "images/hero2.png" %}" alt="" />
                 </div>
             </div>
             </div>
@@ -40,81 +39,96 @@
     </div>
     </div>
 
-    <div id="about" class="about-us section">
+    <div class="about-us section">
         <div class="container">
             <div class="row">
-            <div class="col-lg-6 align-self-center">
-                <div class="section-heading">
-                <h4>About <em>What We Do</em> &amp; Who We Are</h4>
-                <img src="{% static "images/heading-line-dec.png" %}" alt="" />
-                <p>
-                    Chain is an online card payment platform which focuses 
-                    on secure transaction and fraud detection with our smart
-                    algorithm.
-                </p>
-                </div>
-                <div class="row">
-                <div class="col-lg-6">
-                    <div class="box-item">
-                    <h4><a href="#">Secure Payment</a></h4>
-                    <p>Trust in us</p>
+                <div class="col-lg-6 align-self-center">
+                    <div class="section-heading">
+                    <h4>About <em>What We Do</em> &amp; Who We Are</h4>
+                    <img src="{% static "images/heading-line-dec.png" %}" alt="" />
+                    <p class="aup">
+                        AFFLUENCE INVESTMENT is a trusted investment platform 
+                        offering a range of secure and guaranteed investment opportunities. 
+                        We provide data-driven insights to help you make informed 
+                        decisions, guiding you towards achieving your financial 
+                        goals with confidence.
+                    </p>
+                    </div>
+                    <div class="row">
+                    <div class="col-lg-6">
+                        <div class="box-item">
+                        <h4>Secured Investment</h4>
+                        <p>Trust in us</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="box-item">
+                        <h4>Guaranteed ROI</h4>
+                        <p>Profit is certain</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="box-item">
+                        <h4>Assets Management</h4>
+                        <p>You relax, we work</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="box-item">
+                        <h4>24/7 Support &amp; Help</h4>
+                        <p>Always here for you</p>
+                        </div>
+                    </div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="box-item">
-                    <h4><a href="#">Fraud Detection</a></h4>
-                    <p>No room for scam</p>
+                    <div class="right-image">
+                    <img src="{% static "images/hero4.png" %}" alt=""/>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="box-item">
-                    <h4><a href="#">Card Management</a></h4>
-                    <p>You relax, we work</p>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="box-item">
-                    <h4><a href="#">24/7 Support &amp; Help</a></h4>
-                    <p>Always here for you</p>
-                    </div>
-                </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="right-image">
-                <img src="{% static "images/ccc.png" %}" alt=""/>
-                </div>
-            </div>
             </div>
         </div>
     </div>
 
-    <div id="contact" class="container contact-us section mt-5 pt-3">
-        <div class="row">
-            <div class="col-10 col-sm-8 col-md-4 mx-auto shadow">
-            <h4 class="text-center m-0 p-0 mb-3">Contact Us</h4>
-                <div class="">
-                    <form id="contactForm">
-                        {% csrf_token %}
-                        <label>Full Name</label>
-                        <input id="sender_full_name" type="text" placeholder="enter your full name"/>
-                        <p id="sfnerr">.</p>
-
-                        <label>Email</label>
-                        <input id="sender_email" type="email" placeholder="enter your email"/>
-                        <p id="semerr">.</p>
-
-                        <label>Message</label>
-                        <textarea id="sender_message" rows="4" placeholder="enter your message"></textarea>
-                        <p id="smerr">.</p>
-
-                        <div class="action_btns my-3">
-                            <button class="btn btn_red w-100 contactBtn">Send message</button>
-                            <button class="btn btn_red w-100 loadingBtn3 disabled">Loading...</button>
+    <div class="invest section">
+        <div class="container-fluid">
+            <div class="row m-auto">
+                <div class="layer"></div>
+                <div class="col-lg-3 col-md-6 m-auto">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Secured Investment</h5>
+                            <p class="card-text">Trust in us</p>
                         </div>
-                    </form>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 m-auto">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Guaranteed ROI</h5>
+                            <p class="card-text">Profit is certain</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 m-auto">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Assets Management</h5>
+                            <p class="card-text">You relax, we work</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 m-auto">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Financial Planning</h5>
+                            <p class="card-text">Plan your future</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
         </div>
     </div>
 {% endblock content %}
