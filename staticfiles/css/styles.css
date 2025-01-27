@@ -102,7 +102,7 @@ p {
   font-size: 15px;
   line-height: 30px;
   font-weight: 300;
-  color: #7a7a7a;
+  color: #636363;
 }
 
 img {
@@ -137,7 +137,7 @@ body {
 }
 
 .section-heading h4 {
-  color: #2a2a2a;
+  color: #424242;
   font-size: 30px;
   font-weight: 700;
   text-transform: capitalize;
@@ -217,7 +217,7 @@ body {
 .gradient-button a:hover {
   color: #fff !important;
   background: rgb(19,175,240);
-  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);
+  background: linear-gradient(105deg, rgba(40,225,253,1) 0%, rgba(91,104,235,1) 100%);
 }
 
 .border-button a {
@@ -318,7 +318,7 @@ header
 }
 
 .header-area .main-nav .logo img {
-  width: 170px;
+  width: 110px;
 }
 
 .header-area .main-nav .nav {
@@ -363,7 +363,7 @@ header
   display: block;
   font-weight: 500;
   font-size: 15px;
-  color: #2a2a2a;
+  color: rgba(0, 0, 0, .7);
   text-transform: capitalize;
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
@@ -399,14 +399,14 @@ header
   font-family: FontAwesome;
   content: "\f107";
   font-size: 12px;
-  color: #2a2a2a;
+  color: rgba(0, 0, 0, .7);
   position: absolute;
   right: 18px;
   top: 12px;
 }
 
 .background-header .main-nav .nav li.submenu:after {
-  color: #2a2a2a;
+  color: rgba(0, 0, 0, .7);
 }
 
 .header-area .main-nav .nav li.submenu ul {
@@ -432,7 +432,7 @@ header
   opacity: 1;
   display: block;
   background: #f7f7f7;
-  color: #2a2a2a!important;
+  color: rgba(0, 0, 0, .7)!important;
   padding-left: 20px;
   height: 40px;
   line-height: 40px;
@@ -488,7 +488,7 @@ header
   -o-transition: all 0.4s;
   -webkit-transition: all 0.4s;
   transition: all 0.4s;
-  background-color: #2a2a2a;
+  background-color: rgba(0, 0, 0, .7);
   display: block;
   position: absolute;
   width: 30px;
@@ -499,7 +499,7 @@ header
 .background-header .main-nav .menu-trigger span,
 .background-header .main-nav .menu-trigger span:before,
 .background-header .main-nav .menu-trigger span:after {
-  background-color: #2a2a2a;
+  background-color: rgba(0, 0, 0, .7);
 }
 
 .header-area .main-nav .menu-trigger span:before,
@@ -508,7 +508,7 @@ header
   -o-transition: all 0.4s;
   -webkit-transition: all 0.4s;
   transition: all 0.4s;
-  background-color: #2a2a2a;
+  background-color: rgba(0, 0, 0, .7);
   display: block;
   position: absolute;
   width: 30px;
@@ -519,7 +519,7 @@ header
 
 .background-header .main-nav .menu-trigger span:before,
 .background-header .main-nav .menu-trigger span:after {
-  background-color: #2a2a2a;
+  background-color: rgba(0, 0, 0, .7);
 }
 
 .header-area .main-nav .menu-trigger span:before,
@@ -560,11 +560,11 @@ header
   -ms-transform: translateY(6px) translateX(1px) rotate(45deg);
   -webkit-transform: translateY(6px) translateX(1px) rotate(45deg);
   transform: translateY(6px) translateX(1px) rotate(45deg);
-  background-color: #2a2a2a;
+  background-color: rgba(0, 0, 0, .7);
 }
 
 .background-header .main-nav .menu-trigger.active span:before {
-  background-color: #2a2a2a;
+  background-color: rgba(0, 0, 0, .7);
 }
 
 .header-area .main-nav .menu-trigger.active span:after {
@@ -572,11 +572,11 @@ header
   -ms-transform: translateY(-6px) translateX(1px) rotate(-45deg);
   -webkit-transform: translateY(-6px) translateX(1px) rotate(-45deg);
   transform: translateY(-6px) translateX(1px) rotate(-45deg);
-  background-color: #2a2a2a;
+  background-color: rgba(0, 0, 0, .7);
 }
 
 .background-header .main-nav .menu-trigger.active span:after {
-  background-color: #2a2a2a;
+  background-color: rgba(0, 0, 0, .7);
 }
 
 .header-area.header-sticky {
@@ -797,8 +797,8 @@ About Us
 }
 
 .about-us .box-item img {
-  height: 150px;
-  width: 150px;
+  height: 120px;
+  width: 120px;
   object-fit: contain;
   border-radius: 50%;
   margin-bottom: 15px;
@@ -806,8 +806,8 @@ About Us
 }
 
 .about-us .box-item h4 {
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 500;
   color: #004fc5;
   transition: all .3s;
 }
@@ -882,7 +882,68 @@ About Us
 
 .invest .card {
   width: 250px; /* Set your desired width */
-  height: 300px; /* Set your desired height */
+  height: 320px; /* Set your desired height */
+}
+
+.invest .card-body {
+  position: relative;
+}
+
+.invest .card-title {
+  font-size: 26px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, .7);
+}
+
+.invest .card-title {
+  text-align: center;
+}
+
+.invest .card-title span {
+  font-size: 18px;
+}
+
+.invest .card-body hr {
+  color: #062553;
+  height: 2px;
+}
+
+.invest .card-body h6 {
+  font-size: 38px;
+  color: #062553;
+  font-weight: 700;
+  text-align: center;
+  margin: 15px auto;
+}
+
+.invest .card-body h6 span {
+  font-size: 18px;
+  font-weight: 500;
+  color: #062553;
+}
+
+.invest .card-body p {
+  font-size: 15px;
+  font-weight: 400;
+  color: #062553;
+}
+
+.invest .card-body button {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 5px;
+  font-weight: 500;
+  color: #fff;
+  background: rgb(19,175,240);
+  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);
+}
+
+.invest .card-body button:hover {
+  padding: 12px 5px;
+  background: rgb(19,175,240);
+  background: linear-gradient(105deg, rgba(40,225,253,1) 0%, rgba(91,104,235,1) 100%);
 }
 
 .why-us .row {
@@ -950,7 +1011,7 @@ footer {
 }
 
 .footer-widget .logo img {
-  width: 250px;
+  width: 200px;
   margin-bottom: 20px;
 }
 
@@ -1410,12 +1471,6 @@ a.btn_red {
 }
 
 
-
-
-
-
-
-
 /*Scrolling banner*/
 .marquee {
   width: var(--marquee-width);
@@ -1471,6 +1526,41 @@ a.btn_red {
 
 
 
+/* ========== MODAL ========= */
+.plan-details .modal-content {
+  padding: 30px 20px;
+}
 
+.plan-details h5 {
+  font-size: 32px;
+  font-weight: 500;
+  color: #062553;
+}
 
+.plan-details h5 span {
+  font-size: 20px;
+}
+
+.plan-details .modal-body p {
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 20px;
+  margin-bottom: 8px;
+}
+
+.plan-details .modal-body p:first-child {
+  margin-bottom: 30px;
+}
+
+.plan-details .modal-footer button {
+  padding: 5px 20px;
+  background: rgb(19,175,240);
+  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);
+}
+
+.plan-details .modal-footer button:hover {
+  padding: 5px 30px;
+  background: rgb(19,175,240);
+  background: linear-gradient(105deg, rgba(40,225,253,1) 0%, rgba(91,104,235,1) 100%);
+}
 

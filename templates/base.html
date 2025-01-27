@@ -11,8 +11,8 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         {% block title %}
-            <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon"/>
-            <title>Affluence Investment</title>
+            <link rel="shortcut icon" href="{% static 'images/logo2.png' %}" type="image/x-icon"/>
+            <title>Stapfund Investment</title>
         {% endblock %}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -63,7 +63,7 @@
                     <div class="col-12 px-0">
                         <nav class="main-nav">
                             <a href="{% url 'index' %}" class="logo">
-                                <img src="{% static "images/logo.png" %}" alt="" />
+                                <img src="{% static "images/logo2.png" %}" alt="" />
                             </a>                     
                             <ul class="nav">
                                 <li class="scroll-to-section"><a href="{% url 'index' %}">Home</a></li>
@@ -74,12 +74,12 @@
                                     <div class="gradient-button mt-wrp d-md-flex">
                                         {% if request.user.is_authenticated %}
                                             {% block makePayment %}
-                                                <a class="modal_trig text-dark me-2" href="{% url 'manage_card' %}" style="color:black !important;">Dashboard  &nbsp; <i class="fas fa-th-large"></i></a>
+                                                <a class="modal_trig text-dark me-2" href="{% url 'manage_card' %}" style="color:white !important;">Dashboard  &nbsp; <i class="fas fa-th-large"></i></a>
                                             {% endblock %}
                                             <span class="d-block d-md-none w-100"><a class="text-danger fw-bold w-100" href="{% url 'logout' %}" style="color:red !important;">Logout &nbsp;<i class="fas fa-sign-out-alt"></i></a></span>
                                             <span class="d-none d-md-block"><a class="d-none d-md-block text-danger fw-bold" href="{% url 'logout' %}" style="color:red !important;"><i class="fas fa-sign-out-alt"></i></a></span>
                                         {% else %}
-                                            <a class="modal_trigger modal_trig text-dark" href="#modal" style="color:black !important;">Get Started &nbsp; <i class="fa fa-sign-in-alt"></i></a>
+                                            <a class="modal_trigger modal_trig text-dark" href="#modal" style="color:white !important;">Get Started &nbsp; <i class="fa fa-sign-in-alt"></i></a>
                                         {% endif %}
                                     </div>
                                 </li>
@@ -303,14 +303,14 @@
                     <div class="col-12 mt-sm-5 mt-lg-0 col-lg-4">
                         <div class="footer-widget">
                             <h4>Contact Us</h4>
-                            <p>Ikeja City Mall, Ikeja, Lagos, Nigeria</p>
-                            <p><a href="">+2348012345667</a></p>
-                            <p><a href="">info@chain.co</a></p>
+                            {% comment %} <p></p> {% endcomment %}
+                            <p><a href="">623-202-0753</a></p>
+                            <p><a href="">support@stapfund.com</a></p>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="copyright-text">
-                        <p>Copyright © Affluence Investment 2024. All Rights Reserved.</p>
+                        <p>Copyright © Stapfund Investment 2024. All Rights Reserved.</p>
                         </div>
                     </div>
                 </div>
