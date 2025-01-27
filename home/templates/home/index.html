@@ -96,17 +96,17 @@
                 <div class="layer"></div>
                 <div class="col-12 position-relative">
                 <div class="">
-                    <h2 class="text-center mb-4 text-white">Why Choose Stapfund Investment...?</h2>
-                    <p class="text-white">
-                        Stapfund Investment is a leading investment platform dedicated to helping individuals and businesses achieve their financial goals. Our platform offers a range of secure and guaranteed investment opportunities designed to provide consistent returns and peace of mind. With a team of experienced financial experts and cutting-edge technology, we ensure that your investments are managed with the highest level of professionalism and transparency.
+                    <h2 class="text-center mb-4">Why Choose <b>STAPFUND Investment</b>...?</h2>
+                    <p>
+                        <b>Stapfund Investment</b> is a leading investment platform dedicated to helping individuals and businesses achieve their financial goals. Our platform offers a range of secure and guaranteed investment opportunities designed to provide consistent returns and peace of mind. With a team of experienced financial experts and cutting-edge technology, we ensure that your investments are managed with the highest level of professionalism and transparency.
                     </p>
-                    <p class="text-white">
+                    <p>
                         We understand that trust is paramount when it comes to investing your hard-earned money. That's why we prioritize security and reliability in all our investment offerings. Our platform is built on robust security protocols to protect your data and assets, and we provide regular updates and insights to keep you informed about your investments' performance.
                     </p>
-                    <p class="text-white">
+                    <p>
                         At Stapfund Investment, we are committed to delivering guaranteed profits to our clients. Our investment strategies are backed by thorough research and analysis, ensuring that you receive the best possible returns on your investments. Whether you are a seasoned investor or just starting, our platform is designed to cater to your unique needs and help you grow your wealth with confidence.
                     </p>
-                    <p class="text-white">
+                    <p>
                         Join Stapfund Investment today and take the first step towards a secure and prosperous financial future. With our expert guidance and guaranteed profit opportunities, you can achieve your financial goals and enjoy peace of mind knowing that your investments are in safe hands.
                     </p>
                 </div>
@@ -577,7 +577,7 @@
         -->
     </div>
 
-    <div class="invest section mt-5">
+    <div id="invest" class="invest section mt-5">
         <div class="container-fluid px-0">
             <div class="row m-auto">
                 <div class="layer"></div>
@@ -741,7 +741,7 @@
                                 <div class="card shadow">
                                     <div class="card-body">
                                         <p class="card-text">"As someone who has always been cautious about investments, I was initially hesitant to trust any firm with my savings. However, after working with Stapfund Investment, I can confidently say I made the right decision. Their personalized approach and insightful advice have truly transformed my financial outlook. Highly recommend them!"</p>
-                                        <h5 class="card-title">- Sarah Patel, London, UK </h5>
+                                        <h5 class="card-title">- Sarah Patel, <small>London, UK</small> </h5>
                                     </div>
                                 </div>
                             </div>
@@ -749,7 +749,7 @@
                                 <div class="card shadow">
                                     <div class="card-body">
                                         <p class="card-text">"The team made investing easy to understand and helped me achieve my financial goals faster than I expected. They’re knowledgeable, transparent, and truly care about their clients. It’s been a great experience, and I look forward to continuing our partnership."</p>
-                                        <h5 class="card-title">- Carlos Mendoza, Buenos Aires, Argentina</h5>
+                                        <h5 class="card-title">- Olivia Carter, <small>New York, USA</small></h5>
                                     </div>
                                 </div>
                             </div>
@@ -757,7 +757,7 @@
                                 <div class="card shadow">
                                     <div class="card-body">
                                         <p class="card-text">"I've worked with several investment companies in the past, but none have provided the level of service and success that Stapfund Investment has. They truly go above and beyond to ensure your portfolio is well-managed. I'm so pleased with the results so far."</p>
-                                        <h5 class="card-title">- Emily Wu, Sydney, Australia</h5>
+                                        <h5 class="card-title">- Charlotte Lee, <small>Ontario, Canada</small></h5>
                                     </div>
                                 </div>
                             </div>
@@ -765,7 +765,7 @@
                                 <div class="card shadow">
                                     <div class="card-body">
                                         <p class="card-text">"What I love most about Stapfund Investment is their clear communication and commitment to helping their clients achieve financial independence. I feel confident and well-informed every step of the way."</p>
-                                        <h5 class="card-title">- Mohammed Al-Farsi, Dubai, UAE</h5>
+                                        <h5 class="card-title">- Ethan Williams, <small>Florida, USA</small></h5>
                                     </div>
                                 </div>
                             </div>
@@ -773,7 +773,7 @@
                                 <div class="card shadow">
                                     <div class="card-body">
                                         <p class="card-text">"I was new to investing when I reached out to Stapfund Investment, and they guided me through every step. Their team is friendly, professional, and they genuinely care about helping you succeed. I’m thrilled with the results!"</p>
-                                        <h5 class="card-title">- John Roberts, Toronto, Canada</h5>
+                                        <h5 class="card-title">- Ava King, <small>Toronto, Canada</small></h5>
                                     </div>
                                 </div>
                             </div>
@@ -881,3 +881,18 @@
         </div>
     </div>
 {% endblock content %}
+
+{% block altjs %}
+<script>
+    // Automatically scroll to the section if URL contains a fragment
+    window.onload = function() {
+        if (window.location.hash) {
+            // Scroll to the section with the ID in the URL fragment (e.g., #targetSection)
+            document.querySelector(window.location.hash).scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    };
+</script>
+{% endblock %}
+

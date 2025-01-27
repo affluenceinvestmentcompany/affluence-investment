@@ -587,6 +587,10 @@ header
   color: #4b8ef1;
 }
 
+.mt-wrp .modal_trig {
+  color: #fff !important;
+}
+
 /* 
 ---------------------------------------------
 preloader
@@ -836,6 +840,79 @@ About Us
   margin: 0 auto;
 }
 
+
+/* =========== ABOUT US ========== */
+
+.about-section {
+  background-image: url('../images/about-us2.png');
+  background-size: cover;
+  background-position: center;
+  padding: 60px 0;
+  position: relative;
+}
+.about-section::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+.about-section h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  animation: fadeInDown 1s;
+  z-index: 9;
+  position: relative;
+  color: #062553;
+}
+.about-section p {
+  font-size: 18px;
+  line-height: 1.6;
+  animation: fadeInUp 1s;
+  z-index: 9;
+  position: relative;
+  color: #062553;
+  font-weight: 400;
+}
+.mission-vision-section {
+  background: #fff;
+  padding: 60px 0;
+}
+.mission-vision-section h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  animation: fadeInDown 1s;
+}
+.mission-vision-section p {
+  font-size: 18px;
+  line-height: 1.6;
+  animation: fadeInUp 1s;
+}
+@keyframes fadeInDown {
+  from {
+      opacity: 0;
+      transform: translateY(-20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+@keyframes fadeInUp {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* ================================= */
+
 .flex-container {
   display: flex;
   justify-content: flex-start; 
@@ -954,6 +1031,7 @@ About Us
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #062553;
 }
 
 .why-us .row .layer {
@@ -962,11 +1040,13 @@ About Us
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .87);
+  background-color: rgba(255, 255, 255, 0.89);
 }
 
 .why-us p {
   font-size: 16px;
+  font-weight: 400;
+  
 }
 
 .section .testimonial {
@@ -992,6 +1072,11 @@ About Us
 
 #testimonialCarousel {
   transform: translateY(150px);
+}
+
+#testimonialCarousel small {
+  font-weight: 400;
+  font-style: italic;
 }
 
 /* 

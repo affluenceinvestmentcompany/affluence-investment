@@ -402,6 +402,11 @@
   .about-us .about-item {
     margin-top: 5px;
   }
+
+  .gradient-button {
+    background: rgb(19,175,240) !important;
+    background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%) !important;
+  }
 }
 
 @media (min-width: 768px) {

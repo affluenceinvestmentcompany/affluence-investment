@@ -2,5 +2,41 @@
 {% load static %} 
 
 {% block content %}
-    <h1>About Us</h1>
+    <div class="row">
+        <div class="col-12 mt-5 pt-3 pt-md-4 pt-lg-5">
+            <div class="container-fluid mt-5 px-0">
+                <div class="about-section mb-md-5">
+                    <div class="container">
+                        <h2 class="text-center">About Us</h2>
+                        <p><b>Stapfund Investment</b> is a premier investment platform committed to helping individuals and businesses achieve their financial aspirations. We offer a diverse range of secure, high-return investment opportunities, designed to deliver consistent growth and peace of mind. Supported by a team of seasoned financial experts and cutting-edge technology, we ensure that every investment is managed with the utmost professionalism, transparency, and a focus on maximizing long-term wealth.<br><br>
+                            At <b>Stapfund Investment</b>, we are dedicated to aligning each client's financial goals with tailored investment strategies. Our expert team employs innovative planning and a disciplined approach to help you achieve sustainable financial growth while minimizing risk. Trust us to guide your investments towards a secure and prosperous future.</p>
+                    </div>
+                </div>
+            
+                <div class="mission-vision-section">
+                    <div class="container">
+                        <div class="row my-auto mb-5 pb-4">
+                            <div class="col-md-4 my-auto">
+                                <img src="{% static "images/hero1.png" %}"/>
+                            </div>
+                            <div class="mission col-md-8 my-auto">
+                                <h2>Our Mission</h2>
+                                <p>Our mission is to empower our clients to achieve their financial goals through secure and reliable investment opportunities. We are committed to providing exceptional service and delivering guaranteed profits to our clients.</p>
+                            </div>
+                        </div>
+
+                        <div class="row my-auto">
+                            <div class="vision col-md-8 my-auto">
+                                <h2>Our Vision</h2>
+                                <p>Our vision is to be the most trusted and innovative investment platform, recognized for our commitment to excellence and our ability to deliver consistent returns. We strive to create a secure and prosperous financial future for our clients.</p>
+                            </div>
+                            <div class="col-md-4 my-auto">
+                                <img src="{% static "images/hero5.png" %}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
