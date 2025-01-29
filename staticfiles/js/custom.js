@@ -66,7 +66,7 @@
         $("#login_form").click(function () {
             $(".social_login").hide();
             $(".user_login").show();
-            $(".header_title").text('Login');
+            $(".header_title").text('Sign In');
             $(".gsba").show();
             return false;
         });
@@ -76,7 +76,7 @@
             $(".social_login").hide();
             $(".user_register").show();
             $(".gsba").show();
-            $(".header_title").text('Register');
+            $(".header_title").text('Sign Up');
             return false;
         });
 
@@ -86,7 +86,7 @@
             $(".user_register").hide();
             $(".social_login").show();
             $(".gsba").hide();
-            $(".header_title").text('Register or Login');
+            $(".header_title").text('Sign Up \n|| Sign In');
             return false;
         });
     });

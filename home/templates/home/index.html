@@ -19,7 +19,7 @@
                                         </p>
                                         <div class="make-payment-btn">
                                             {% if request.user.is_authenticated %}
-                                            <a class="modal2_trigger btn fw-bold" href="{% url 'manage_card' %}" style="box-shadow:0 0 2px 2px #fff;">Start Investing &nbsp; <i class="fas fa-chart-line"></i></a>
+                                            <a class="modal2_trigger btn fw-bold" href="{% url 'index' %}#invest" style="box-shadow:0 0 2px 2px #fff;">Start Investing &nbsp;<i class="fas fa-chart-line"></i></a>
                                             {% else %}
                                             <button class="modal_trigger" href="#modal">Get Started &nbsp; <i class="fas fa-sign-in-alt"></i></button>
                                             {% endif %}
@@ -30,7 +30,7 @@
                         </div>
                     <div class="col-lg-6">
                         <div class="right-image wow fadeInRight mt-5 pt-5 pt-lg-0 mt-lg-0" data-wow-duration="1s" data-wow-delay="0.5s">
-                        <img src="{% static "images/hero2.png" %}" alt="" />
+                        <img src="{% static "images/hero2.png" %}" alt="" loading="lazy"/>
                         </div>
                     </div>
                     </div>
@@ -45,7 +45,7 @@
                 <div class="col-lg-6 align-self-center">
                     <div class="section-heading">
                     <h4>About <em>What We Do</em> &amp; Who We Are</h4>
-                    <img src="{% static "images/heading-line-dec.png" %}" alt="" />
+                    <img src="{% static "images/heading-line-dec.png" %}" alt=""/>
                     <p class="aup">
                         STAPFUND INVESTMENT is a trusted investment platform 
                         offering a range of secure and guaranteed investment opportunities. 
@@ -57,25 +57,25 @@
                     <div class="row">
                     <div class="col-lg-6">
                         <div class="box-item text-center">
-                            <img src="{% static "images/secured-investment.png" %}"/>
+                            <img src="{% static "images/secured-investment.png" %}" loading="lazy"/>
                             <h4>Secured Investment</h4>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="box-item text-center">
-                            <img src="{% static "images/roi.png" %}"/>
+                            <img src="{% static "images/roi.png" %}" loading="lazy"/>
                             <h4>Guaranteed ROI</h4>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="box-item text-center">
-                            <img src="{% static "images/asset-management.png" %}"/>
+                            <img src="{% static "images/asset-management.png" %}" loading="lazy"/>
                             <h4>Assets Management</h4>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="box-item text-center">
-                            <img src="{% static "images/support.png" %}"/>
+                            <img src="{% static "images/support.png" %}" loading="lazy"/>
                             <h4>24/7 Support &amp; Help</h4>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                 </div>
                 <div class="col-lg-6 my-auto">
                     <div class="right-image">
-                        <img src="{% static "images/hero4.png" %}" alt=""/>
+                        <img src="{% static "images/hero4.png" %}" alt="" loading="lazy"/>
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                 <div class="layer"></div>
                 <div class="col-12 position-relative">
                 <div class="">
-                    <h2 class="text-center mb-4">Why Choose <b>STAPFUND Investment</b>...?</h2>
+                    <h2 class="text-center mb-4">Why Choose <b>STAPFUND</b> Investment...?</h2>
                     <p>
                         <b>Stapfund Investment</b> is a leading investment platform dedicated to helping individuals and businesses achieve their financial goals. Our platform offers a range of secure and guaranteed investment opportunities designed to provide consistent returns and peace of mind. With a team of experienced financial experts and cutting-edge technology, we ensure that your investments are managed with the highest level of professionalism and transparency.
                     </p>
@@ -119,462 +119,53 @@
         <h4 class="p-0 px-4 m-0 mb-4 text-center" style="color:#062553;">Trusted by world-class investment and research teams</h4>
         <div class="container-fluid px-0">
             <div class="marquee">
-                <div class="m-layer"></div>
-                <ul class="marquee-content">
-                    <li><img src="https://imgur.com/bRLrW9o.png"></li>
-                    <li><img src="https://imgur.com/rgnlDBK.png"></li>
-                    <li><img src="https://imgur.com/xfVozpR.png"></li>
-                    <li><img src="https://imgur.com/hw7HLFt.png"></li>
-                    <li><img src="https://imgur.com/QZhNFuq.png"></li>
-                    <li><img src="https://imgur.com/ZFLwhdY.png"></li>
-                    <li><img src="https://imgur.com/ux10D0l.png"></li>
-                    <li><img src="https://imgur.com/4tSMyZT.png"></li>
-                    <li><img src="https://imgur.com/jESEpVx.png"></li>
-                    <li><img src="https://imgur.com/qRQpfeW.png"></li>
-                    <li><img src="https://imgur.com/bRLrW9o.png"></li>
-                    <li><img src="https://imgur.com/rgnlDBK.png"></li>
-                    <li><img src="https://imgur.com/xfVozpR.png"></li>
-                    <li><img src="https://imgur.com/hw7HLFt.png"></li>
-                    <li><img src="https://imgur.com/QZhNFuq.png"></li>
-                </ul>
+                <div class="m-layer">
+                    <ul class="marquee-content">
+                        <li><img src="https://imgur.com/bRLrW9o.png" loading="lazy" alt="Image 1"></li>
+                        <li><img src="https://imgur.com/rgnlDBK.png" loading="lazy" alt="Image 2"></li>
+                        <li><img src="https://imgur.com/xfVozpR.png" loading="lazy" alt="Image 3"></li>
+                        <li><img src="https://imgur.com/hw7HLFt.png" loading="lazy" alt="Image 4"></li>
+                        <li><img src="https://imgur.com/QZhNFuq.png" loading="lazy" alt="Image 5"></li>
+                        <li><img src="https://imgur.com/ZFLwhdY.png" loading="lazy" alt="Image 6"></li>
+                        <li><img src="https://imgur.com/ux10D0l.png" loading="lazy" alt="Image 7"></li>
+                        <li><img src="https://imgur.com/4tSMyZT.png" loading="lazy" alt="Image 8"></li>
+                        <li><img src="https://imgur.com/jESEpVx.png" loading="lazy" alt="Image 9"></li>
+                        <li><img src="https://imgur.com/qRQpfeW.png" loading="lazy" alt="Image 10"></li>
+                        <li><img src="https://imgur.com/bRLrW9o.png" loading="lazy" alt="Image 11"></li>
+                        <li><img src="https://imgur.com/rgnlDBK.png" loading="lazy" alt="Image 12"></li>
+                        <li><img src="https://imgur.com/xfVozpR.png" loading="lazy" alt="Image 13"></li>
+                        <li><img src="https://imgur.com/hw7HLFt.png" loading="lazy" alt="Image 14"></li>
+                        <li><img src="https://imgur.com/QZhNFuq.png" loading="lazy" alt="Image 15"></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="charts flex-container">
-        <!--
         <div class="flex-item">
-            <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container" id="widgetOne">
                 <div class="tradingview-widget-container__widget"></div>
-                {% comment %} <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div> {% endcomment %}
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
-                {
-                    "feedMode": "all_symbols",
-                    "isTransparent": false,
-                    "displayMode": "regular",
-                    "width": "100%",
-                    "height": "100%",
-                    "colorTheme": "dark",
-                    "locale": "en"
-                }
-                </script>
+            </div>
+            {% comment %} <i class="fas fa-spinner fa-spin fs-1 text-primary" id="spinnerOne"></i> {% endcomment %}
+        </div> 
+        <div class="flex-item">
+            <div class="tradingview-widget-container" id="widgetTwo">
+                <div class="tradingview-widget-container__widget"></div>
+            </div>
+        </div> 
+        <div class="flex-item">
+            <div class="tradingview-widget-container" id="widgetThree">
+                <div class="tradingview-widget-container__widget"></div>
             </div>
         </div>
         <div class="flex-item">
-            <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container"  id="widgetFour">
                 <div class="tradingview-widget-container__widget"></div>
-                {% comment %} <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div> {% endcomment %}
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-                    {
-                    "title": "Cryptocurrencies",
-                    "title_raw": "Cryptocurrencies",
-                    "tabs": [
-                    {
-                        "title": "Overview",
-                        "title_raw": "Overview",
-                        "symbols": [
-                        {
-                            "s": "CRYPTOCAP:TOTAL"
-                        },
-                        {
-                            "s": "BITSTAMP:BTCUSD"
-                        },
-                        {
-                            "s": "BITSTAMP:ETHUSD"
-                        },
-                        {
-                            "s": "FTX:SOLUSD"
-                        },
-                        {
-                            "s": "BINANCE:AVAXUSD"
-                        },
-                        {
-                            "s": "COINBASE:UNIUSD"
-                        }
-                        ],
-                        "quick_link": {
-                        "title": "More cryptocurrencies",
-                        "href": "/markets/cryptocurrencies/prices-all/"
-                        }
-                    },
-                    {
-                        "title": "Bitcoin",
-                        "title_raw": "Bitcoin",
-                        "symbols": [
-                        {
-                            "s": "BITSTAMP:BTCUSD"
-                        },
-                        {
-                            "s": "COINBASE:BTCEUR"
-                        },
-                        {
-                            "s": "COINBASE:BTCGBP"
-                        },
-                        {
-                            "s": "BITFLYER:BTCJPY"
-                        },
-                        {
-                            "s": "CME:BTC1!"
-                        }
-                        ],
-                        "quick_link": {
-                        "title": "More Bitcoin pairs",
-                        "href": "/symbols/BTCUSD/markets/"
-                        }
-                    },
-                    {
-                        "title": "Ethereum",
-                        "title_raw": "Ethereum",
-                        "symbols": [
-                        {
-                            "s": "BITSTAMP:ETHUSD"
-                        },
-                        {
-                            "s": "KRAKEN:ETHEUR"
-                        },
-                        {
-                            "s": "COINBASE:ETHGBP"
-                        },
-                        {
-                            "s": "BITFLYER:ETHJPY"
-                        },
-                        {
-                            "s": "BINANCE:ETHBTC"
-                        },
-                        {
-                            "s": "BINANCE:ETHUSDT"
-                        }
-                        ],
-                        "quick_link": {
-                        "title": "More Ethereum pairs",
-                        "href": "/symbols/ETHUSD/markets/"
-                        }
-                    },
-                    {
-                        "title": "Solana",
-                        "title_raw": "Solana",
-                        "symbols": [
-                        {
-                            "s": "FTX:SOLUSD"
-                        },
-                        {
-                            "s": "BINANCE:SOLEUR"
-                        },
-                        {
-                            "s": "COINBASE:SOLGBP"
-                        },
-                        {
-                            "s": "BINANCE:SOLBTC"
-                        },
-                        {
-                            "s": "HUOBI:SOLETH"
-                        },
-                        {
-                            "s": "BINANCE:SOLUSDT"
-                        }
-                        ],
-                        "quick_link": {
-                        "title": "More Solana pairs",
-                        "href": "/symbols/SOLUSD/markets/"
-                        }
-                    },
-                    {
-                        "title": "Uniswap",
-                        "title_raw": "Uniswap",
-                        "symbols": [
-                        {
-                            "s": "COINBASE:UNIUSD"
-                        },
-                        {
-                            "s": "KRAKEN:UNIEUR"
-                        },
-                        {
-                            "s": "COINBASE:UNIGBP"
-                        },
-                        {
-                            "s": "BINANCE:UNIBTC"
-                        },
-                        {
-                            "s": "KRAKEN:UNIETH"
-                        },
-                        {
-                            "s": "BINANCE:UNIUSDT"
-                        }
-                        ],
-                        "quick_link": {
-                        "title": "More Uniswap pairs",
-                        "href": "/symbols/UNIUSD/markets/"
-                        }
-                    }
-                    ],
-                    "title_link": "/markets/cryptocurrencies/prices-all/",
-                    "width": "100%",
-                    "height": "100%",
-                    "showChart": true,
-                    "showFloatingTooltip": false,
-                    "locale": "en",
-                    "plotLineColorGrowing": "#2962FF",
-                    "plotLineColorFalling": "#2962FF",
-                    "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
-                    "belowLineFillColorFalling": "rgba(41, 98, 255, 0.12)",
-                    "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
-                    "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
-                    "gridLineColor": "rgba(240, 243, 250, 0)",
-                    "scaleFontColor": "rgba(120, 123, 134, 1)",
-                    "showSymbolLogo": true,
-                    "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
-                    "colorTheme": "light"
-                }
-                </script>
             </div>
-        </div>
-        <div class="flex-item">
-            <div class="tradingview-widget-container">
-                <div class="tradingview-widget-container__widget"></div>
-                {% comment %} <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div> {% endcomment %}
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-                    {
-                        "title": "Currencies",
-                        "tabs": [
-                        {
-                            "title": "Major",
-                            "title_raw": "Major",
-                            "symbols": [
-                            {
-                                "s": "FX_IDC:EURUSD",
-                                "d": "EUR to USD"
-                            },
-                            {
-                                "s": "FX_IDC:USDJPY",
-                                "d": "USD to JPY"
-                            },
-                            {
-                                "s": "FX_IDC:GBPUSD",
-                                "d": "GBP to USD"
-                            },
-                            {
-                                "s": "FX_IDC:AUDUSD",
-                                "d": "AUD to USD"
-                            },
-                            {
-                                "s": "FX_IDC:USDCAD",
-                                "d": "USD to CAD"
-                            },
-                            {
-                                "s": "FX_IDC:USDCHF",
-                                "d": "USD to CHF"
-                            }
-                            ],
-                            "quick_link": {
-                            "title": "More majors",
-                            "href": "/markets/currencies/rates-major/"
-                            }
-                        },
-                        {
-                            "title": "Minor",
-                            "title_raw": "Minor",
-                            "symbols": [
-                            {
-                                "s": "FX_IDC:EURGBP",
-                                "d": "EUR to GBP"
-                            },
-                            {
-                                "s": "FX_IDC:EURJPY",
-                                "d": "EUR to JPY"
-                            },
-                            {
-                                "s": "FX_IDC:GBPJPY",
-                                "d": "GBP to JPY"
-                            },
-                            {
-                                "s": "FX_IDC:CADJPY",
-                                "d": "CAD to JPY"
-                            },
-                            {
-                                "s": "FX_IDC:GBPCAD",
-                                "d": "GBP to CAD"
-                            },
-                            {
-                                "s": "FX_IDC:EURCAD",
-                                "d": "EUR to CAD"
-                            }
-                            ],
-                            "quick_link": {
-                            "title": "More minors",
-                            "href": "/markets/currencies/rates-minor/"
-                            }
-                        },
-                        {
-                            "title": "Exotic",
-                            "title_raw": "Exotic",
-                            "symbols": [
-                            {
-                                "s": "FX_IDC:USDSEK",
-                                "d": "USD to SEK"
-                            },
-                            {
-                                "s": "FX_IDC:USDMXN",
-                                "d": "USD to MXN"
-                            },
-                            {
-                                "s": "FX_IDC:USDZAR",
-                                "d": "USD to ZAR"
-                            },
-                            {
-                                "s": "FX_IDC:EURTRY",
-                                "d": "EUR to TRY"
-                            },
-                            {
-                                "s": "FX_IDC:EURNOK",
-                                "d": "EUR to NOK"
-                            },
-                            {
-                                "s": "FX_IDC:GBPPLN",
-                                "d": "GBP to PLN"
-                            }
-                            ],
-                            "quick_link": {
-                            "title": "More exotics",
-                            "href": "/markets/currencies/rates-exotic/"
-                            }
-                        }
-                        ],
-                        "title_link": "/markets/currencies/rates-major/",
-                        "width": "100%",
-                        "height": "100%",
-                        "showChart": true,
-                        "showFloatingTooltip": false,
-                        "locale": "en",
-                        "plotLineColorGrowing": "#2962FF",
-                        "plotLineColorFalling": "#2962FF",
-                        "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
-                        "belowLineFillColorFalling": "rgba(41, 98, 255, 0.12)",
-                        "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
-                        "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
-                        "gridLineColor": "rgba(240, 243, 250, 0)",
-                        "scaleFontColor": "rgba(120, 123, 134, 1)",
-                        "showSymbolLogo": true,
-                        "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
-                        "colorTheme": "light"
-                    }
-                </script>
-            </div>
-        </div>
-        <div class="flex-item">
-            <div class="tradingview-widget-container">
-                <div class="tradingview-widget-container__widget"></div>
-                {% comment %} <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div> {% endcomment %}
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-                {
-                    "title": "Stocks",
-                    "tabs": [
-                    {
-                        "title": "Financial",
-                        "symbols": [
-                        {
-                            "s": "NYSE:JPM",
-                            "d": "JPMorgan Chase"
-                        },
-                        {
-                            "s": "NYSE:WFC",
-                            "d": "Wells Fargo Co New"
-                        },
-                        {
-                            "s": "NYSE:BAC",
-                            "d": "Bank Amer Corp"
-                        },
-                        {
-                            "s": "NYSE:HSBC",
-                            "d": "Hsbc Hldgs Plc"
-                        },
-                        {
-                            "s": "NYSE:C",
-                            "d": "Citigroup Inc"
-                        },
-                        {
-                            "s": "NYSE:MA",
-                            "d": "Mastercard Incorporated"
-                        }
-                        ]
-                    },
-                    {
-                        "title": "Technology",
-                        "symbols": [
-                        {
-                            "s": "NASDAQ:AAPL",
-                            "d": "Apple"
-                        },
-                        {
-                            "s": "NASDAQ:GOOGL",
-                            "d": "Alphabet"
-                        },
-                        {
-                            "s": "NASDAQ:MSFT",
-                            "d": "Microsoft"
-                        },
-                        {
-                            "s": "NASDAQ:FB",
-                            "d": "Meta Platforms"
-                        },
-                        {
-                            "s": "NYSE:ORCL",
-                            "d": "Oracle Corp"
-                        },
-                        {
-                            "s": "NASDAQ:INTC",
-                            "d": "Intel Corp"
-                        }
-                        ]
-                    },
-                    {
-                        "title": "Services",
-                        "symbols": [
-                        {
-                            "s": "NASDAQ:AMZN",
-                            "d": "Amazon"
-                        },
-                        {
-                            "s": "NYSE:BABA",
-                            "d": "Alibaba Group Hldg Ltd"
-                        },
-                        {
-                            "s": "NYSE:T",
-                            "d": "At&t Inc"
-                        },
-                        {
-                            "s": "NYSE:WMT",
-                            "d": "Walmart"
-                        },
-                        {
-                            "s": "NYSE:V",
-                            "d": "Visa"
-                        }
-                        ]
-                    }
-                    ],
-                    "width": "100%",
-                    "height": "100%",
-                    "showChart": true,
-                    "showFloatingTooltip": false,
-                    "locale": "en",
-                    "plotLineColorGrowing": "#2962FF",
-                    "plotLineColorFalling": "#2962FF",
-                    "belowLineFillColorGrowing": "rgba(41, 98, 255, 0.12)",
-                    "belowLineFillColorFalling": "rgba(41, 98, 255, 0.12)",
-                    "belowLineFillColorGrowingBottom": "rgba(41, 98, 255, 0)",
-                    "belowLineFillColorFallingBottom": "rgba(41, 98, 255, 0)",
-                    "gridLineColor": "rgba(240, 243, 250, 0)",
-                    "scaleFontColor": "rgba(120, 123, 134, 1)",
-                    "showSymbolLogo": true,
-                    "symbolActiveColor": "rgba(41, 98, 255, 0.12)",
-                    "colorTheme": "light"
-                }
-                </script>
-            </div>
-        </div>
+        </div> 
         <div class="flex-item shadow-none d-none d-lg-flex"></div>
         <div class="flex-item shadow-none d-none d-lg-flex"></div>
-        -->
     </div>
 
     <div id="invest" class="invest section mt-5">
@@ -590,7 +181,7 @@
                             <p class="card-text">Starter bonus: <b>0.5%</b></p>
                             <p class="card-text">Minimum Amount: <b>$100</b></p>
                             <p class="card-text">Minimum Period: <b>30 days</b></p>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicPlanModal">Learn More</button>
+                            <button type="button" class="invest-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicPlanModal" data-plan="basic" data-profit="0.8" data-bonus="0.5" data-minamount="100" data-mindays="30">Learn More</button>
                         </div>
                     </div>
                 </div>
@@ -600,10 +191,10 @@
                             <h5 class="card-title">Standard <span>Plan</span></h5>
                             <hr>
                             <h6 class="card-text">1.0% <span>daily profit</span></h6>
-                            <p class="card-text">Starter bonus: <b>1%</b></p>
+                            <p class="card-text">Starter bonus: <b>1.0%</b></p>
                             <p class="card-text">Minimum Amount: <b>$500</b></p>
                             <p class="card-text">Minimum Period: <b>60 days</b></p>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#standardPlanModal">Learn More</button>
+                            <button type="button" class="invest-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#standardPlanModal" data-plan="standard" data-profit="1.0" data-bonus="1.0" data-minamount="500" data-mindays="60">Learn More</button>
                         </div>
                     </div>
                 </div>
@@ -614,9 +205,9 @@
                             <hr>
                             <h6 class="card-text">1.2% <span>daily profit</span></h6>
                             <p class="card-text">Starter bonus: <b>1.5%</b></p>
-                            <p class="card-text">Minimum Amount: <b>$1000</b></p>
+                            <p class="card-text">Minimum Amount: <b>$1,000</b></p>
                             <p class="card-text">Minimum Period: <b>90 days</b></p>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal">Learn More</button>
+                            <button type="button" class="invest-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#premiumPlanModal" data-plan="premium" data-profit="1.2" data-bonus="1.5" data-minamount="1000" data-mindays="90">Learn More</button>
                         </div>
                     </div>
                 </div>
@@ -626,10 +217,10 @@
                             <h5 class="card-title">Ultimate <span>Plan</span></h5>
                             <hr>
                             <h6 class="card-text">1.5% <span>daily profit</span></h6>
-                            <p class="card-text">Starter bonus: <b>2%</b></p>
-                            <p class="card-text">Minimum Amount: <b>$5000</b></p>
+                            <p class="card-text">Starter bonus: <b>2.0%</b></p>
+                            <p class="card-text">Minimum Amount: <b>$5,000</b></p>
                             <p class="card-text">Minimum Period: <b>120 days</b></p>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ultimatePlanModal">Learn More</button>
+                            <button type="button" class="invest-btn btn btn-primary" data-bs-toggle="modal" data-bs-target="#ultimatePlanModal" data-plan="ultimate" data-profit="1.5" data-bonus="2.0" data-minamount="5000" data-mindays="120">Learn More</button>
                         </div>
                     </div>
                 </div>
@@ -809,7 +400,7 @@
                     <p><b>Minimun period:</b> The plan requires a minimum of <b>30 days</b> before you can withdraw or reinvest, ensuring your investment grows steadily.</b></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Invest Now</button>
+                    <a href="{% url 'invest' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                 </div>
             </div>
         </div>
@@ -831,7 +422,7 @@
                     <p><b>Minimun period:</b> You must commit to a minimum of <b>60 days</b> before withdrawal, ensuring your investment is working for you in the medium term.</b></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Invest Now</button>
+                    <a href="{% url 'invest' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                 </div>
             </div>
         </div>
@@ -853,7 +444,7 @@
                     <p><b>Minimum period:</b> The minimum investment is <b>$1000</b>, catering to more experienced investors looking for higher earnings.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Invest Now</button>
+                    <a href="{% url 'invest' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                 </div>
             </div>
         </div>
@@ -875,7 +466,7 @@
                     <p><b>Minimum period:</b> This plan requires a minimum of <b>120 days</b> before withdrawal. Allowing your capital to grow over an extended period.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Invest Now</button>
+                    <a href="{% url 'invest' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                 </div>
             </div>
         </div>
@@ -883,16 +474,42 @@
 {% endblock content %}
 
 {% block altjs %}
-<script>
-    // Automatically scroll to the section if URL contains a fragment
-    window.onload = function() {
-        if (window.location.hash) {
-            // Scroll to the section with the ID in the URL fragment (e.g., #targetSection)
-            document.querySelector(window.location.hash).scrollIntoView({
-                behavior: 'smooth'
+    <script>
+        window.onload = function() {
+            if (window.location.hash) {
+                document.querySelector(window.location.hash).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        };
+    </script>
+
+    <script>
+        const buttons = document.querySelectorAll('.invest-btn');
+    
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                localStorage.clear();
+                const plan = this.getAttribute('data-plan');
+                const profit = this.getAttribute('data-profit');
+                const bonus = this.getAttribute('data-bonus');
+                const minAmount = this.getAttribute('data-minamount');
+                const minDays = this.getAttribute('data-mindays');
+    
+                const selectedInvestment = {
+                    plan: plan,
+                    dailyProfit: profit,
+                    starterBonus: bonus,
+                    minimumAmount: minAmount,
+                    minimumDays: minDays
+                };
+    
+                localStorage.setItem('selectedInvestment', JSON.stringify(selectedInvestment));
             });
-        }
-    };
-</script>
+        });
+    </script>
+    
+    <script src="{% static 'js/widgets.js' %} "></script>
+    
 {% endblock %}
 

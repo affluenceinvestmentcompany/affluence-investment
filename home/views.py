@@ -11,12 +11,9 @@ from account.models import OneTimePassword, User
 def index(request):
     return render(request, 'home/index.html')
 
-def manage_card(request):
+def invest(request):
     if request.user.is_authenticated:
-        all_cards = ManageCard.objects.filter(user=request.user)
-        all_payments = Payments.objects.filter(user=request.user)
-        context = {'all_cards': all_cards, 'all_payments':all_payments}
-        return render(request, 'home/manage-card.html', context)
+        return render(request, 'home/invest.html')
     else:
         return redirect('index')
 

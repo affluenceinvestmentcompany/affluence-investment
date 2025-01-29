@@ -9,19 +9,12 @@
   .header-area .main-nav .nav li:last-child {
     padding-left: 20px;
   }
-  
-  /* .main-banner .left-content h2 {
-    z-index: 2;
-    position: relative;
-    font-weight: 700;
-    line-height: 70px;
-    font-size: 3em;
-    margin-bottom: 15px;
-  }
+}
 
-  .main-banner .left-content p {
-    margin-bottom: 45px;
-  } */
+@media (max-width: 1180px) {
+  .slider-wrp {
+    width: 70vw;
+  }
 }
 
 
@@ -157,6 +150,18 @@
     color: #fff !important;
     border-radius: 0;
     margin: 1px auto;
+  }
+  .slider-wrp {
+    width: 80vw;
+  }
+  .slider {
+    height: 600px;
+    padding: 50px;
+  }
+  .slider-container #paid {
+    font-size: 16px;
+    font-weight: 500;
+    padding: 15px 40px;
   }
 }
 
@@ -402,10 +407,27 @@
   .about-us .about-item {
     margin-top: 5px;
   }
-
+  .slider-wrp {
+    width: 95vw;
+  }
   .gradient-button {
     background: rgb(19,175,240) !important;
     background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%) !important;
+  }
+  .slider {
+    height: 600px;
+    padding: 40px;
+  }
+  .slider-content .scl {
+    padding: 50px;
+  }
+  .slider-content .scr {
+    margin-top: 15px;
+    padding-left: 20px;
+  }
+  .slider-content .scr ul li {
+    font-size: 1.5rem;
+    line-height: 2.3rem;
   }
 }
 
