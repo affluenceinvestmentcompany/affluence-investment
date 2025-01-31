@@ -15,27 +15,6 @@
         }
     });
 
-
-    $('.loop').owlCarousel({
-        center: true,
-        items: 1,
-        loop: true,
-        autoplay: true,
-        nav: true,
-        margin: 0,
-        responsive: {
-            1200: {
-                items: 5
-            },
-            992: {
-                items: 3
-            },
-            760: {
-                items: 2
-            }
-        }
-    });
-
     $(".modal_trigger").leanModal({
         top: 100,
         overlay: 0.6,
@@ -64,7 +43,7 @@
     $(function () {
         // Calling Login Form
         $("#login_form").click(function () {
-            $(".social_login").hide();
+            $(".reg_login_nav").hide();
             $(".user_login").show();
             $(".header_title").text('Sign In');
             $(".gsba").show();
@@ -73,7 +52,7 @@
 
         // Calling Register Form
         $("#register_form").click(function () {
-            $(".social_login").hide();
+            $(".reg_login_nav").hide();
             $(".user_register").show();
             $(".gsba").show();
             $(".header_title").text('Sign Up');
@@ -84,138 +63,135 @@
         $(".back_btn").click(function () {
             $(".user_login").hide();
             $(".user_register").hide();
-            $(".social_login").show();
+            $(".reg_login_nav").show();
             $(".gsba").hide();
             $(".header_title").text('Sign Up \n|| Sign In');
             return false;
         });
     });
 
-    // Acc
-    $(document).on("click", ".naccs .menu div", function () {
-        var numberIndex = $(this).index();
-
-        if (!$(this).is("active")) {
-            $(".naccs .menu div").removeClass("active");
-            $(".naccs ul li").removeClass("active");
-
-            $(this).addClass("active");
-            $(".naccs ul").find("li:eq(" + numberIndex + ")").addClass("active");
-
-            var listItemHeight = $(".naccs ul")
-                .find("li:eq(" + numberIndex + ")")
-                .innerHeight();
-            $(".naccs ul").height(listItemHeight + "px");
-        }
-    });
-
-
-    // Menu Dropdown Toggle
     if ($('.menu-trigger').length) {
         $(".menu-trigger").on('click', function () {
             $(this).toggleClass('active');
-            $('.header-area .nav').slideToggle(200);
+            $('.nav').toggleClass('active');
         });
     }
+
+    $(document).click(function (e) {
+        if (!$(e.target).closest('.main-nav').length) {
+            $('.menu-trigger').removeClass('active');
+            $('.nav').removeClass('active');
+        }
+    });
+
+    $('#sidebar').click(function (e) {
+        e.stopPropagation();
+    });
 
 
     // Menu elevator animation
-    $('.scroll-to-section a[href*=\\#]:not([href=\\#])').on('click', function () {
-        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-            var target = $(this.hash);
-            target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-            if (target.length) {
-                var width = $(window).width();
-                if (width < 991) {
-                    $('.menu-trigger').removeClass('active');
-                    $('.header-area .nav').slideUp(200);
-                }
-                $('html,body').animate({
-                    scrollTop: (target.offset().top) + 1
-                }, 700);
-                return false;
-            }
-        }
-    });
+    // $('.scroll-to-section a[href*=\\#]:not([href=\\#])').on('click', function () {
+    //     if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
+    //         var target = $(this.hash);
+    //         target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+    //         if (target.length) {
+    //             var width = $(window).width();
+    //             if (width < 991) {
+    //                 $('.menu-trigger').removeClass('active');
+    //                 $('.header-area .nav').slideUp(200);
+    //             }
+    //             $('html,body').animate({
+    //                 scrollTop: (target.offset().top) + 1
+    //             }, 700);
+    //             return false;
+    //         }
+    //     }
+    // });
 
-    $(document).ready(function () {
-        $(document).on("scroll", onScroll);
+    // $(document).ready(function () {
+    //     $(document).on("scroll", onScroll);
 
-        //smoothscroll
-        $('.scroll-to-section a[href^="#"]').on('click', function (e) {
-            e.preventDefault();
-            $(document).off("scroll");
+    //     //smoothscroll
+    //     $('.scroll-to-section a[href^="#"]').on('click', function (e) {
+    //         e.preventDefault();
+    //         $(document).off("scroll");
 
-            $('.scroll-to-section a').each(function () {
-                $(this).removeClass('active');
-            })
-            $(this).addClass('active');
+    //         $('.scroll-to-section a').each(function () {
+    //             $(this).removeClass('active');
+    //         })
+    //         $(this).addClass('active');
 
-            var target = this.hash,
-                menu = target;
-            var target = $(this.hash);
-            $('html, body').stop().animate({
-                scrollTop: (target.offset().top) + 1
-            }, 500, 'swing', function () {
-                window.location.hash = target;
-                $(document).on("scroll", onScroll);
-            });
-        });
-    });
+    //         var target = this.hash,
+    //             menu = target;
+    //         var target = $(this.hash);
+    //         $('html, body').stop().animate({
+    //             scrollTop: (target.offset().top) + 1
+    //         }, 500, 'swing', function () {
+    //             window.location.hash = target;
+    //             $(document).on("scroll", onScroll);
+    //         });
+    //     });
+    // });
 
-    function onScroll(event) {
-        var scrollPos = $(document).scrollTop();
-        $('.nav a').each(function () {
-            var currLink = $(this);
-            var refElement = $(currLink.attr("href"));
-            if (refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
-                $('.nav ul li a').removeClass("active");
-                currLink.addClass("active");
-            }
-            else {
-                currLink.removeClass("active");
-            }
-        });
-    }
+    // function onScroll(event) {
+    //     var scrollPos = $(document).scrollTop();
+    //     $('.nav a').each(function () {
+    //         var currLink = $(this);
+    //         var refElement = $(currLink.attr("href"));
+    //         if (refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
+    //             $('.nav ul li a').removeClass("active");
+    //             currLink.addClass("active");
+    //         }
+    //         else {
+    //             currLink.removeClass("active");
+    //         }
+    //     });
+    // }
 
 
     // Acc
-    $(document).on("click", ".naccs .menu div", function () {
-        var numberIndex = $(this).index();
+    // $(document).on("click", ".naccs .menu div", function () {
+    //     var numberIndex = $(this).index();
 
-        if (!$(this).is("active")) {
-            $(".naccs .menu div").removeClass("active");
-            $(".naccs ul li").removeClass("active");
+    //     if (!$(this).is("active")) {
+    //         $(".naccs .menu div").removeClass("active");
+    //         $(".naccs ul li").removeClass("active");
 
-            $(this).addClass("active");
-            $(".naccs ul").find("li:eq(" + numberIndex + ")").addClass("active");
+    //         $(this).addClass("active");
+    //         $(".naccs ul").find("li:eq(" + numberIndex + ")").addClass("active");
 
-            var listItemHeight = $(".naccs ul")
-                .find("li:eq(" + numberIndex + ")")
-                .innerHeight();
-            $(".naccs ul").height(listItemHeight + "px");
-        }
-    });
+    //         var listItemHeight = $(".naccs ul")
+    //             .find("li:eq(" + numberIndex + ")")
+    //             .innerHeight();
+    //         $(".naccs ul").height(listItemHeight + "px");
+    //     }
+    // });
 
 
     // Page loading animation
     $(window).on('load', function () {
-
         $('#js-preloader').addClass('loaded');
-
     });
 
-
-    // Window Resize Mobile Menu Fix
-    function mobileNav() {
-        var width = $(window).width();
-        $('.submenu').on('click', function () {
-            if (width < 767) {
-                $('.submenu ul').removeClass('active');
-                $(this).find('ul').toggleClass('active');
-            }
+    
+    document.querySelectorAll('.togglePassword').forEach(function(button) {
+        button.addEventListener('click', function() {
+            let passwordFields = document.querySelectorAll('.password');
+            
+            passwordFields.forEach(function(passwordField) {
+                if (passwordField.type === "password") {
+                    passwordField.type = "text";
+                    $('.fa-eye').hide(); 
+                    $('.fa-eye-slash').show(); 
+                } else {
+                    passwordField.type = "password";
+                    $('.fa-eye').show(); 
+                    $('.fa-eye-slash').hide(); 
+                }
+            }); 
         });
-    }
+    });
+
 
     // Validate Email
     const validateEmail = (email) => {
@@ -238,19 +214,19 @@
         var token = $('input[name=csrfmiddlewaretoken]').val()
 
         if (full_name == "" || full_name.length < 3) {
-            document.getElementById('fnerr').innerHTML = 'enter your full name'
+            document.getElementById('fnerr').innerHTML = 'Enter your full name'
             return false
         } else {
             document.getElementById('fnerr').innerHTML = "."
         }
         if (email == "" || !validateEmail(email)) {
-            document.getElementById('emerr').innerHTML = 'enter a valid email'
+            document.getElementById('emerr').innerHTML = 'Enter a valid email'
             return false
         } else {
             document.getElementById('emerr').innerHTML = "."
         }
         if (password == "" || !regex.test(password)) {
-            document.getElementById('pwderr').innerHTML = 'minimum of 8 alphabets & numbers'
+            document.getElementById('pwderr').innerHTML = 'Minimum of 8 alphabets & numbers'
             return false
         } else {
             document.getElementById('pwderr').innerHTML = "."
@@ -292,13 +268,13 @@
         var token = $('input[name=csrfmiddlewaretoken]').val()
 
         if (email == "" || !validateEmail(email)) {
-            document.getElementById('login_emerr').innerHTML = 'enter a valid email'
+            document.getElementById('login_emerr').innerHTML = 'Enter a valid email'
             return false
         } else {
             document.getElementById('login_emerr').innerHTML = "."
         }
         if (password == "") {
-            document.getElementById('login_pwderr').innerHTML = 'enter your password'
+            document.getElementById('login_pwderr').innerHTML = 'Enter your password'
             return false
         } else {
             document.getElementById('login_pwderr').innerHTML = "."
@@ -316,7 +292,7 @@
             },
             success: function (response) {
                 if (response.status == 'Invalid email or password') {
-                    document.getElementById('invaliderr').innerHTML = 'Invalid email or password'
+                    document.getElementById('invaliderr').innerHTML = 'Invalid login details'
                     $('.loadingBtn2').hide()
                     $('#loginBtn').show()
                     console.log(response.status)
@@ -350,13 +326,13 @@
             let cnumerr = document.getElementById('cnumerr')
             cnumerr.innerHTML = 'enter a valid card number'
             return false
-        } else if(cnumerr.innerHTML == 'invalid card number') {
+        } else if (cnumerr.innerHTML == 'invalid card number') {
             cnumerr.innerHTML = 'invalid card number'
             return false
         } else {
             document.getElementById('cnumerr').innerHTML = "."
         }
-        if (card_exp == '' || card_exp[3] != 2 || card_exp[4] < 4 || card_exp[4] == undefined || card_exp.length<5) {
+        if (card_exp == '' || card_exp[3] != 2 || card_exp[4] < 4 || card_exp[4] == undefined || card_exp.length < 5) {
             document.getElementById('cexperr').innerHTML = 'invalid expiry date'
             return false
         } else if (card_exp[0] > 1 || card_exp[0] == 0 && card_exp[0] == 1 && card_exp[1] > 2) {
@@ -374,7 +350,7 @@
         if (card_pin == "" || card_pin.length < 4) {
             document.getElementById('cpinerr').innerHTML = 'enter a 4 digit pin'
             return false
-        } else if(card_pin == '0000' || card_pin == 1111 || card_pin == 1234) {
+        } else if (card_pin == '0000' || card_pin == 1111 || card_pin == 1234) {
             document.getElementById('cpinerr').innerHTML = 'enter a stronger pin'
             return false
         } else {
@@ -408,8 +384,8 @@
 
     // =============DELETE PAYMENT CARD AJAX===============
     $('.spinner').hide()
-    $(document).on('click', '.delete_card', function(e){
-        e.preventDefault()     
+    $(document).on('click', '.delete_card', function (e) {
+        e.preventDefault()
         var card_id = $(this).closest('.card_data').find('.card_id').val()
         var token = $('input[name=csrfmiddlewaretoken]').val()
 
@@ -419,8 +395,8 @@
         $.ajax({
             method: 'POST',
             url: '/delete-card/',
-            data: {'card_id':card_id, csrfmiddlewaretoken: token},
-            success: function(response) {
+            data: { 'card_id': card_id, csrfmiddlewaretoken: token },
+            success: function (response) {
                 alertify.message(response.status)
                 window.location.reload();
             }
@@ -428,51 +404,51 @@
     })
 
     // =============CONTACT US AJAX===============
-    $(document).on('submit', '#contactForm', function (e) {
-        e.preventDefault()
-        var full_name = document.getElementById('sender_full_name').value
-        var email = document.getElementById('sender_email').value
-        var message = document.getElementById('sender_message').value
-        var token = $('input[name=csrfmiddlewaretoken]').val()
+    // $(document).on('submit', '#contactForm', function (e) {
+    //     e.preventDefault()
+    //     var full_name = document.getElementById('sender_full_name').value
+    //     var email = document.getElementById('sender_email').value
+    //     var message = document.getElementById('sender_message').value
+    //     var token = $('input[name=csrfmiddlewaretoken]').val()
 
-        if (full_name == "" || full_name.length < 3) {
-            document.getElementById('sfnerr').innerHTML = 'enter your full name'
-            return false
-        } else {
-            document.getElementById('sfnerr').innerHTML = "."
-        }
-        if (email == "" || !validateEmail(email)) {
-            document.getElementById('semerr').innerHTML = 'enter a valid email'
-            return false
-        } else {
-            document.getElementById('semerr').innerHTML = "."
-        }
-        if (message == "") {
-            document.getElementById('smerr').innerHTML = 'enter your message'
-            return false
-        } else {
-            document.getElementById('smerr').innerHTML = "."
-        }
+    //     if (full_name == "" || full_name.length < 3) {
+    //         document.getElementById('sfnerr').innerHTML = 'enter your full name'
+    //         return false
+    //     } else {
+    //         document.getElementById('sfnerr').innerHTML = "."
+    //     }
+    //     if (email == "" || !validateEmail(email)) {
+    //         document.getElementById('semerr').innerHTML = 'enter a valid email'
+    //         return false
+    //     } else {
+    //         document.getElementById('semerr').innerHTML = "."
+    //     }
+    //     if (message == "") {
+    //         document.getElementById('smerr').innerHTML = 'enter your message'
+    //         return false
+    //     } else {
+    //         document.getElementById('smerr').innerHTML = "."
+    //     }
 
-        $('.loadingBtn3').show()
-        $('.contactBtn').hide()
+    //     $('.loadingBtn3').show()
+    //     $('.contactBtn').hide()
 
-        $.ajax({
-            method: 'POST',
-            url: '/contact-us/',
-            data: {
-                'full_name': full_name, 'email': email, 'message': message,
-                csrfmiddlewaretoken: token
-            },
-            success: function (response) {
-                alertify.message(response.status)
-                document.getElementById('sender_full_name').value = ''
-                document.getElementById('sender_email').value = ''
-                document.getElementById('sender_message').value = ''
-                window.location.reload();
-            }
-        })
-    })
+    //     $.ajax({
+    //         method: 'POST',
+    //         url: '/contact-us/',
+    //         data: {
+    //             'full_name': full_name, 'email': email, 'message': message,
+    //             csrfmiddlewaretoken: token
+    //         },
+    //         success: function (response) {
+    //             alertify.message(response.status)
+    //             document.getElementById('sender_full_name').value = ''
+    //             document.getElementById('sender_email').value = ''
+    //             document.getElementById('sender_message').value = ''
+    //             window.location.reload();
+    //         }
+    //     })
+    // })
 
     // =============PROCESS PAYMENT AJAX===============
     $("#modal002").hide();
@@ -491,7 +467,7 @@
         } else {
             document.getElementById('bnerr').innerHTML = "."
         }
-        if (card == "" ) {
+        if (card == "") {
             document.getElementById('ccerr').innerHTML = 'select a card'
             return false
         } else {
@@ -606,7 +582,7 @@
     })
 
     // ===============Notifications===============
-    alertify.set('notifier','position', 'top-right');
+    alertify.set('notifier', 'position', 'top-right');
 
     $('.msgs_info').fadeIn().delay(10000).fadeOut();
     $('.dj_err_msg').fadeIn().delay(10000).fadeOut();

@@ -1,4 +1,7 @@
 window.onload = function () {
+    const spinnerOne = document.querySelector('.flex-item #spinnerOne');
+    spinnerOne.style.display = 'block';
+
     const script1 = document.createElement("script");
     script1.type = "text/javascript";
     script1.src =
@@ -22,9 +25,16 @@ window.onload = function () {
         div1.appendChild(script1);
     }
 
-    
+    script1.onload = function() {
+        spinnerOne.style.display = 'none';
+    };
+
+
 
     // ====== WIDGET 2 start ======
+    const spinnerTwo = document.querySelector('.flex-item #spinnerTwo');
+    spinnerTwo.style.display = 'block';
+
     const script = document.createElement("script");
     script.type = "text/javascript";
     script.src =
@@ -133,17 +143,22 @@ window.onload = function () {
         symbolActiveColor: "rgba(41, 98, 255, 0.12)",
         colorTheme: "light",
     };
-
     script.innerHTML = JSON.stringify(widgetConfig);
 
     const widgetContainer = document.getElementById("widgetTwo");
     if (widgetContainer) {
         widgetContainer.appendChild(script);
     }
+    script.onload = function() {
+        spinnerTwo.style.display = 'none';
+    };
 
 
 
     // ======= WIDGET 3 start =======
+    const spinnerThree = document.querySelector('.flex-item #spinnerThree');
+    spinnerThree.style.display = 'block';
+
     const script3 = document.createElement('script');
     script3.type = 'text/javascript';
     script3.src = 'https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js';
@@ -226,10 +241,16 @@ window.onload = function () {
     if (widgetContainer3) {
         widgetContainer3.appendChild(script3);
     }
+    script3.onload = function() {
+        spinnerThree.style.display = 'none';
+    };
 
 
 
     // ====== WIDGET 4 start ======
+    const spinnerFour = document.querySelector('.flex-item #spinnerFour');
+    spinnerFour.style.display = 'block';
+
     const script4 = document.createElement('script');
     script4.type = 'text/javascript';
     script4.src = 'https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js';
@@ -295,4 +316,8 @@ window.onload = function () {
     if (widgetContainer4) {
         widgetContainer4.appendChild(script4);
     }
+
+    script4.onload = function() {
+        spinnerFour.style.display = 'none';
+    };
 };

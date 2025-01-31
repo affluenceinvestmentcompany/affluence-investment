@@ -200,7 +200,8 @@ body {
   margin-left: 8px;
 }
 
-.gradient-button a {
+.gradient-button a,
+.one_half a {
   display: inline-block !important;
   padding: 10px 20px !important;
   color: #fff !important;
@@ -214,7 +215,8 @@ body {
   transition: all .5s;
 }
 
-.gradient-button a:hover {
+.gradient-button a:hover,
+.one_half a:hover {
   color: #fff !important;
   background: rgb(19,175,240);
   background: linear-gradient(105deg, rgba(40,225,253,1) 0%, rgba(91,104,235,1) 100%);
@@ -743,6 +745,26 @@ Banner Style
   line-height: 20px;
 }
 
+.make-payment-btn button {
+  border: none;
+  outline: none;
+  background-color: #fff;
+  color: #4b8ef1;
+  padding: 8px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 20px;
+  box-shadow: 0 .35em .35em #4b8ef1;
+}
+
+.make-payment-btn button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 .25em .25em #fff;
+  background-color: #4b8ef1;
+  color: #fff;
+  transition: 2 sec;
+}
+
 .main-banner .left-content .first-button {
   margin-right: 15px;
 }
@@ -922,6 +944,7 @@ About Us
 }
 
 .flex-item {
+  position: relative;
   width: 400px; 
   height: 500px; 
   display: flex;
@@ -929,6 +952,11 @@ About Us
   align-items: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin: 25px auto;
+}
+
+.flex-item .fa-spinner {
+  font-size: 28px;
+  color: #4b8ef1;
 }
 
 .invest .row {
@@ -1187,13 +1215,13 @@ PopUp
 
 .popupContainer {
   position: absolute;
-  width: 350px;
+  width: 360px;
   height: auto;
   left: 45%;
   top: 0;
   background: #FFF;
   border-radius: 20px;
-  transform: translateY(-45px);
+  transform: translateY(-55px);
 }
 
 .btn {
@@ -1227,16 +1255,18 @@ a.btn_red {
   color: #FFF;
 }
 
-.one_half {
-  width: 50%;
-  display: block;
-  float: left;
+.action_btns {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
-.one_half.last {
-  width: 45%;
-  margin-left: 5%;
+.one_half a {
+  padding: 10px 22px !important;
 }
+
+
+
 /* Popup Styles*/
 
 .popupHeader {
@@ -1271,28 +1301,6 @@ a.btn_red {
   cursor: pointer;
 }
 
-.social_login .social_box {
-  display: block;
-  clear: both;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #F4F4F2;
-  overflow: hidden;
-}
-
-.social_login .icon_title {
-  display: block;
-  padding: 5px 0;
-  float: left;
-  font-weight: bold;
-  font-size: 16px;
-  color: #777;
-}
-
-.social_login .social_box:hover {
-  background: #E4E4E2;
-}
-
 .centeredText {
   color: #afafaf;
   text-align: center;
@@ -1301,179 +1309,6 @@ a.btn_red {
   overflow: hidden;
   text-transform: capitalize;
 }
-
-.user_login label {
-  color: #afafaf;
-}
-
-.action_btns {
-  clear: both;
-  overflow: hidden;
-}
-
-.action_btns a {
-  display: block;
-}
-/* User Login Form */
-
-.user_login {
-  display: none;
-}
-
-.user_login label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.user_login input[type="text"],
-.user_login input[type="email"],
-.user_login input[type="password"] {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #DDD;
-  border-radius: 7px;
-  color: rgba(102, 102, 102, 0.7);
-}
-
-.user_login input[type="checkbox"] {
-  float: left;
-  margin-right: 10px;
-  width: 22px;
-  height: 22px;
-}
-
-.user_login input[type="checkbox"]+label {
-  float: left;
-}
-
-.user_login .checkbox {
-  margin-bottom: 10px;
-  clear: both;
-  overflow: hidden;
-}
-
-.forgot_password {
-  display: block;
-  margin: 20px 0 10px;
-  clear: both;
-  overflow: hidden;
-  text-decoration: none;
-  color: #4b8ef1;
-  transition: all .3s;
-}
-/* User Register Form */
-
-.user_register {
-  display: none;
-}
-
-.user_register label {
-  color: #afafaf;
-  display: block;
-  margin-bottom: 5px;
-}
-
-.user_register input[type="text"],
-.user_register input[type="email"],
-.user_register input[type="password"] {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #DDD;
-  border-radius: 7px;
-  color: rgba(102, 102, 102, 0.7);
-}
-
-.user_register input[type="checkbox"] {
-  width: 22px;
-  height: 22px;
-  float: left;
-  margin-right: 8px;
-}
-
-.user_register input[type="checkbox"]+label {
-  float: left;
-  color: #afafaf;
-}
-
-.user_register .checkbox {
-  margin-bottom: 10px;
-  clear: both;
-  overflow: hidden;
-}
-
-.make-payment-btn button {
-  border: none;
-  outline: none;
-  background-color: #fff;
-  color: #4b8ef1;
-  padding: 8px 30px;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 20px;
-  box-shadow: 0 .35em .35em #4b8ef1;
-}
-
-.make-payment-btn button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 .25em .25em #fff;
-  background-color: #4b8ef1;
-  color: #fff;
-  transition: 2 sec;
-}
-
-.mt-wrp a:hover {
-  transform: translateY(-2px);
-}
-
-.form-group label,
-.form-group input,
-.form-group select {
-  font-size: 14px;
-}
-
-.form-group select {
-  width: 100%;
-  background-color: inherit;
-  outline: none;
-  padding: 9px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.frm_wrp p,
-#process_pay p,
-#add_card p,
-#contactForm p,
-#auth_pay p:last-child {
-  padding: 0;
-  margin: 0;
-  margin-bottom: 10px;
-  color: red;
-  font-size: 13px;
-  line-height: 15px;
-}
-
-#process_pay p,
-#add_card p,
-#contactForm p,
-#auth_pay p:last-child {
-  margin-bottom: 2px;
-}
-
-.card-num {
-  position: relative;
-}
-
-.card-num img {
-  width: 40px;
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
 
 #loader_wrp {
   width: 100%;
@@ -1795,7 +1630,7 @@ a.btn_red {
   font-weight: 400;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 .amount-container .error,
 .custom-select .error {
@@ -1857,10 +1692,7 @@ select {
 .custom-select.open .custom-options {
   display: block;
 }
-.selected-option {
-  /* font-size: 15px;
-  font-weight: 400; */
-}
+
 
 
 
@@ -1905,4 +1737,159 @@ select {
 }
 
 
+
+/* ============ Register / Login =========== */
+.user_register,
+.user_login {
+  display: none;
+}
+
+.user_register input,
+.user_login input {
+  width: 100%;
+  padding: 10px;
+  padding-left: 35px;
+  border: 1.5px solid #DDD;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 7px;
+  color: #444;
+  font-weight: 400;
+	transition: .2s;
+  outline: none;
+}
+
+.login__input:active,
+.login__input:focus,
+.login__input:hover {
+	outline: none;
+	border-color: rgba(40,225,253,1);
+}
+
+.screen {		
+  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);		
+	position: relative;	
+	width: 360px;
+  padding-bottom: 20px;
+	box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.3);
+}
+
+.screen__content {
+	z-index: 1;
+	position: relative;	
+	height: 100%;
+}
+
+.screen__content #invaliderr {
+  text-align: center;
+  width: 200px;
+  font-size: 16px;
+  color: rgb(250, 0, 0);
+  font-weight: 400;
+  background-color: rgb(255, 255, 255);
+  padding: 0 15px;
+  margin: -5px auto 10px auto;
+  border-radius: 15px;
+}
+
+.screen__background {		
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 0;
+	-webkit-clip-path: inset(0 0 0 0);
+	clip-path: inset(0 0 0 0);	
+}
+
+.screen__background__shape {
+	transform: rotate(45deg);
+	position: absolute;
+}
+
+.screen__background__shape1 {
+	height: 520px;
+	width: 520px;
+	background: #FFF;	
+	top: -50px;
+	right: 120px;	
+	border-radius: 0 72px 0 0;
+}
+
+.screen__background__shape2 {
+	height: 220px;
+	width: 220px;
+  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);		
+	top: -172px;
+  
+  right: 0;	
+	border-radius: 32px;
+}
+
+.screen__background__shape3 {
+	height: 540px;
+	width: 190px;
+  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);		
+	top: -24px;
+  
+  right: 0;	
+	border-radius: 32px;
+}
+
+.screen__background__shape4 {
+	height: 400px;
+	width: 200px;
+  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);		
+	top: 420px;
+  
+  right: 50px;	
+	border-radius: 60px;
+}
+
+.login {
+	width: 100%;
+	padding: 30px;
+}
+
+.login__field {
+	padding: 20px 0;
+	position: relative;	
+}
+
+.login__field i {
+	position: absolute;
+	top: 35.5px;
+  left: 10px;
+	color: rgba(91,104,235,1);
+}
+
+.login__field .fa-eye, 
+.login__field .fa-eye-slash {
+  left: 270px;
+	color: #444;
+  cursor: pointer;
+}
+
+.login__field .fa-eye-slash {
+  display: none;
+}
+
+.login__field p {
+	position: absolute;	
+  left: 0;
+  bottom: -5px;
+  font-size: 12px;
+  color: rgb(250, 0, 0);
+  font-weight: 400;
+}
+
+.screen__content .make-payment-btn button {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);
+  box-shadow: 0 0 20px 5px #fff;
+  padding: 10px 30px;
+  border-radius: 40px;
+}
 

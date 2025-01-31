@@ -57,7 +57,7 @@
         <!-- ***** Preloader End ***** -->
 
         <!-- ***** Header Area Start ***** -->
-        <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+        <header class="header-area header-sticky wow" data-wow-duration="0.75s" data-wow-delay="0s">
             <div class="container">
                 <div class="row d-flex align-items-center">
                     <div class="col-12 px-0">
@@ -65,26 +65,26 @@
                             <a href="{% url 'index' %}" class="logo">
                                 <img src="{% static "images/logo2.png" %}" alt="" />
                             </a>                     
-                            <ul class="nav">
-                                <li class="scroll-to-section"><a href="{% url 'index' %}">Home</a></li>
+                            <ul class="nav" id="nav">
                                 <li><a href="{% url 'index' %}#invest">Invest</a></li>
+                                <li><a href="{% url 'index' %}#news">News</a></li>
                                 <li><a href="{% url 'about' %}" class="">About</a></li>
                                 <li><a href="#footer" class="">Contact</a></li>
+                                <li><a href="{% url 'index' %}#faqs">FAQs</a></li>
                                 <li>
                                     <div class="gradient-button mt-wrp d-md-flex">
                                         {% if request.user.is_authenticated %}
                                             {% block makePayment %}
                                                 <a class="modal_trig text-dark me-2" href="">Dashboard  &nbsp; <i class="fas fa-th-large"></i></a>
                                             {% endblock %}
-                                            <span class="d-block d-md-none w-100"><a class="text-danger fw-bold w-100" href="{% url 'logout' %}" style="color:red !important;">Logout &nbsp;<i class="fas fa-sign-out-alt"></i></a></span>
-                                            <span class="d-none d-md-block"><a class="d-none d-md-block text-danger fw-bold" href="{% url 'logout' %}" style="color:red !important;"><i class="fas fa-sign-out-alt"></i></a></span>
+                                                <a class="text-danger fw-bold" href="{% url 'logout' %}" style="color:red !important;"><span class="d-md-none">Logout &nbsp;</span><i class="fas fa-sign-out-alt"></i></a>
                                         {% else %}
                                             <a class="modal_trigger modal_trig text-dark" href="#modal">Get Started &nbsp; <i class="fa fa-sign-in-alt"></i></a>
                                         {% endif %}
                                     </div>
                                 </li>
                             </ul>
-                            <a class="menu-trigger">
+                            <a class="menu-trigger" id="menuTrigger">
                                 <span>Menu</span>
                             </a>
                         </nav>
@@ -100,68 +100,98 @@
                 <span class="modal_close"><i class="fas fa-times"></i></span>
             </div>
 
-            <section class="popupBody">
-                <!-- Social Login -->
-                <div class="social_login">
-                <div class="action_btns">
-                    <div class="one_half">
-                    <a href="#" id="register_form" class="btn">Sign Up</a>
+            <section class="popupBody p-0">
+                <div class="reg_login_nav p-3 py-4">
+                    <div class="action_btns">
+                        <div class="one_half">
+                            <a href="#" id="register_form">Sign Up &nbsp;<i class="fas fa-user-plus"></i></a>
+                        </div>
+                        <div class="one_half">
+                            <a href="#" id="login_form">Sign In &nbsp;<i class="fas fa-sign-in-alt"></i></a>
+                        </div>
                     </div>
-                    <div class="one_half last">
-                    <a href="#" id="login_form" class="btn">Sign In</a>
-                    </div>
-                </div>
                 </div>
 
                 <div class="user_register frm_wrp">
-                <form id="reg_form">
-                    {% csrf_token %}
-                    <label>Full Name</label>
-                    <input name="full_name" type="text" placeholder="Enter your full name" />
-                    <p id="fnerr">.</p>
-
-                    <label>Email Address</label>
-                    <input name="email" type="email" placeholder="Enter your email" />
-                    <p id="emerr">.</p>
-
-                    <label>Password</label>
-                    <input name="password" type="password" placeholder="Enter your password" />
-                    <p id="pwderr">.</p>
-
-                    <div class="checkbox">
-                    <input id="send_updates" type="checkbox" />
-                    <label for="send_updates">Send me occasional email updates</label>
+                    <div class="screen">
+                        <div class="screen__content">
+                            <form id="reg_form" class="login">
+                                {% csrf_token %}
+                                <div class="login__field">
+                                    <i class="fas fa-user"></i>
+                                    <input name="full_name" type="text" class="login__input" placeholder="Full name">
+                                    <p id="fnerr"></p>
+                                </div>
+                                <div class="login__field">
+                                    <i class="fas fa-envelope"></i>
+                                    <input name="email" type="email" class="login__input" placeholder="Email">
+                                    <p id="emerr"></p>
+                                </div>
+                                <div class="login__field">
+                                    <i class="fas fa-phone-alt"></i>
+                                    <input name="phone" type="text" class="login__input" placeholder="Phone number">
+                                    <p id="pherr"></p>
+                                </div>
+                                <div class="login__field">
+                                    <i class="fas fa-lock"></i>
+                                    <input name="password" type="password" class="login__input password" placeholder="Password" id="reg_password">
+                                    <i class="fas fa-eye togglePassword"></i><i class="fas fa-eye-slash togglePassword"></i>
+                                    <p id="pwderr"></p>
+                                </div>
+                                <div class="login__field">
+                                    <i class="fas fa-lock"></i>
+                                    <input name="confirm_password" type="password" class="login__input password" placeholder="Confirm password">
+                                    <i class="fas fa-eye togglePassword"></i><i class="fas fa-eye-slash togglePassword"></i>
+                                    <p id="pwderr2"></p>
+                                </div>
+                                <div class="make-payment-btn mt-3">
+                                    <button class="w-100" id="regBtn">Sign Up &nbsp;<i class="fas fa-user-plus"></i></button>
+                                    <button class="w-100 loadingBtn" disable><i class="fas fa-spinner fa-spin text-white"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="screen__background">
+                            <span class="screen__background__shape screen__background__shape4"></span>
+                            <span class="screen__background__shape screen__background__shape3"></span>		
+                            <span class="screen__background__shape screen__background__shape2"></span>
+                            <span class="screen__background__shape screen__background__shape1"></span>
+                        </div>
                     </div>
-
-                    <div class="action_btns mb-3">
-                        <input type="submit" value="Sign Up" id="regBtn" class="btn btn_red w-100" />
-                        <input value="Loading..." class="loadingBtn btn btn_red w-100" disabled />
-                    </div>
-                </form>
                 </div>
 
                 <div class="user_login frm_wrp">
-                <form id="login_form">
-                    {% csrf_token %}
-                    <p id="invaliderr" class="p-0 m-0 mb-2 lh-md text-danger fs-6 text-center" style="font-weight:400;"></p>
-                    <label>Email</label>
-                    <input name="login_email" type="text" placeholder="Enter your email" />
-                    <p id="login_emerr">.</p>
-
-                    <label>Password</label>
-                    <input name="login_password" type="password" placeholder="Enter your password" />
-                    <p id="login_pwderr">.</p>
-
-                    <div class="checkbox">
-                    <input id="remember" type="checkbox" />
-                    <label for="remember">Remember me</label>
-                    </div>
-
-                    <div class="action_btns mb-3">
-                        <input type="submit" value="Sign In" id="loginBtn" class="btn btn_red w-100" />
-                        <input value="Loading..." class="loadingBtn2 btn btn_red w-100" disabled />
-                    </div>
-                </form>
+                    <div class="screen">
+                        <div class="screen__content">
+                            <form id="login_form" class="login">
+                                {% csrf_token %}
+                                <p class="" id="invaliderr"></p>
+                                <div class="login__field">
+                                    <i class="fas fa-envelope"></i>
+                                    <input name="login_email" type="email" class="login__input" placeholder="Email">
+                                    <p id="login_emerr"></p>
+                                </div>
+                                <div class="login__field">
+                                    <i class="fas fa-lock"></i>
+                                    <input name="login_password" type="password" class="login__input password" placeholder="Password">
+                                    <i class="fas fa-eye togglePassword"></i><i class="fas fa-eye-slash togglePassword"></i>
+                                    <p id="login_pwderr"></p>
+                                </div>
+                                <div class="make-payment-btn mt-3">
+                                    <button class="w-100" id="loginBtn">Sign In &nbsp;<i class="fas fa-sign-in-alt"></i></button>
+                                    <button class="w-100 loadingBtn2" disable><i class="fas fa-spinner fa-spin text-white"></i></button>
+                                </div>
+                                <div class="forgot-pass mt-3">
+                                    <a href="">Forgot password?</a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="screen__background">
+                            <span class="screen__background__shape screen__background__shape4"></span>
+                            <span class="screen__background__shape screen__background__shape3"></span>		
+                            <span class="screen__background__shape screen__background__shape2"></span>
+                            <span class="screen__background__shape screen__background__shape1"></span>
+                        </div>
+                    <div>
                 </div>
 
                 <div class="verify_email">
@@ -207,7 +237,7 @@
                                         <div class="form-group">
                                             <label>Name On Card</label>
                                             <input name="card_owner" type="text" class="form-control" placeholder="name on card" />
-                                            <p id="cownerr">.</p>
+                                            <p id="cownerr"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -219,7 +249,7 @@
                                                 <input id="cardNumber" name="card_number" type="text" class="form-control" maxlength="19" placeholder="0000 0000 0000 0000" oninput="cardNumberFunction(event)"/>
                                                 <img id="cardType" src="" alt="card type"/>
                                             </div>
-                                            <p id="cnumerr">.</p>
+                                            <p id="cnumerr"></p>
                                         </div>
                                     </div>
                                 </div>
@@ -228,14 +258,14 @@
                                         <div class="form-group">
                                             <label class="hidden-xs">Exp Date</label>
                                             <input name="card_exp" type="text" id="cardExp" class="form-control" maxlength="5" placeholder="MM / YY" onkeyup="formatExpDate(event)";>
-                                            <p id="cexperr">.</p>
+                                            <p id="cexperr"></p>
                                         </div>
                                     </div>
                                     <div class="col-5 pull-right">
                                         <div class="form-group">
                                             <label>CVV Code</label>
                                             <input name="card_cvv" type="password" class="form-control" maxlength="3" placeholder="CVV" oninput="cvvFunction(event)"/>
-                                            <p id="ccvverr">.</p>
+                                            <p id="ccvverr"></p>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -243,7 +273,7 @@
                                             <div class="form-group">
                                                 <label>Set Transaction Pin</label>
                                                 <input name="card_pin" type="password" class="form-control" placeholder="create a 4 digit pin" maxlength="4" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
-                                                <p id="cpinerr">.</p>
+                                                <p id="cpinerr"></p>
                                             </div>
                                         </div>
                                     </div>
@@ -323,7 +353,8 @@
         <!-- Scripts -->
         <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-        <script src="{% static 'jquery/jquery.min.js' %} "></script>
+        {% comment %} <script src="{% static 'jquery/jquery.min.js' %} "></script> {% endcomment %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %} "></script>
         <script src="{% static 'js/owl-carousel.js' %} "></script>
         <script src="{% static 'js/animation.js' %} "></script>

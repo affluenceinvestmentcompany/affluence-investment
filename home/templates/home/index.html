@@ -142,27 +142,30 @@
         </div>
     </div>
 
-    <div class="charts flex-container">
+    <div id="news" class="charts flex-container">
         <div class="flex-item">
             <div class="tradingview-widget-container" id="widgetOne">
                 <div class="tradingview-widget-container__widget"></div>
             </div>
-            {% comment %} <i class="fas fa-spinner fa-spin fs-1 text-primary" id="spinnerOne"></i> {% endcomment %}
+            <i class="fas fa-spinner fa-spin text-primary" id="spinnerOne"></i>
         </div> 
         <div class="flex-item">
             <div class="tradingview-widget-container" id="widgetTwo">
                 <div class="tradingview-widget-container__widget"></div>
             </div>
+            <i class="fas fa-spinner fa-spin text-primary" id="spinnerTwo"></i>
         </div> 
         <div class="flex-item">
             <div class="tradingview-widget-container" id="widgetThree">
                 <div class="tradingview-widget-container__widget"></div>
             </div>
+            <i class="fas fa-spinner fa-spin text-primary" id="spinnerThree"></i>
         </div>
         <div class="flex-item">
             <div class="tradingview-widget-container"  id="widgetFour">
                 <div class="tradingview-widget-container__widget"></div>
             </div>
+            <i class="fas fa-spinner fa-spin text-primary" id="spinnerFour"></i>
         </div> 
         <div class="flex-item shadow-none d-none d-lg-flex"></div>
         <div class="flex-item shadow-none d-none d-lg-flex"></div>
@@ -228,7 +231,7 @@
         </div>
     </div>
 
-    <div class="section mt-5 py-lg-3">
+    <div id="faqs" class="section mt-5 py-lg-3">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-6">
@@ -400,7 +403,7 @@
                     <p><b>Minimun period:</b> The plan requires a minimum of <b>30 days</b> before you can withdraw or reinvest, ensuring your investment grows steadily.</b></p>
                 </div>
                 <div class="modal-footer">
-                    <a href="{% url 'invest' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    <a href="{% url 'invest_basic' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                 </div>
             </div>
         </div>
@@ -422,7 +425,7 @@
                     <p><b>Minimun period:</b> You must commit to a minimum of <b>60 days</b> before withdrawal, ensuring your investment is working for you in the medium term.</b></p>
                 </div>
                 <div class="modal-footer">
-                    <a href="{% url 'invest' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    <a href="{% url 'invest_standard' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                 </div>
             </div>
         </div>
@@ -444,7 +447,7 @@
                     <p><b>Minimum period:</b> The minimum investment is <b>$1000</b>, catering to more experienced investors looking for higher earnings.</p>
                 </div>
                 <div class="modal-footer">
-                    <a href="{% url 'invest' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    <a href="{% url 'invest_premium' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                 </div>
             </div>
         </div>
@@ -466,7 +469,7 @@
                     <p><b>Minimum period:</b> This plan requires a minimum of <b>120 days</b> before withdrawal. Allowing your capital to grow over an extended period.</p>
                 </div>
                 <div class="modal-footer">
-                    <a href="{% url 'invest' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    <a href="{% url 'invest_ultimate' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                 </div>
             </div>
         </div>

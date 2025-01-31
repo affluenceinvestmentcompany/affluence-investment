@@ -5,12 +5,11 @@
     <div class="row">
         <div class="col-12 mt-5 pt-5">
             <div class="container slider-wrp mt-5 px-2 ">
-                <!-- Slider 1: Display Data from LocalStorage -->
                 <div class="slider active" id="slider1">
                     <div class="slider-layer"></div>
                     <div class="slider-container">
                         <h3>Investment Details</h3>
-                        <div class="slider-content d-block d-md-flex justify-content-between align-items-center">
+                        <div class="slider-content d-block d-md-flex justify-content-around align-items-center">
                             <div class="scl text-center shadow">
                                 <h1 id="selDaily">----</h1>
                                 <h6 class="fs-4 ">Daily Profit</h6>
@@ -31,7 +30,6 @@
                     </div>
                 </div>
             
-                <!-- Slider 2: Payment Method and Amount -->
                 <div class="slider" id="slider2">
                     <div class="slider-layer"></div>
                     <div class="slider-container">
@@ -52,7 +50,7 @@
                                 <div class="option">PayPal</div>
                                 <div class="option">Bitcoin (BTC)</div>
                                 <div class="option">Ethereum (ETH)</div>
-                                <div class="option">Binance (BNC)</div>
+                                <div class="option">Binance (BNB)</div>
                                 <div class="option">Litecoin (LTC)</div>
                                 <div class="option">Tether (USDT)</div>
                             </div>
@@ -76,7 +74,6 @@
                     </div>
                 </div>
             
-                <!-- Slider 3: Confirmation -->
                 <div class="slider" id="slider3">
                     <div class="slider-layer"></div>
                     <div class="slider-container">
@@ -163,6 +160,19 @@
                 }
             }
 
+            function storePayment() {
+                let invamt = amount.value;
+                let investAmount = invamt.replace(/,/g, '');
+                if(localStorage.getItem('investAmount')) {
+                    localStorage.removeItem('investAmount');
+                }
+                if(localStorage.getItem('payMethod')) {
+                    localStorage.removeItem('payMethod');
+                }
+                localStorage.setItem('investAmount', Number(investAmount));
+                localStorage.setItem('payMethod', payMethod.textContent);
+            }
+
             next1.addEventListener('click', function () {
                 slider1.classList.add('slide-out-left');                                                                          
                 setTimeout(() => {
@@ -177,6 +187,7 @@
             next2.addEventListener('click', function () {
                 paymentValidation();
                 if(!foundError) {
+                    storePayment();
                     slider2.classList.add('slide-out-left');
                     setTimeout(() => {
                         slider2.classList.remove('active', 'slide-out-left');
