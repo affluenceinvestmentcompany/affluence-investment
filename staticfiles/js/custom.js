@@ -49,10 +49,26 @@
             $(".gsba").show();
             return false;
         });
+        $("#goto_signin").click(function () {
+            $(".reg_login_nav").hide();
+            $(".user_register").hide();
+            $(".user_login").show();
+            $(".header_title").text('Sign In');
+            $(".gsba").show();
+            return false;
+        });
 
         // Calling Register Form
         $("#register_form").click(function () {
             $(".reg_login_nav").hide();
+            $(".user_register").show();
+            $(".gsba").show();
+            $(".header_title").text('Sign Up');
+            return false;
+        });
+        $("#goto_signup").click(function () {
+            $(".reg_login_nav").hide();
+            $(".user_login").hide();
             $(".user_register").show();
             $(".gsba").show();
             $(".header_title").text('Sign Up');
@@ -201,6 +217,12 @@
     }
     let regex = new RegExp('^(?=.*[0-9])(?=.{8,})')
 
+    const phoneInput = document.getElementById('phoneInput');
+    phoneInput.addEventListener('input', function() {
+        let formattedNumber = phoneInput.value.replace(/\D/g, '');
+        phoneInput.value = formattedNumber;
+    });
+
     // =============== REGISTER AJAX===================
     $('.verify_email').hide()
     $('.loadingBtn').hide()
@@ -210,7 +232,9 @@
         e.preventDefault()
         var full_name = $('input[name=full_name]').val()
         var email = $('input[name=email]').val()
+        var phone = $('input[name=phone]').val()
         var password = $('input[name=password]').val()
+        var password2 = $('input[name=password2]').val()
         var token = $('input[name=csrfmiddlewaretoken]').val()
 
         if (full_name == "" || full_name.length < 3) {
@@ -225,11 +249,25 @@
         } else {
             document.getElementById('emerr').innerHTML = "."
         }
+        const phoneRegex = /^(?:\+?\d{1,3})?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,4}$/;
+        const isValidPhone = phoneRegex.test(phone);
+        if (phone == "" || !isValidPhone) {
+            document.getElementById('pherr').innerHTML = 'Enter a valid phone number'
+            return false
+        } else {
+            document.getElementById('pherr').innerHTML = "."
+        }
         if (password == "" || !regex.test(password)) {
             document.getElementById('pwderr').innerHTML = 'Minimum of 8 alphabets & numbers'
             return false
         } else {
             document.getElementById('pwderr').innerHTML = "."
+        }
+        if (password2 !== password) {
+            document.getElementById('pwderr2').innerHTML = 'Password do not match'
+            return false
+        } else {
+            document.getElementById('pwderr2').innerHTML = "."
         }
 
         $('.loadingBtn').show()
@@ -239,7 +277,7 @@
             method: 'POST',
             url: '/account/register/',
             data: {
-                'full_name': full_name, 'email': email, 'password': password,
+                'full_name': full_name, 'email': email, 'phone': phone, 'password': password,
                 csrfmiddlewaretoken: token
             },
             success: function (response) {

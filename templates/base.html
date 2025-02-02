@@ -113,7 +113,7 @@
                 </div>
 
                 <div class="user_register frm_wrp">
-                    <div class="screen">
+                    <div class="screen rounded-bottom">
                         <div class="screen__content">
                             <form id="reg_form" class="login">
                                 {% csrf_token %}
@@ -129,7 +129,7 @@
                                 </div>
                                 <div class="login__field">
                                     <i class="fas fa-phone-alt"></i>
-                                    <input name="phone" type="text" class="login__input" placeholder="Phone number">
+                                    <input name="phone" type="text" class="login__input" placeholder="Phone number" id="phoneInput">
                                     <p id="pherr"></p>
                                 </div>
                                 <div class="login__field">
@@ -140,7 +140,7 @@
                                 </div>
                                 <div class="login__field">
                                     <i class="fas fa-lock"></i>
-                                    <input name="confirm_password" type="password" class="login__input password" placeholder="Confirm password">
+                                    <input name="password2" type="password" class="login__input password" placeholder="Confirm password">
                                     <i class="fas fa-eye togglePassword"></i><i class="fas fa-eye-slash togglePassword"></i>
                                     <p id="pwderr2"></p>
                                 </div>
@@ -148,9 +148,13 @@
                                     <button class="w-100" id="regBtn">Sign Up &nbsp;<i class="fas fa-user-plus"></i></button>
                                     <button class="w-100 loadingBtn" disable><i class="fas fa-spinner fa-spin text-white"></i></button>
                                 </div>
+                                <div class="forgot-pass d-flex justify-content-evenly mt-3">
+                                    <a id="goto_signin" style="cursor:pointer;color:#4b8ef1;">Sign In</a>
+                                    <a href="{% url 'terms_conditions' %}">Terms &amp; Condition</a>
+                                </div>
                             </form>
                         </div>
-                        <div class="screen__background">
+                        <div class="screen__background rounded">
                             <span class="screen__background__shape screen__background__shape4"></span>
                             <span class="screen__background__shape screen__background__shape3"></span>		
                             <span class="screen__background__shape screen__background__shape2"></span>
@@ -180,8 +184,9 @@
                                     <button class="w-100" id="loginBtn">Sign In &nbsp;<i class="fas fa-sign-in-alt"></i></button>
                                     <button class="w-100 loadingBtn2" disable><i class="fas fa-spinner fa-spin text-white"></i></button>
                                 </div>
-                                <div class="forgot-pass mt-3">
-                                    <a href="">Forgot password?</a>
+                                <div class="forgot-pass d-flex justify-content-evenly mt-3">
+                                    <a id="goto_signup" style="cursor:pointer;color:#4b8ef1;">Sign Up</a>
+                                    <a href="">Forgotten password?</a>
                                 </div>
                             </form>
                         </div>

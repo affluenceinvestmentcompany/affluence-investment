@@ -1750,7 +1750,7 @@ select {
   padding: 10px;
   padding-left: 35px;
   border: 1.5px solid #DDD;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 7px;
   color: #444;
   font-weight: 400;
@@ -1766,7 +1766,7 @@ select {
 }
 
 .screen {		
-  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);		
+  background: linear-gradient(105deg, rgba(91,104,235,.2) 0%, rgba(40,225,253,.2) 100%);		
 	position: relative;	
 	width: 360px;
   padding-bottom: 20px;
@@ -1799,12 +1799,14 @@ select {
 	bottom: 0;
 	z-index: 0;
 	-webkit-clip-path: inset(0 0 0 0);
-	clip-path: inset(0 0 0 0);	
+	clip-path: inset(0 0 0 0);
+  border-radius: 20px;
 }
 
 .screen__background__shape {
 	transform: rotate(45deg);
 	position: absolute;
+  border-radius: 20px;
 }
 
 .screen__background__shape1 {
@@ -1819,9 +1821,8 @@ select {
 .screen__background__shape2 {
 	height: 220px;
 	width: 220px;
-  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);		
+  background: linear-gradient(105deg, rgba(91,104,235,.2) 0%, rgba(40,225,253,.2) 100%);		
 	top: -172px;
-  
   right: 0;	
 	border-radius: 32px;
 }
@@ -1829,9 +1830,8 @@ select {
 .screen__background__shape3 {
 	height: 540px;
 	width: 190px;
-  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);		
+  background: linear-gradient(105deg, rgba(91,104,235,.2) 0%, rgba(40,225,253,.2) 100%);		
 	top: -24px;
-  
   right: 0;	
 	border-radius: 32px;
 }
@@ -1839,9 +1839,8 @@ select {
 .screen__background__shape4 {
 	height: 400px;
 	width: 200px;
-  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);		
+  background: linear-gradient(105deg, rgba(91,104,235,.2) 0%, rgba(40,225,253,.2) 100%);		
 	top: 420px;
-  
   right: 50px;	
 	border-radius: 60px;
 }

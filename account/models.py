@@ -3,17 +3,20 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 from autoslug import AutoSlugField
 
 class CustomUserManager(BaseUserManager):
-    def _create_user(self, email, password, full_name, **extra_fields):
+    def _create_user(self, full_name, email, phone, password, **extra_fields):
         if not full_name:
             raise ValueError('Enter fullname')
         if not email:
             raise ValueError('Invalid Email')
+        if not phone:
+            raise ValueError('Invalid Phone')
         if not password:
             raise ValueError('Password not correct')
         
         user = self.model(
             email = self.normalize_email(email),
             full_name = full_name,
+            phone = phone,
             **extra_fields
         )
         
@@ -21,21 +24,21 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
     
-    def create_user(self, email, password, **extra_fields):
+    def create_user(self, full_name, phone, email, password, **extra_fields):
         extra_fields.setdefault('is_admin', False)
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('is_superuser', False)
         extra_fields.setdefault('is_verified', False)
-        return self._create_user(email, password, **extra_fields)
+        return self._create_user(full_name, phone, email, password, **extra_fields)
 
-    def create_superuser(self, email, password, full_name, **extra_fields):
+    def create_superuser(self, full_name, phone, email, password, **extra_fields):
         extra_fields.setdefault('is_admin', True)
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_active', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_verified', True)
-        return self._create_user(email, password, full_name, **extra_fields)
+        return self._create_user(full_name, phone, email, password, **extra_fields)
 
 
 
@@ -45,8 +48,9 @@ def default_profile_pic():
 
 class User(AbstractBaseUser, PermissionsMixin):
     # AbstractBaseUser has password, last_login and is_active by default
-    email = models.EmailField(db_index=True, unique=True, max_length=255)
     full_name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
+    email = models.EmailField(db_index=True, unique=True, max_length=255)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -72,10 +76,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def delete(self):
         self.profile_image.delete()
         super().delete()
-    
-    class Meta:
-        ordering = ['-is_superuser', '-is_admin', '-is_verified']
-
 
 class OneTimePassword(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

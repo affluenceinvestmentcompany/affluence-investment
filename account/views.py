@@ -40,29 +40,15 @@ def register(request):
     if request.method == 'POST':
         full_name = request.POST['full_name']
         email = request.POST['email']
+        phone = request.POST['phone']
         password = request.POST['password']
         
         if User.objects.filter(email__iexact=email).exists():
             return JsonResponse({'status':"Email already exist, try another..."})
-
-        url = 'http://ipinfo.io/json'
-        response = urlopen(url)
-        data = json.load(response)
-
-        ip=data['ip']
-        org=data['org']
-        city = data['city']
-        region=data['region']
-        country=data['country']
-        
-        f = open('countries.json')
-        country_data = json.load(f)
-        f.close()
         
         user = User.objects.create_user(full_name=full_name, email=email, 
-                                        password=password,
-                                        ip=ip, org=org, city=city, region=region, 
-                                        country=country_data[country], is_verified=False
+                                        phone=phone, password=password,
+                                        is_verified=False
                                         )
         
         user.save()
