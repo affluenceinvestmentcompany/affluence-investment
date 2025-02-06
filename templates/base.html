@@ -58,7 +58,7 @@
 
         <!-- ***** Header Area Start ***** -->
         <header class="header-area header-sticky wow" data-wow-duration="0.75s" data-wow-delay="0s">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="row d-flex align-items-center">
                     <div class="col-12 px-0">
                         <nav class="main-nav">
@@ -66,16 +66,21 @@
                                 <img src="{% static "images/logo2.png" %}" alt="" />
                             </a>                     
                             <ul class="nav" id="nav">
+                                {% if request.user.is_authenticated %}
+                                    <li>Hi, <span>{{request.user.full_name}}</span></li>
+                                {% else %} 
+                                    <li>Hi, <span>Guest</span></li>
+                                {% endif %}
                                 <li><a href="{% url 'index' %}#invest">Invest</a></li>
                                 <li><a href="{% url 'index' %}#news">News</a></li>
                                 <li><a href="{% url 'about' %}" class="">About</a></li>
                                 <li><a href="#footer" class="">Contact</a></li>
                                 <li><a href="{% url 'index' %}#faqs">FAQs</a></li>
                                 <li>
-                                    <div class="gradient-button mt-wrp d-md-flex">
+                                    <div class="gradient-button dashlog mt-wrp d-md-flex">
                                         {% if request.user.is_authenticated %}
                                             {% block makePayment %}
-                                                <a class="modal_trig text-dark me-2" href="">Dashboard  &nbsp; <i class="fas fa-th-large"></i></a>
+                                                <a class="modal_trig text-dark" href="">Dashboard  &nbsp; <i class="fas fa-th-large"></i></a>
                                             {% endblock %}
                                                 <a class="text-danger fw-bold" href="{% url 'logout' %}" style="color:red !important;"><span class="d-md-none">Logout &nbsp;</span><i class="fas fa-sign-out-alt"></i></a>
                                         {% else %}
@@ -84,6 +89,7 @@
                                     </div>
                                 </li>
                             </ul>
+                            {% comment %} <span class="intro">Hi {{request.user.full_name}}</span> {% endcomment %}
                             <a class="menu-trigger" id="menuTrigger">
                                 <span>Menu</span>
                             </a>
@@ -96,7 +102,7 @@
 
         <div id="modal" class="popupContainer" style="display: none">
             <div class="popupHeader">
-                <i class="fas fa-arrow-left text-primary gsba back_btn"></i> &nbsp;&nbsp; <span class="header_title">Sign Up || Sign In</span>
+                <i class="fas fa-arrow-left text-white gsba back_btn"></i> &nbsp;&nbsp; <span class="header_title">Sign Up || Sign In</span>
                 <span class="modal_close"><i class="fas fa-times"></i></span>
             </div>
 
@@ -149,7 +155,7 @@
                                     <button class="w-100 loadingBtn" disable><i class="fas fa-spinner fa-spin text-white"></i></button>
                                 </div>
                                 <div class="forgot-pass d-flex justify-content-evenly mt-3">
-                                    <a id="goto_signin" style="cursor:pointer;color:#4b8ef1;">Sign In</a>
+                                    <a id="goto_signin" style="cursor:pointer;color:#4b8ef1;font-weight:500;">Sign In</a>
                                     <a href="{% url 'terms_conditions' %}">Terms &amp; Condition</a>
                                 </div>
                             </form>
@@ -185,7 +191,7 @@
                                     <button class="w-100 loadingBtn2" disable><i class="fas fa-spinner fa-spin text-white"></i></button>
                                 </div>
                                 <div class="forgot-pass d-flex justify-content-evenly mt-3">
-                                    <a id="goto_signup" style="cursor:pointer;color:#4b8ef1;">Sign Up</a>
+                                    <a id="goto_signup" style="cursor:pointer;color:#4b8ef1;font-weight:500;">Sign Up</a>
                                     <a href="">Forgotten password?</a>
                                 </div>
                             </form>
@@ -218,9 +224,9 @@
         <div id="modal3" class="popupContainer" style="display: none">
             <div class="popupHeader">
                 {% if request.user.is_verified %}
-                <i class="fas fa-arrow-left text-primary gsba back_btn"></i> &nbsp;&nbsp; <span class="header_title">Add payment Card</span>
+                <i class="fas fa-arrow-left text-white gsba back_btn"></i> &nbsp;&nbsp; <span class="header_title">Add payment Card</span>
                 {% else %}
-                <i class="fas fa-arrow-left text-primary gsba back_btn"></i> &nbsp;&nbsp; <span class="header_title">Verification</span>
+                <i class="fas fa-arrow-left text-white gsba back_btn"></i> &nbsp;&nbsp; <span class="header_title">Verification</span>
                 {% endif %}
                 <span class="modal_close"><i class="fas fa-times"></i></span>
             </div>
@@ -327,15 +333,15 @@
                         <div class="footer-widget">
                             <h4>Useful Links</h4>
                             <ul class="text-center">
-                                <li><a href="{% url 'index' %}">Home</a></li>
                                 <li><a href="{% url 'index' %}#invest">Invest</a></li>
+                                <li><a href="{% url 'index' %}#news">News</a></li>
                                 <li><a href="{% url 'about' %}">About Us</a></li>
                                 <li><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
                                 <li><a href="{% url 'terms_conditions' %}">Terms &amp; Condition</a></li>
                             </ul>
                         </div>
                     </div>
-                    <div class="col-12 mt-sm-5 mt-lg-0 col-lg-4">
+                    <div class="col-12 mt-5 mt-lg-0 col-lg-4">
                         <div class="footer-widget">
                             <h4>Contact Us</h4>
                             {% comment %} <p></p> {% endcomment %}

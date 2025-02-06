@@ -100,8 +100,9 @@
         }
     });
 
-    $('#sidebar').click(function (e) {
-        e.stopPropagation();
+    $('.nav a').on('click', function () {
+        $('.menu-trigger').removeClass('active');
+        $('.nav').removeClass('active');
     });
 
 

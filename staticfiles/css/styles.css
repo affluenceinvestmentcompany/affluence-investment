@@ -222,6 +222,10 @@ body {
   background: linear-gradient(105deg, rgba(40,225,253,1) 0%, rgba(91,104,235,1) 100%);
 }
 
+.gradient-button a.text-danger {
+  margin-left: 15px;
+}
+
 .border-button a {
   display: inline-block !important;
   padding: 10px 20px !important;
@@ -312,7 +316,7 @@ header
   float: left;
   margin-left: 0;
   margin-top: 14px;
-  padding-left: 20px;
+  padding-left: 30px;
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
   -o-transition: all 0.3s ease 0s;
@@ -327,6 +331,7 @@ header
   float: right;
   margin-right: 0;
   margin-top: 20px;
+  padding-right: 30px;
   background-color: transparent;
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
@@ -341,23 +346,23 @@ header
   padding-right: 20px;
 }
 
-.header-area .main-nav .nav li:nth-child(6) {
+/* .header-area .main-nav .nav li:nth-child(6) {
   padding-right: 0px;
   padding-left: 40px;
-}
+} */
 
-.header-area .main-nav .nav li:last-child a ,
-.background-header .main-nav .nav li:last-child a,
-.header-area .main-nav .nav li:nth-child(6) a ,
-.background-header .main-nav .nav li:nth-child(6) a {
+.header-area .main-nav .nav li .dashlog a,
+.background-header .main-nav .nav li .dashlog a,
+.header-area .main-nav .nav li .daslog a,
+.background-header .main-nav .nav li .dashlog a {
   padding: 0px 20px !important;
   font-weight: 400;
 }
 
-.header-area .main-nav .nav li:last-child a:hover ,
-.background-header .main-nav .nav li:last-child a:hover,
-.header-area .main-nav .nav li:nth-child(6) a:hover ,
-.background-header .main-nav .nav li:nth-child(6) a:hover {
+.header-area .main-nav .nav li .dashlog a:hover,
+.background-header .main-nav .nav li .dashlog a:hover,
+.header-area .main-nav .nav li .dashlog a:hover,
+.background-header .main-nav .nav li .dashlog a:hover {
   color: #fff !important;
 }
 
@@ -1268,18 +1273,14 @@ a.btn_red {
 
 
 /* Popup Styles*/
-
 .popupHeader {
-  font-size: 16px;
-  /* text-transform: uppercase; */
-}
-
-.popupHeader {
-  background: #F4F4F2;
+  color: #fff;
+  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 75%, rgba(91,104,235,1) 100%);
   position: relative;
   padding: 10px 20px;
   border-bottom: 1px solid #DDD;
   font-weight: bold;
+  font-size: 18px;
 }
 
 .popupHeader .modal_close {
@@ -1287,10 +1288,9 @@ a.btn_red {
   right: 0;
   top: 0;
   padding: 10px 15px;
-  /* background: #4b8ef1; */
   cursor: pointer;
-  color: #333;
-  font-size: 16px;
+  color: #fff;
+  font-size: 18px;
 }
 
 .popupBody {
@@ -1736,6 +1736,11 @@ select {
   background: linear-gradient(105deg, rgba(40,225,253,1) 0%, rgba(91,104,235,1) 100%);
 }
 
+
+/* =============== Intro =============== */
+.header-area .nav li:first-child {
+  display: none;
+}
 
 
 /* ============ Register / Login =========== */
