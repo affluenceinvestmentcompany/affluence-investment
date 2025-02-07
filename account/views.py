@@ -55,7 +55,7 @@ def register(request):
         
         user = authenticate(email=email, password=password)
 
-        # auth.login(request, user)
+        auth.login(request, user)
         
         verification_email = EmailMessage(
             subject = 'Verify your email',

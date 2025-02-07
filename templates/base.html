@@ -82,7 +82,7 @@
                                             {% block makePayment %}
                                                 <a class="modal_trig text-dark" href="">Dashboard  &nbsp; <i class="fas fa-th-large"></i></a>
                                             {% endblock %}
-                                                <a class="text-danger fw-bold" href="{% url 'logout' %}" style="color:red !important;"><span class="d-md-none">Logout &nbsp;</span><i class="fas fa-sign-out-alt"></i></a>
+                                                <a class="text-danger fw-bold logout" href="{% url 'logout' %}" style="color:red !important;"><span class="d-md-none">Logout &nbsp;</span><i class="fas fa-sign-out-alt"></i></a>
                                         {% else %}
                                             <a class="modal_trigger modal_trig text-dark" href="#modal">Get Started &nbsp; <i class="fa fa-sign-in-alt"></i></a>
                                         {% endif %}
@@ -204,114 +204,29 @@
                         </div>
                     <div>
                 </div>
+            </section>
+        </div>
 
-                <div class="verify_email">
-                <h5 class="text-center primary-color border-bottom pb-2">Please verify your email</h5>
-                <p class="fs-6 text-center mt-2">
-                    A verification link have been sent to <br>
-                    <b id="reg_email"></b>, <br>
+        <div id="verifyEmail" class="verify_email" style="display: none">
+            <div class="popupHeader">
+                <span class="header_title">Verification</span>
+                <span class="modal_close"><i class="fas fa-times"></i></span>
+            </div>
+            <section class="popupBody">
+                <h5 class="text-center border-bottom p-0 m-0 py-1" style="font-size:18px;">Please verify your email</h5>
+                <p class="fs-6 text-center mt-2" style="line-height:22px;font-weight:400;">
+                    A link have been sent to <br>
+                    <b id="reg_email" class="fw-bold"></b>, <br>
                     please check your email <br>
                     and click on the link to <br>
                     complete your registration.
                 </p>
+                <div class="d-flex justify-content-end">
+                    <a href="{% url 'resend_link' %}" class="btn btn-round btn-sm py-1 px-3 mt-4">Resend link</a>
                 </div>
             </section>
         </div>
-
-        {% block modal2 %}
-        {% endblock %}
-
-        <div id="modal3" class="popupContainer" style="display: none">
-            <div class="popupHeader">
-                {% if request.user.is_verified %}
-                <i class="fas fa-arrow-left text-white gsba back_btn"></i> &nbsp;&nbsp; <span class="header_title">Add payment Card</span>
-                {% else %}
-                <i class="fas fa-arrow-left text-white gsba back_btn"></i> &nbsp;&nbsp; <span class="header_title">Verification</span>
-                {% endif %}
-                <span class="modal_close"><i class="fas fa-times"></i></span>
-            </div>
-
-            <section class="popupBody">
-                {% if request.user.is_verified %}
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <div class="row mb-3 py-2">
-                                <img width="400px" class="img-responsive cc-img" src="">
-                            </div>
-                        </div>
-                        <div class="panel-body">
-                            <form role="form" id="add_card">
-                                {% csrf_token %}
-                                <input type="hidden" id="card_type" name="card_type" value=""/>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <label>Name On Card</label>
-                                            <input name="card_owner" type="text" class="form-control" placeholder="name on card" />
-                                            <p id="cownerr"></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <label>Card Number</label>
-                                            <div class="card-num">
-                                                <input id="cardNumber" name="card_number" type="text" class="form-control" maxlength="19" placeholder="0000 0000 0000 0000" oninput="cardNumberFunction(event)"/>
-                                                <img id="cardType" src="" alt="card type"/>
-                                            </div>
-                                            <p id="cnumerr"></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-7">
-                                        <div class="form-group">
-                                            <label class="hidden-xs">Exp Date</label>
-                                            <input name="card_exp" type="text" id="cardExp" class="form-control" maxlength="5" placeholder="MM / YY" onkeyup="formatExpDate(event)";>
-                                            <p id="cexperr"></p>
-                                        </div>
-                                    </div>
-                                    <div class="col-5 pull-right">
-                                        <div class="form-group">
-                                            <label>CVV Code</label>
-                                            <input name="card_cvv" type="password" class="form-control" maxlength="3" placeholder="CVV" oninput="cvvFunction(event)"/>
-                                            <p id="ccvverr"></p>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <label>Set Transaction Pin</label>
-                                                <input name="card_pin" type="password" class="form-control" placeholder="create a 4 digit pin" maxlength="4" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
-                                                <p id="cpinerr"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row my-3">
-                                    <div class="col-12">
-                                        <input type="submit" value="Add Card" id="addCardBtn" class="btn btn-lg btn-block w-100 border-0" />
-                                        <input value="Loading..." class="loadingBtn3 btn btn-lg btn-block w-100 border-0" disabled/>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                {% else %}
-                    <div class="verify_email d-block text-center">
-                    <h5 class="text-center primary-color border-bottom pb-2">Please verify your email</h5>
-                    <p class="fs-6 text-center mt-2 lh-sm">
-                        A verification link have been <br>
-                        sent to your email please check <br>
-                        your email and click on the link to <br>
-                        complete your registration.
-                    </p>
-                    {% comment %} <a href="{% url 'resend_link' %}" class="btn btn-round btn-md py-1 px-2 mt-4">Resend link</a> {% endcomment %}
-                    </div>
-                {% endif %}
-            </section>
-        </div>
+        <a href="#verifyEmail" class="show_ver_email d-none" style="bottom:0;right:0;"></a>
 
         {% block content %}
 

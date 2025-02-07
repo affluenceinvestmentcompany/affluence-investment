@@ -17,27 +17,36 @@
 
     $(".modal_trigger").leanModal({
         top: 100,
-        overlay: 0.6,
+        overlay: 0.7,
         closeButton: ".modal_close"
     });
 
-    $(".modal2_trigger").leanModal({
+    $(".show_ver_email").leanModal({
         top: 100,
-        overlay: 0.6,
+        overlay: 0.7,
         closeButton: ".modal_close"
     });
 
-    $(".modal3_trigger").leanModal({
-        top: 100,
-        overlay: 0.6,
-        closeButton: ".modal_close"
+    $('.modal_trigger').on('click', function () {
+        $(".closeModal").click();
+    });
+    $('.show_ver_email').on('click', function () {
+        $(".closeModal").click();
     });
 
-    $(".modal3_trigger").leanModal({
-        top: 100,
-        overlay: 0.6,
-        closeButton: ".modal_close"
-    });
+    document.getElementById('reg_email').textContent = localStorage.getItem('email');
+    // $('.modal_trigger').on('click', function () {
+    //     if(localStorage.getItem('email')) {
+    //         $(".header_title").text('Verification');
+    //         $('.popupBody').html($('.verify_email').html());
+    //         console.log($('#reg_email'))
+    //         console.log(localStorage.getItem('email'))
+    //     }
+    // })
+
+    $('.logout').on('click', function () {
+        localStorage.clear();
+    })
 
     $(".gsba").hide();
     $(function () {
@@ -190,7 +199,7 @@
         $('#js-preloader').addClass('loaded');
     });
 
-    
+    // Hide/Show Password
     document.querySelectorAll('.togglePassword').forEach(function(button) {
         button.addEventListener('click', function() {
             let passwordFields = document.querySelectorAll('.password');
@@ -225,7 +234,6 @@
     });
 
     // =============== REGISTER AJAX===================
-    $('.verify_email').hide()
     $('.loadingBtn').hide()
     $('.loadingBtn2').hide()
     $('.loadingBtn3').hide()
@@ -287,12 +295,15 @@
                     $('.loadingBtn').hide()
                     $('#regBtn').show()
                 } else {
-                    $('.frm_wrp').hide()
-                    $(".gsba").hide();
-                    $(".header_title").text('Verification');
-                    $('.verify_email').show()
-                    $('.verify_modal').css({ opacity: '1', visibility: 'visible' })
+                    // $('.frm_wrp').hide()
+                    $(".popupContainer").hide();
                     $('#reg_email').append(response.data);
+                    $(".modal_trigger").leanModal('close');
+                    $(".show_ver_email").leanModal('open');
+                    if(localStorage.getItem('email')) {
+                        localStorage.removeItem('email');
+                    }
+                    localStorage.setItem('email', response.data);
                     // window.location.reload();
                 }
             }
@@ -632,3 +643,4 @@
     })
 
 })(window.jQuery);
+

@@ -12,10 +12,7 @@ def index(request):
     return render(request, 'home/index.html')
 
 def invest(request):
-    if request.user.is_authenticated:
-        return render(request, 'home/invest.html')
-    else:
-        return redirect('index')
+    return render(request, 'home/invest.html')
 
 
 def add_card(request):

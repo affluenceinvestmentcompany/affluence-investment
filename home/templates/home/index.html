@@ -386,14 +386,14 @@
         </div>
     </div>
 
-    {% comment %} MODALS {% endcomment %}
+
     <!-- Basic Plan Modal -->
     <div class="modal fade plan-details" id="basicPlanModal" tabindex="-1" aria-labelledby="basicPlanModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title p- m-0" id="basicPlanModalLabel">Basic <span>Plan</span></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close closeModal" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>The <b>Basic Plan</b> is designed for new investors looking for a steady return with a manageable investment. It offers a solid daily profit at an affordable entry point and a low minimum commitment period.</p>
@@ -403,7 +403,13 @@
                     <p><b>Minimun period:</b> The plan requires a minimum of <b>30 days</b> before you can withdraw or reinvest, ensuring your investment grows steadily.</b></p>
                 </div>
                 <div class="modal-footer">
-                    <a href="{% url 'invest_basic' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% if request.user.is_authenticated and request.user.is_verified %}
+                        <a href="{% url 'invest_basic' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% elif request.user.is_authenticated and not request.user.is_verified %}
+                        <a href="#verifyEmail" class="show_ver_email btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% else %}
+                        <a href="#modal" class="modal_trigger btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -415,17 +421,23 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="standardPlanModalLabel">Standard <span>Plan</span></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close closeModal" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>The <b>Standard Plan</b> is perfect for investors looking to earn a higher return while committing for a longer period. With a reasonable minimum investment, it provides a balanced return.</p>
-                    <p><b>Daily profit:</b> This plan offer a <b>1%</b> daily profit, allows for faster growth of your funds over time, with a higher return than the Basic plan.</p>
-                    <p><b>Starter bonus:</b> You get a <b>1%</b> starter bonus which gives a significant boost at the start, enhancing your initial earnings.</p>
+                    <p><b>Daily profit:</b> This plan offer a <b>1.0%</b> daily profit, allows for faster growth of your funds over time, with a higher return than the Basic plan.</p>
+                    <p><b>Starter bonus:</b> You get a <b>1.0%</b> starter bonus which gives a significant boost at the start, enhancing your initial earnings.</p>
                     <p><b>Minimun amount:</b> The minimum investment for this plan is <b>$500</b>, making it suitable for investors with a moderate budget.</p>
                     <p><b>Minimun period:</b> You must commit to a minimum of <b>60 days</b> before withdrawal, ensuring your investment is working for you in the medium term.</b></p>
                 </div>
                 <div class="modal-footer">
-                    <a href="{% url 'invest_standard' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% if request.user.is_authenticated and request.user.is_verified %}
+                        <a href="{% url 'invest_standard' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% elif request.user.is_authenticated and not request.user.is_verified %}
+                        <a href="#verifyEmail" class="show_ver_email btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% else %}
+                        <a href="#modal" class="modal_trigger btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -437,7 +449,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="premiumPlanModalLabel">Premium <span>Plan</span></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close closeModal" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>The <b>Premium Plan</b> offers a high-return opportunity for investors who are ready to commit to a longer-term strategy. It provides a larger daily profit along with an attractive starter bonus.</p>
@@ -447,7 +459,13 @@
                     <p><b>Minimum period:</b> The minimum investment is <b>$1000</b>, catering to more experienced investors looking for higher earnings.</p>
                 </div>
                 <div class="modal-footer">
-                    <a href="{% url 'invest_premium' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% if request.user.is_authenticated and request.user.is_verified %}
+                        <a href="{% url 'invest_premium' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% elif request.user.is_authenticated and not request.user.is_verified %}
+                        <a href="#verifyEmail" class="show_ver_email btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% else %}
+                        <a href="#modal" class="modal_trigger btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -459,17 +477,23 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="ultimatePlanModalLabel">Ultimate <span>Plan</span></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close closeModal" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>The <b>Ultimate Plan</b> is the top-tier option for serious investors who are ready to make a large commitment for the highest returns. It offers the best daily profit and starter bonus, making it ideal for those looking for the ultimate investment opportunity.</p>
                     <p><b>Daily profit:</b> Offers the highest return rate of <b>1.5%</b> daily profit, providing exceptional daily earnings.</p>
-                    <p><b>Starter bonus:</b> Comes with a <b>2%</b> starter bonus which gives you an impressive boost from the beginning, maximizing your total returns.</p>
+                    <p><b>Starter bonus:</b> Comes with a <b>2.0%</b> starter bonus which gives you an impressive boost from the beginning, maximizing your total returns.</p>
                     <p><b>Minimum amount:</b> The minimum investment is <b>$5000</b>, designed for experienced and high-commitment investors.</p>
                     <p><b>Minimum period:</b> This plan requires a minimum of <b>120 days</b> before withdrawal. Allowing your capital to grow over an extended period.</p>
                 </div>
                 <div class="modal-footer">
-                    <a href="{% url 'invest_ultimate' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% if request.user.is_authenticated and request.user.is_verified %}
+                        <a href="{% url 'invest_ultimate' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% elif request.user.is_authenticated and not request.user.is_verified %}
+                        <a href="#verifyEmail" class="show_ver_email btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% else %}
+                        <a href="#modal" class="modal_trigger btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                    {% endif %}
                 </div>
             </div>
         </div>
