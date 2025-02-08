@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.core.management.utils import get_random_secret_key  
 from .models import ManageCard, ContactUs, Payments
@@ -12,8 +13,10 @@ def index(request):
     return render(request, 'home/index.html')
 
 def invest(request):
-    return render(request, 'home/invest.html')
-
+    if request.user.is_authenticated and request.user.is_verified:
+        return render(request, 'home/invest.html')
+    else:
+        raise Http404("Page not found")
 
 def add_card(request):
     if request.method == 'POST':

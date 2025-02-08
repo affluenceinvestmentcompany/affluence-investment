@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %} 
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 mt-5 pt-3 pt-md-4 pt-lg-5">
+            <div class="container mt-5">
+                <div class="not-found">
+                    <div class="text-center">
+                        <img src="{% static 'images/404.png' %}" alt="404" class="img-fluid">
+                        <h4 class="my-4">THE PAGE YOU'VE REQUESTED IS NOT AVAILABLE</h4>
+                        <a href="{% url 'index' %}" class="btn btn-md round">Back to home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

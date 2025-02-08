@@ -15,68 +15,84 @@
         }
     });
 
-
-    $('.loop').owlCarousel({
-        center: true,
-        items: 1,
-        loop: true,
-        autoplay: true,
-        nav: true,
-        margin: 0,
-        responsive: {
-            1200: {
-                items: 5
-            },
-            992: {
-                items: 3
-            },
-            760: {
-                items: 2
-            }
-        }
+    // Page loading animation
+    $(window).on('load', function () {
+        $('#js-preloader').addClass('loaded');
     });
 
-    $(".modal_trigger").leanModal({
-        top: 100,
-        overlay: 0.6,
-        closeButton: ".modal_close"
+    function initializeModalTrigger() {
+        $(".modal_trigger").leanModal({
+            top: 100,
+            overlay: 0.7,
+            closeButton: ".modal_close"
+        });
+    
+        $(".show_ver_email").leanModal({
+            top: 100,
+            overlay: 0.7,
+            closeButton: ".modal_close2"
+        });
+    }
+
+    initializeModalTrigger();
+
+    $('.modal_trigger').on('click', function () {
+        $(".closeModal").click();
+    });
+    
+    $('.show_ver_email').on('click', function () {
+        $(".closeModal").click();
     });
 
-    $(".modal2_trigger").leanModal({
-        top: 100,
-        overlay: 0.6,
-        closeButton: ".modal_close"
+    $(".modal_close2").click(function () {
+        $('#lean_overlay2').css({
+            'display': 'none',
+        });
     });
 
-    $(".modal3_trigger").leanModal({
-        top: 100,
-        overlay: 0.6,
-        closeButton: ".modal_close"
-    });
+    $('.logout').on('click', function () {
+        localStorage.clear();
+    })
 
-    $(".modal3_trigger").leanModal({
-        top: 100,
-        overlay: 0.6,
-        closeButton: ".modal_close"
-    });
+    $('.resendEmailBtn2').hide();
+    $('.resendEmailBtn').on('click', function () {
+        $('.resendEmailBtn').hide();
+        $('.resendEmailBtn2').show();
+    })
 
     $(".gsba").hide();
     $(function () {
         // Calling Login Form
         $("#login_form").click(function () {
-            $(".social_login").hide();
+            $(".reg_login_nav").hide();
             $(".user_login").show();
-            $(".header_title").text('Login');
+            $(".header_title").text('Sign In');
+            $(".gsba").show();
+            return false;
+        });
+        $("#goto_signin").click(function () {
+            $(".reg_login_nav").hide();
+            $(".user_register").hide();
+            $(".user_login").show();
+            $(".header_title").text('Sign In');
             $(".gsba").show();
             return false;
         });
 
         // Calling Register Form
         $("#register_form").click(function () {
-            $(".social_login").hide();
+            $(".reg_login_nav").hide();
             $(".user_register").show();
             $(".gsba").show();
-            $(".header_title").text('Register');
+            $(".header_title").text('Sign Up');
+            return false;
+        });
+        $("#goto_signup").click(function () {
+            $(".reg_login_nav").hide();
+            $(".user_login").hide();
+            $(".user_register").show();
+            $(".gsba").show();
+            $(".header_title").text('Sign Up');
             return false;
         });
 
@@ -84,138 +100,60 @@
         $(".back_btn").click(function () {
             $(".user_login").hide();
             $(".user_register").hide();
-            $(".social_login").show();
+            $(".reg_login_nav").show();
             $(".gsba").hide();
-            $(".header_title").text('Register or Login');
+            $(".header_title").text('Sign Up \n|| Sign In');
             return false;
         });
     });
 
-    // Acc
-    $(document).on("click", ".naccs .menu div", function () {
-        var numberIndex = $(this).index();
-
-        if (!$(this).is("active")) {
-            $(".naccs .menu div").removeClass("active");
-            $(".naccs ul li").removeClass("active");
-
-            $(this).addClass("active");
-            $(".naccs ul").find("li:eq(" + numberIndex + ")").addClass("active");
-
-            var listItemHeight = $(".naccs ul")
-                .find("li:eq(" + numberIndex + ")")
-                .innerHeight();
-            $(".naccs ul").height(listItemHeight + "px");
-        }
-    });
-
-
-    // Menu Dropdown Toggle
     if ($('.menu-trigger').length) {
         $(".menu-trigger").on('click', function () {
             $(this).toggleClass('active');
-            $('.header-area .nav').slideToggle(200);
+            $('.nav').toggleClass('active');
         });
     }
 
-
-    // Menu elevator animation
-    $('.scroll-to-section a[href*=\\#]:not([href=\\#])').on('click', function () {
-        if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-            var target = $(this.hash);
-            target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-            if (target.length) {
-                var width = $(window).width();
-                if (width < 991) {
-                    $('.menu-trigger').removeClass('active');
-                    $('.header-area .nav').slideUp(200);
-                }
-                $('html,body').animate({
-                    scrollTop: (target.offset().top) + 1
-                }, 700);
-                return false;
-            }
+    $(document).click(function (e) {
+        if (!$(e.target).closest('.main-nav').length) {
+            $('.menu-trigger').removeClass('active');
+            $('.nav').removeClass('active');
         }
     });
 
-    $(document).ready(function () {
-        $(document).on("scroll", onScroll);
+    $('.nav a').on('click', function () {
+        $('.menu-trigger').removeClass('active');
+        $('.nav').removeClass('active');
+    });
 
-        //smoothscroll
-        $('.scroll-to-section a[href^="#"]').on('click', function (e) {
-            e.preventDefault();
-            $(document).off("scroll");
-
-            $('.scroll-to-section a').each(function () {
-                $(this).removeClass('active');
-            })
-            $(this).addClass('active');
-
-            var target = this.hash,
-                menu = target;
-            var target = $(this.hash);
-            $('html, body').stop().animate({
-                scrollTop: (target.offset().top) + 1
-            }, 500, 'swing', function () {
-                window.location.hash = target;
-                $(document).on("scroll", onScroll);
+    // Function to refresh
+    function refreshSection(element) {
+        $('.' + element).load(location.href + ' .' + element + ' > *', function () {
+            initializeModalTrigger();
+            $('.show_ver_email').on('click', function () {
+                $(".closeModal").click();
             });
         });
-    });
-
-    function onScroll(event) {
-        var scrollPos = $(document).scrollTop();
-        $('.nav a').each(function () {
-            var currLink = $(this);
-            var refElement = $(currLink.attr("href"));
-            if (refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
-                $('.nav ul li a').removeClass("active");
-                currLink.addClass("active");
-            }
-            else {
-                currLink.removeClass("active");
-            }
-        });
     }
 
-
-    // Acc
-    $(document).on("click", ".naccs .menu div", function () {
-        var numberIndex = $(this).index();
-
-        if (!$(this).is("active")) {
-            $(".naccs .menu div").removeClass("active");
-            $(".naccs ul li").removeClass("active");
-
-            $(this).addClass("active");
-            $(".naccs ul").find("li:eq(" + numberIndex + ")").addClass("active");
-
-            var listItemHeight = $(".naccs ul")
-                .find("li:eq(" + numberIndex + ")")
-                .innerHeight();
-            $(".naccs ul").height(listItemHeight + "px");
-        }
-    });
-
-
-    // Page loading animation
-    $(window).on('load', function () {
-
-        $('#js-preloader').addClass('loaded');
-
-    });
-
-
-    // Window Resize Mobile Menu Fix
-    function mobileNav() {
-        var width = $(window).width();
-        $('.submenu').on('click', function () {
-            if (width < 767) {
-                $('.submenu ul').removeClass('active');
-                $(this).find('ul').toggleClass('active');
-            }
+    // Hide/Show Password
+    document.querySelectorAll('.togglePassword').forEach(function(button) {
+        button.addEventListener('click', function() {
+            let passwordFields = document.querySelectorAll('.password');
+            
+            passwordFields.forEach(function(passwordField) {
+                if (passwordField.type === "password") {
+                    passwordField.type = "text";
+                    $('.fa-eye').hide(); 
+                    $('.fa-eye-slash').show(); 
+                } else {
+                    passwordField.type = "password";
+                    $('.fa-eye').show(); 
+                    $('.fa-eye-slash').hide(); 
+                }
+            }); 
         });
-    }
+    });
 
     // Validate Email
     const validateEmail = (email) => {
@@ -225,8 +163,13 @@
     }
     let regex = new RegExp('^(?=.*[0-9])(?=.{8,})')
 
+    const phoneInput = document.getElementById('phoneInput');
+    phoneInput.addEventListener('input', function() {
+        let formattedNumber = phoneInput.value.replace(/\D/g, '');
+        phoneInput.value = formattedNumber;
+    });
+
     // =============== REGISTER AJAX===================
-    $('.verify_email').hide()
     $('.loadingBtn').hide()
     $('.loadingBtn2').hide()
     $('.loadingBtn3').hide()
@@ -234,26 +177,42 @@
         e.preventDefault()
         var full_name = $('input[name=full_name]').val()
         var email = $('input[name=email]').val()
+        var phone = $('input[name=phone]').val()
         var password = $('input[name=password]').val()
+        var password2 = $('input[name=password2]').val()
         var token = $('input[name=csrfmiddlewaretoken]').val()
 
         if (full_name == "" || full_name.length < 3) {
-            document.getElementById('fnerr').innerHTML = 'enter your full name'
+            document.getElementById('fnerr').innerHTML = 'Enter your full name'
             return false
         } else {
             document.getElementById('fnerr').innerHTML = "."
         }
         if (email == "" || !validateEmail(email)) {
-            document.getElementById('emerr').innerHTML = 'enter a valid email'
+            document.getElementById('emerr').innerHTML = 'Enter a valid email'
             return false
         } else {
             document.getElementById('emerr').innerHTML = "."
         }
+        const phoneRegex = /^(?:\+?\d{1,3})?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,4}$/;
+        const isValidPhone = phoneRegex.test(phone);
+        if (phone == "" || !isValidPhone) {
+            document.getElementById('pherr').innerHTML = 'Enter a valid phone number'
+            return false
+        } else {
+            document.getElementById('pherr').innerHTML = "."
+        }
         if (password == "" || !regex.test(password)) {
-            document.getElementById('pwderr').innerHTML = 'minimum of 8 alphabets & numbers'
+            document.getElementById('pwderr').innerHTML = 'Minimum of 8 alphabets & numbers'
             return false
         } else {
             document.getElementById('pwderr').innerHTML = "."
+        }
+        if (password2 !== password) {
+            document.getElementById('pwderr2').innerHTML = 'Password do not match'
+            return false
+        } else {
+            document.getElementById('pwderr2').innerHTML = "."
         }
 
         $('.loadingBtn').show()
@@ -263,7 +222,7 @@
             method: 'POST',
             url: '/account/register/',
             data: {
-                'full_name': full_name, 'email': email, 'password': password,
+                'full_name': full_name, 'email': email, 'phone': phone, 'password': password,
                 csrfmiddlewaretoken: token
             },
             success: function (response) {
@@ -272,13 +231,15 @@
                     $('.loadingBtn').hide()
                     $('#regBtn').show()
                 } else {
-                    $('.frm_wrp').hide()
-                    $(".gsba").hide();
+                    $(".modal_close").click();
                     $(".header_title").text('Verification');
-                    $('.verify_email').show()
-                    $('.verify_modal').css({ opacity: '1', visibility: 'visible' })
-                    $('#reg_email').append(response.data);
-                    // window.location.reload();
+                    $(".show_ver_email").click();
+                    $('#lean_overlay2').css({
+                        'display': 'block',
+                    });
+                    refreshSection('nav');
+                    refreshSection('refreshBanner');
+                    refreshSection('planModals');
                 }
             }
         })
@@ -292,13 +253,13 @@
         var token = $('input[name=csrfmiddlewaretoken]').val()
 
         if (email == "" || !validateEmail(email)) {
-            document.getElementById('login_emerr').innerHTML = 'enter a valid email'
+            document.getElementById('login_emerr').innerHTML = 'Enter a valid email'
             return false
         } else {
             document.getElementById('login_emerr').innerHTML = "."
         }
         if (password == "") {
-            document.getElementById('login_pwderr').innerHTML = 'enter your password'
+            document.getElementById('login_pwderr').innerHTML = 'Enter your password'
             return false
         } else {
             document.getElementById('login_pwderr').innerHTML = "."
@@ -316,7 +277,7 @@
             },
             success: function (response) {
                 if (response.status == 'Invalid email or password') {
-                    document.getElementById('invaliderr').innerHTML = 'Invalid email or password'
+                    document.getElementById('invaliderr').innerHTML = 'Invalid login details'
                     $('.loadingBtn2').hide()
                     $('#loginBtn').show()
                     console.log(response.status)
@@ -350,13 +311,13 @@
             let cnumerr = document.getElementById('cnumerr')
             cnumerr.innerHTML = 'enter a valid card number'
             return false
-        } else if(cnumerr.innerHTML == 'invalid card number') {
+        } else if (cnumerr.innerHTML == 'invalid card number') {
             cnumerr.innerHTML = 'invalid card number'
             return false
         } else {
             document.getElementById('cnumerr').innerHTML = "."
         }
-        if (card_exp == '' || card_exp[3] != 2 || card_exp[4] < 4 || card_exp[4] == undefined || card_exp.length<5) {
+        if (card_exp == '' || card_exp[3] != 2 || card_exp[4] < 4 || card_exp[4] == undefined || card_exp.length < 5) {
             document.getElementById('cexperr').innerHTML = 'invalid expiry date'
             return false
         } else if (card_exp[0] > 1 || card_exp[0] == 0 && card_exp[0] == 1 && card_exp[1] > 2) {
@@ -374,7 +335,7 @@
         if (card_pin == "" || card_pin.length < 4) {
             document.getElementById('cpinerr').innerHTML = 'enter a 4 digit pin'
             return false
-        } else if(card_pin == '0000' || card_pin == 1111 || card_pin == 1234) {
+        } else if (card_pin == '0000' || card_pin == 1111 || card_pin == 1234) {
             document.getElementById('cpinerr').innerHTML = 'enter a stronger pin'
             return false
         } else {
@@ -408,8 +369,8 @@
 
     // =============DELETE PAYMENT CARD AJAX===============
     $('.spinner').hide()
-    $(document).on('click', '.delete_card', function(e){
-        e.preventDefault()     
+    $(document).on('click', '.delete_card', function (e) {
+        e.preventDefault()
         var card_id = $(this).closest('.card_data').find('.card_id').val()
         var token = $('input[name=csrfmiddlewaretoken]').val()
 
@@ -419,8 +380,8 @@
         $.ajax({
             method: 'POST',
             url: '/delete-card/',
-            data: {'card_id':card_id, csrfmiddlewaretoken: token},
-            success: function(response) {
+            data: { 'card_id': card_id, csrfmiddlewaretoken: token },
+            success: function (response) {
                 alertify.message(response.status)
                 window.location.reload();
             }
@@ -428,51 +389,51 @@
     })
 
     // =============CONTACT US AJAX===============
-    $(document).on('submit', '#contactForm', function (e) {
-        e.preventDefault()
-        var full_name = document.getElementById('sender_full_name').value
-        var email = document.getElementById('sender_email').value
-        var message = document.getElementById('sender_message').value
-        var token = $('input[name=csrfmiddlewaretoken]').val()
+    // $(document).on('submit', '#contactForm', function (e) {
+    //     e.preventDefault()
+    //     var full_name = document.getElementById('sender_full_name').value
+    //     var email = document.getElementById('sender_email').value
+    //     var message = document.getElementById('sender_message').value
+    //     var token = $('input[name=csrfmiddlewaretoken]').val()
 
-        if (full_name == "" || full_name.length < 3) {
-            document.getElementById('sfnerr').innerHTML = 'enter your full name'
-            return false
-        } else {
-            document.getElementById('sfnerr').innerHTML = "."
-        }
-        if (email == "" || !validateEmail(email)) {
-            document.getElementById('semerr').innerHTML = 'enter a valid email'
-            return false
-        } else {
-            document.getElementById('semerr').innerHTML = "."
-        }
-        if (message == "") {
-            document.getElementById('smerr').innerHTML = 'enter your message'
-            return false
-        } else {
-            document.getElementById('smerr').innerHTML = "."
-        }
+    //     if (full_name == "" || full_name.length < 3) {
+    //         document.getElementById('sfnerr').innerHTML = 'enter your full name'
+    //         return false
+    //     } else {
+    //         document.getElementById('sfnerr').innerHTML = "."
+    //     }
+    //     if (email == "" || !validateEmail(email)) {
+    //         document.getElementById('semerr').innerHTML = 'enter a valid email'
+    //         return false
+    //     } else {
+    //         document.getElementById('semerr').innerHTML = "."
+    //     }
+    //     if (message == "") {
+    //         document.getElementById('smerr').innerHTML = 'enter your message'
+    //         return false
+    //     } else {
+    //         document.getElementById('smerr').innerHTML = "."
+    //     }
 
-        $('.loadingBtn3').show()
-        $('.contactBtn').hide()
+    //     $('.loadingBtn3').show()
+    //     $('.contactBtn').hide()
 
-        $.ajax({
-            method: 'POST',
-            url: '/contact-us/',
-            data: {
-                'full_name': full_name, 'email': email, 'message': message,
-                csrfmiddlewaretoken: token
-            },
-            success: function (response) {
-                alertify.message(response.status)
-                document.getElementById('sender_full_name').value = ''
-                document.getElementById('sender_email').value = ''
-                document.getElementById('sender_message').value = ''
-                window.location.reload();
-            }
-        })
-    })
+    //     $.ajax({
+    //         method: 'POST',
+    //         url: '/contact-us/',
+    //         data: {
+    //             'full_name': full_name, 'email': email, 'message': message,
+    //             csrfmiddlewaretoken: token
+    //         },
+    //         success: function (response) {
+    //             alertify.message(response.status)
+    //             document.getElementById('sender_full_name').value = ''
+    //             document.getElementById('sender_email').value = ''
+    //             document.getElementById('sender_message').value = ''
+    //             window.location.reload();
+    //         }
+    //     })
+    // })
 
     // =============PROCESS PAYMENT AJAX===============
     $("#modal002").hide();
@@ -491,7 +452,7 @@
         } else {
             document.getElementById('bnerr').innerHTML = "."
         }
-        if (card == "" ) {
+        if (card == "") {
             document.getElementById('ccerr').innerHTML = 'select a card'
             return false
         } else {
@@ -606,7 +567,7 @@
     })
 
     // ===============Notifications===============
-    alertify.set('notifier','position', 'top-right');
+    alertify.set('notifier', 'position', 'top-right');
 
     $('.msgs_info').fadeIn().delay(10000).fadeOut();
     $('.dj_err_msg').fadeIn().delay(10000).fadeOut();
@@ -617,3 +578,4 @@
     })
 
 })(window.jQuery);
+

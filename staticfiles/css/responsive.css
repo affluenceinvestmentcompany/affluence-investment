@@ -270,8 +270,8 @@
     padding-left: 20px;
   }
   .slider-content .scr ul li {
-    font-size: 1.5rem;
-    line-height: 2.3rem;
+    font-size: 1.33rem;
+    line-height: 2rem;
   }
   .header-area .nav li:first-child {
     display: inline-block;
@@ -291,6 +291,14 @@
   }
   .header-area .nav li:nth-child(2)  {
     margin-top: 50px;
+  }
+}
+
+@media (max-width: 450px) {
+  .popupContainer,
+  .verify_email,
+  .screen {
+    width: 95vw;
   }
 }
 

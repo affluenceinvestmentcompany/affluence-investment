@@ -15,37 +15,49 @@
         }
     });
 
-    $(".modal_trigger").leanModal({
-        top: 100,
-        overlay: 0.7,
-        closeButton: ".modal_close"
+    // Page loading animation
+    $(window).on('load', function () {
+        $('#js-preloader').addClass('loaded');
     });
 
-    $(".show_ver_email").leanModal({
-        top: 100,
-        overlay: 0.7,
-        closeButton: ".modal_close"
-    });
+    function initializeModalTrigger() {
+        $(".modal_trigger").leanModal({
+            top: 100,
+            overlay: 0.7,
+            closeButton: ".modal_close"
+        });
+    
+        $(".show_ver_email").leanModal({
+            top: 100,
+            overlay: 0.7,
+            closeButton: ".modal_close2"
+        });
+    }
+
+    initializeModalTrigger();
 
     $('.modal_trigger').on('click', function () {
         $(".closeModal").click();
     });
+    
     $('.show_ver_email').on('click', function () {
         $(".closeModal").click();
     });
 
-    document.getElementById('reg_email').textContent = localStorage.getItem('email');
-    // $('.modal_trigger').on('click', function () {
-    //     if(localStorage.getItem('email')) {
-    //         $(".header_title").text('Verification');
-    //         $('.popupBody').html($('.verify_email').html());
-    //         console.log($('#reg_email'))
-    //         console.log(localStorage.getItem('email'))
-    //     }
-    // })
+    $(".modal_close2").click(function () {
+        $('#lean_overlay2').css({
+            'display': 'none',
+        });
+    });
 
     $('.logout').on('click', function () {
         localStorage.clear();
+    })
+
+    $('.resendEmailBtn2').hide();
+    $('.resendEmailBtn').on('click', function () {
+        $('.resendEmailBtn').hide();
+        $('.resendEmailBtn2').show();
     })
 
     $(".gsba").hide();
@@ -114,90 +126,15 @@
         $('.nav').removeClass('active');
     });
 
-
-    // Menu elevator animation
-    // $('.scroll-to-section a[href*=\\#]:not([href=\\#])').on('click', function () {
-    //     if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-    //         var target = $(this.hash);
-    //         target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-    //         if (target.length) {
-    //             var width = $(window).width();
-    //             if (width < 991) {
-    //                 $('.menu-trigger').removeClass('active');
-    //                 $('.header-area .nav').slideUp(200);
-    //             }
-    //             $('html,body').animate({
-    //                 scrollTop: (target.offset().top) + 1
-    //             }, 700);
-    //             return false;
-    //         }
-    //     }
-    // });
-
-    // $(document).ready(function () {
-    //     $(document).on("scroll", onScroll);
-
-    //     //smoothscroll
-    //     $('.scroll-to-section a[href^="#"]').on('click', function (e) {
-    //         e.preventDefault();
-    //         $(document).off("scroll");
-
-    //         $('.scroll-to-section a').each(function () {
-    //             $(this).removeClass('active');
-    //         })
-    //         $(this).addClass('active');
-
-    //         var target = this.hash,
-    //             menu = target;
-    //         var target = $(this.hash);
-    //         $('html, body').stop().animate({
-    //             scrollTop: (target.offset().top) + 1
-    //         }, 500, 'swing', function () {
-    //             window.location.hash = target;
-    //             $(document).on("scroll", onScroll);
-    //         });
-    //     });
-    // });
-
-    // function onScroll(event) {
-    //     var scrollPos = $(document).scrollTop();
-    //     $('.nav a').each(function () {
-    //         var currLink = $(this);
-    //         var refElement = $(currLink.attr("href"));
-    //         if (refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
-    //             $('.nav ul li a').removeClass("active");
-    //             currLink.addClass("active");
-    //         }
-    //         else {
-    //             currLink.removeClass("active");
-    //         }
-    //     });
-    // }
-
-
-    // Acc
-    // $(document).on("click", ".naccs .menu div", function () {
-    //     var numberIndex = $(this).index();
-
-    //     if (!$(this).is("active")) {
-    //         $(".naccs .menu div").removeClass("active");
-    //         $(".naccs ul li").removeClass("active");
-
-    //         $(this).addClass("active");
-    //         $(".naccs ul").find("li:eq(" + numberIndex + ")").addClass("active");
-
-    //         var listItemHeight = $(".naccs ul")
-    //             .find("li:eq(" + numberIndex + ")")
-    //             .innerHeight();
-    //         $(".naccs ul").height(listItemHeight + "px");
-    //     }
-    // });
-
-
-    // Page loading animation
-    $(window).on('load', function () {
-        $('#js-preloader').addClass('loaded');
-    });
+    // Function to refresh
+    function refreshSection(element) {
+        $('.' + element).load(location.href + ' .' + element + ' > *', function () {
+            initializeModalTrigger();
+            $('.show_ver_email').on('click', function () {
+                $(".closeModal").click();
+            });
+        });
+    }
 
     // Hide/Show Password
     document.querySelectorAll('.togglePassword').forEach(function(button) {
@@ -217,7 +154,6 @@
             }); 
         });
     });
-
 
     // Validate Email
     const validateEmail = (email) => {
@@ -295,16 +231,15 @@
                     $('.loadingBtn').hide()
                     $('#regBtn').show()
                 } else {
-                    // $('.frm_wrp').hide()
-                    $(".popupContainer").hide();
-                    $('#reg_email').append(response.data);
-                    $(".modal_trigger").leanModal('close');
-                    $(".show_ver_email").leanModal('open');
-                    if(localStorage.getItem('email')) {
-                        localStorage.removeItem('email');
-                    }
-                    localStorage.setItem('email', response.data);
-                    // window.location.reload();
+                    $(".modal_close").click();
+                    $(".header_title").text('Verification');
+                    $(".show_ver_email").click();
+                    $('#lean_overlay2').css({
+                        'display': 'block',
+                    });
+                    refreshSection('nav');
+                    refreshSection('refreshBanner');
+                    refreshSection('planModals');
                 }
             }
         })
