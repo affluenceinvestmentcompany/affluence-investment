@@ -33,7 +33,7 @@
                 <div class="slider" id="slider2">
                     <div class="slider-layer"></div>
                     <div class="slider-container">
-                        <h3>Payment</h3>
+                        <h3>Amount</h3>
                         <div class="amount-container">
                             <label for="amount">Investment Amount</label>
                             <input type="text" id="amount" name="amount" value="" placeholder="0.0" required>
@@ -77,11 +77,22 @@
                 <div class="slider" id="slider3">
                     <div class="slider-layer"></div>
                     <div class="slider-container">
-                        <h3>Confirmation</h3>
-                        <p id="confirmationInfo"></p>
+                        <h3>Payment</h3>
+                        <div class="slider-content d-block d-md-flex justify-content-around align-items-center">
+                            <div class="text-center csl">
+                                <img src="{% static 'images/paypal.png' %}" alt="image" class="img-fluid">
+                            </div>
+                            <div class="scr csr">
+                                <ul>
+                                    <li class="fw-normal mb-2" id="network">None</li>
+                                    <li class="fw-normal mb-2" id="address" style="word-wrap: break-word;line-height:28px;"><span id="payAddress">hfurehl885t88888889485tufjeihfiuhfh7676y</span> <i class="fas fa-copy" id="copyPayAddress" style="cursor:pointer;"></i></li>
+                                    <li class="fw-normal" id="amountPay">$0</li>
+                                </ul>
+                            </div>
+                        </div>
                         <div class="slider-btn">
                             <button class="" id="back3">Back</button>
-                            <button class="" id="paid">I have paid</button>
+                            <button class="btn" id="paid"><a href="#">I have paid</a></button>
                         </div>
                     </div>
                 </div>
@@ -246,6 +257,7 @@
         } else {
             console.log('Nothing found.');
         }
+
     </script>
 
     <script>
@@ -306,6 +318,18 @@
             } else {
                 errorMessage.textContent = "";
             }
+        });
+
+        document.getElementById('copyPayAddress').addEventListener('click', function() {
+            let payAddress = document.getElementById('payAddress');
+            
+            navigator.clipboard.writeText(payAddress.textContent || payAddress.innerText)
+                .then(function() {
+                    alertify.message("Copied to clipboard");
+                })
+                .catch(function(error) {
+                    alertify.message("Error copying text: " + error);
+            });
         });
     </script>
 

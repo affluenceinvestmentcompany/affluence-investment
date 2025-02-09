@@ -34,7 +34,6 @@ def activate(request, uidb64, token):
         messages.error(request, 'Activation link is invalid!')
     return redirect('index')
 
-
 # Create your views here.
 def register(request):
     if request.method == 'POST':
@@ -72,8 +71,6 @@ def register(request):
         
         return JsonResponse({"data": email})
 
-
-
 # User Login
 def login(request):
     if request.method == 'POST':
@@ -88,12 +85,12 @@ def login(request):
         else:
             return JsonResponse({'status':"Invalid email or password"})
 
-
+# User Logout
 def logout(request):
     auth.logout(request)
     return redirect('index')
 
-
+# Resend verification link
 def resendLink(request):
     user = request.user
     email = request.user.email
@@ -111,4 +108,8 @@ def resendLink(request):
     verification_email.send()
     messages.success(request, 'Verification email resent.')
     return redirect('index')
+
+# Dashboard
+def dashboard(request):
+    return render(request, 'account/dashboard.html')
 

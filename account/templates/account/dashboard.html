@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+{% load static %} 
+
+{% block content %}
+    <div class="container=fluid mt-5 px-0">
+        <div class="row mt-5 pt-5">
+            <div class="dashboard">
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <div class="user">
+                        <img src="{% static 'images/user.png' %}" alt="">
+                        <span>{{ request.user.full_name }}</span>
+                    </div>
+                    <nav>
+                        <a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a>
+                        <a href="#"><i class="fas fa-users"></i> Users</a>
+                        <a href="#"><i class="fas fa-chart-line"></i> Investments</a>
+                        <a href="#"><i class="fas fa-exchange-alt"></i> Transactions</a>
+                        <a href="#"><i class="fas fa-money-check-alt"></i> Withdrawal</a>
+                        <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                    </nav>
+                </div>
+            
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Cards -->
+                    <div class="cards">
+                        <div class="card t-users">
+                            <i class="fas fa-users"></i>
+                            <h3>Total Users</h3>
+                            <p>456</p>
+                            <div class="chart-container">
+                                <canvas id="usersChart" width="100" height="50"></canvas>
+                            </div>
+                        </div>
+                        <div class="card t-invest">
+                            <i class="fas fa-dollar-sign"></i>
+                            <h3>Total Investments</h3>
+                            <p>$1,234,567</p>
+                            <div class="chart-container">
+                                <canvas id="investmentChart" width="100" height="50"></canvas>
+                            </div>
+                        </div>
+                        <div class="card t-roi">
+                            <i class="fas fa-percent"></i>
+                            <h3>Total ROI</h3>
+                            <p>%3.80</p>
+                            <div class="chart-container">
+                                <canvas id="roiChart" width="100" height="50"></canvas>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Investment Table -->
+                    <div class="table-container">
+                        <table id="usersInvestmentsTable" class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Amount ($)</th>
+                                    <th>ROI (%)</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody class="border-0">
+                                <tr>
+                                    <td>John Doe</td>
+                                    <td>$5,000</td>
+                                    <td>12%</td>
+                                    <td>Active</td>
+                                    <td>2024-01-12</td>
+                                </tr>
+                                <tr>
+                                    <td>Jane Smith</td>
+                                    <td>$7,500</td>
+                                    <td>8%</td>
+                                    <td>Pending</td>
+                                    <td>2024-02-25</td>
+                                </tr>
+                                <tr>
+                                    <td>Sam Johnson</td>
+                                    <td>$2,000</td>
+                                    <td>15%</td>
+                                    <td>Closed</td>
+                                    <td>2024-03-10</td>
+                                </tr>
+                                <tr>
+                                    <td>Anna Lee</td>
+                                    <td>$10,000</td>
+                                    <td>18%</td>
+                                    <td>Closed</td>
+                                    <td>2024-01-01</td>
+                                </tr>
+                                <tr>
+                                    <td>Mike Brown</td>
+                                    <td>$4,500</td>
+                                    <td>10%</td>
+                                    <td>Closed</td>
+                                    <td>2024-04-15</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block footer %}
+{% endblock footer %}
+
+{% block altjs %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // Initial Data for charts (empty or default values)
+        const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        let investmentData = Array(12).fill(0);
+        let userData = Array(12).fill(0);
+        let roiData = Array(12).fill(0);
+
+        // Create Users Chart
+        const ctxUsers = document.getElementById('usersChart').getContext('2d');
+        const usersChart = new Chart(ctxUsers, {
+            type: 'line',
+            data: {
+                labels: labels,  // months of the year
+                datasets: [{
+                    label: 'Total Users',
+                    data: userData,
+                    borderColor: '#ffffff',
+                    backgroundColor: '#4b8ef1',
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#fff'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#fff' // White color for x-axis labels
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#fff' // White color for y-axis labels
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Create Investment Chart
+        const ctxInvestment = document.getElementById('investmentChart').getContext('2d');
+        const investmentChart = new Chart(ctxInvestment, {
+            type: 'line',
+            data: {
+                labels: labels,  // months of the year
+                datasets: [{
+                    label: 'Investments ($)',
+                    data: investmentData,
+                    borderColor: '#fff',
+                    backgroundColor: '#4b8ef1',
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#fff'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#fff' // White color for x-axis labels
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#fff' // White color for y-axis labels
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Create ROI Chart
+        const ctxROI = document.getElementById('roiChart').getContext('2d');
+        const roiChart = new Chart(ctxROI, {
+            type: 'line',
+            data: {
+                labels: labels,  // months of the year
+                datasets: [{
+                    label: 'ROI (%)',
+                    data: roiData,
+                    borderColor: '#fff',
+                    backgroundColor: '#4b8ef1',
+                    borderWidth: 2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#fff'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#fff' // White color for x-axis labels
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#fff' // White color for y-axis labels
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Function to update the charts dynamically by fetching data from Django (example with axios)
+        function updateCharts() {
+            axios.get('/api/get_chart_data/') // Django endpoint to get data
+                .then(function(response) {
+                    const data = response.data;
+                    investmentData = data.investment_data; // New investment data
+                    userData = data.user_data; // New user data
+                    roiData = data.roi_data; // New ROI data
+
+                    // Update chart data
+                    investmentChart.data.datasets[0].data = investmentData;
+                    usersChart.data.datasets[0].data = userData;
+                    roiChart.data.datasets[0].data = roiData;
+
+                    // Update charts
+                    investmentChart.update();
+                    usersChart.update();
+                    roiChart.update();
+                })
+                .catch(function(error) {
+                    console.error('Error fetching chart data:', error);
+                });
+        }
+
+        // Call updateCharts every 5 seconds (or adjust accordingly)
+        setInterval(updateCharts, 5000);
+    </script>
+{% endblock %}
+

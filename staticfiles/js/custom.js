@@ -576,6 +576,6 @@
         $('.msgs_info').hide()
         $('.dj_err_msg').hide()
     })
-
+    
 })(window.jQuery);
 
