@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.http import Http404
 from django.contrib import messages
 from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate
@@ -111,5 +112,8 @@ def resendLink(request):
 
 # Dashboard
 def dashboard(request):
-    return render(request, 'account/dashboard.html')
+    if request.user.is_authenticated and request.user.is_verified:
+        return render(request, 'account/dashboard.html')
+    else:
+        raise Http404("Page not found")
 

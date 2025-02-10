@@ -114,10 +114,27 @@
         });
     }
 
+    $("#sidebar_trigger").on('click', function () {
+        $(this).hide();
+        $('.sidebar').addClass('active');
+        $('#sidebar_trigger2').addClass('active');
+    });
+
+    $("#sidebar_trigger2").on('click', function () {
+        $(this).removeClass('active');
+        $('#sidebar_trigger').show();
+        $('.sidebar').removeClass('active');
+    });
+
     $(document).click(function (e) {
         if (!$(e.target).closest('.main-nav').length) {
             $('.menu-trigger').removeClass('active');
             $('.nav').removeClass('active');
+        }
+        if (!$(e.target).closest('.dashboard').length) {
+            $('.sidebar').removeClass('active');
+            $('#sidebar_trigger').show();
+            $('#sidebar_trigger2').removeClass('active');
         }
     });
 
@@ -576,6 +593,6 @@
         $('.msgs_info').hide()
         $('.dj_err_msg').hide()
     })
-    
+
 })(window.jQuery);
 

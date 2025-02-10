@@ -163,6 +163,18 @@
   }
 }
 
+@media (max-width: 834px) {
+  .table .email-col {
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 790px) {
+  .table .email-col {
+    max-width: 200px;
+  }
+}
+
 @media (max-width: 767.99px) {
   .header-area.header-sticky .nav li a:hover,
   .header-area.header-sticky .nav li a.active {
