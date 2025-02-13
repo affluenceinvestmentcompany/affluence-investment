@@ -161,6 +161,13 @@
     font-weight: 500;
     padding: 10px 20px;
   }
+  .table th, .table td {
+    font-size: 14px;
+  }
+  #editPackageForm {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
 }
 
 @media (max-width: 834px) {
@@ -175,7 +182,7 @@
   }
 }
 
-@media (max-width: 767.99px) {
+@media (max-width: 768px) {
   .header-area.header-sticky .nav li a:hover,
   .header-area.header-sticky .nav li a.active {
     color: #4b8ef1!important;
@@ -249,13 +256,19 @@
     font-weight: 500;
     color: #444;
   }
-  .gradient-button a {
+  .gradient-button a,
+  .gradient-button button {
     width: 80%;
+    margin: 15px auto !important;
   }
-  .gradient-button a.text-danger {
+  .gradient-button button {
     background: #fff;
     margin-top: 0 !important;
     margin-left: 0;
+  }
+  .gradient-button .logout-spinner {
+    color: rgb(230, 48, 48) !important;
+    background: #fff !important;;
   }
   .header-area .main-nav .nav.active {
     right: 0;
@@ -309,13 +322,48 @@
   .header-area .nav li:nth-child(2)  {
     margin-top: 50px;
   }
+  .dashboard {
+    flex-direction: column;
+  }
+  #sidebar_trigger {
+    top: -13px;
+    left: 15px;
+  }
+  #sidebar_trigger2.active {
+    top: -8px;
+    left: 237px;
+  }
+  .sidebar {
+    position: absolute;
+    top: 0;
+    left: -250px;
+  }
+  .sidebar.active {
+    left: 10px;
+    height: 100vh;
+    z-index:999;
+  }
+  .table th, .table td {
+      font-size: 12px;
+  }
 }
 
 @media (max-width: 450px) {
   .popupContainer,
   .verify_email,
+  .edit_profile,
+  .change_password,
+  .add_user,
+  .forgot_password,
   .screen {
     width: 95vw;
+  }
+
+  .edit_profile,
+  .change_password,
+  .edit_profile .screen,
+  .change_password .screen {
+      width: 300px;
   }
 }
 

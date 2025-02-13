@@ -202,13 +202,13 @@ body {
 }
 
 .gradient-button a,
+.gradient-button button,
 .one_half a {
-  display: inline-block !important;
+  display: inline-block;
   padding: 10px 20px !important;
-  color: #fff !important;
+  color: #fff;
   text-transform: capitalize;
   font-size: 15px;
-  background: rgb(19,175,240);
   background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);
   border-radius: 23px;
   font-weight: 500 !important;
@@ -216,15 +216,30 @@ body {
   transition: all .5s;
 }
 
-.gradient-button a:hover,
-.one_half a:hover {
-  color: #fff !important;
-  background: rgb(19,175,240);
-  background: linear-gradient(105deg, rgba(40,225,253,1) 0%, rgba(91,104,235,1) 100%);
+.gradient-button button {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  padding: 10.4px !important;
+  color: rgb(230, 48, 48);
+  margin-left: 15px;
 }
 
-.gradient-button a.text-danger {
-  margin-left: 15px;
+.gradient-button button:hover{
+  background: rgb(230, 48, 48) !important;
+  color: #fff;
+}
+
+.gradient-button .logout-spinner {
+  background: rgb(230, 48, 48) !important;
+  color: #fff;
+}
+
+.gradient-button a:hover,
+.one_half a:hover {
+  color: #fff;
+  background: linear-gradient(105deg, rgba(40,225,253,1) 0%, rgba(91,104,235,1) 100%);
 }
 
 .border-button a {
@@ -599,9 +614,6 @@ header
   color: #fff !important;
 }
 
-.resendEmailBtn2 {
-  display: none;
-}
 /* 
 ---------------------------------------------
 preloader
@@ -1223,7 +1235,9 @@ PopUp
 }
 
 .popupContainer,
-.verify_email {
+.verify_email,
+.add_user,
+.forgot_password {
   position: absolute;
   width: 360px;
   height: auto;
@@ -1231,8 +1245,18 @@ PopUp
   left: 50%;
   background: #FFF;
   border-radius: 20px;
+  overflow: hidden;
   transform: translateX(-50%);
   transform: translateY(-55px);
+}
+
+.edit_profile,
+.change_password {
+  width: 360px;
+  height: auto;
+  background: #FFF;
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .btn {
@@ -1283,7 +1307,7 @@ a.btn_red {
   color: #fff;
   background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 75%, rgba(91,104,235,1) 100%);
   position: relative;
-  padding: 10px 20px;
+  padding: 11px 20px;
   border-bottom: 1px solid #DDD;
   font-weight: bold;
   font-size: 18px;
@@ -1291,7 +1315,7 @@ a.btn_red {
 }
 
 .popupHeader .modal_close,
-.popupHeader .modal_close2 {
+.screen .fa-times {
   position: absolute;
   right: 0;
   top: 0;
@@ -1301,13 +1325,18 @@ a.btn_red {
   font-size: 18px;
 }
 
+.popupHeader .gsba {
+  cursor: pointer;
+}
+
 .popupBody {
   padding: 20px;
 }
 
-.popupHeader .gsba {
-  cursor: pointer;
+.popupHeader.disable {
+  display: none;
 }
+
 
 .centeredText {
   color: #afafaf;
@@ -1384,19 +1413,20 @@ a.btn_red {
 .alertify-notifier .ajs-message {
   color: #ffffff;
   text-align: center;
+  font-size: 16px;
   font-weight: 400;
   border: none;
   border-radius: 7px;
-  padding: 10px 5px;
+  padding: 7px;
   background-color: #4b8ef1;
 }
 .alertify-notifier .ajs-message.ajs-success {
   color: #fff;
-  background: #4b8ef1;
+  background: #16b316;
 }
 .alertify-notifier .ajs-message.ajs-error {
   color: #fff;
-  background: #fe4221;
+  background: #ee5135;
 }
 .alertify-notifier .ajs-message.ajs-warning {
   background: #01377e;
@@ -1761,13 +1791,12 @@ select {
 
 
 /* ============ Register / Login =========== */
-.user_register,
-.user_login {
+.form_wrp {
   display: none;
 }
 
-.user_register input,
-.user_login input {
+.form_wrp input,
+.form_wrp2 input {
   width: 100%;
   padding: 10px;
   padding-left: 35px;
@@ -1791,14 +1820,31 @@ select {
   background: linear-gradient(105deg, rgba(91,104,235,.2) 0%, rgba(40,225,253,.2) 100%);		
 	position: relative;	
 	width: 360px;
+  padding-top: 60px;
   padding-bottom: 20px;
 	box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.3);
+}
+
+.screen .fa-times {
+  color: #004fc5;
+  z-index: 99999;
+  cursor: pointer;
 }
 
 .screen__content {
 	z-index: 1;
 	position: relative;	
 	height: 100%;
+}
+
+.screen__content h3 {
+	padding: 0;
+  margin: 0 0 10px 0;
+  line-height: 0;
+  text-align: center;
+  font-weight: 600;
+  color: #01377e;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
 .screen__content #invaliderr {
@@ -1809,7 +1855,7 @@ select {
   font-weight: 400;
   background-color: rgb(255, 255, 255);
   padding: 0 15px;
-  margin: -5px auto 10px auto;
+  margin: -10px auto 20px auto;
   border-radius: 15px;
 }
 
@@ -1869,17 +1915,17 @@ select {
 
 .login {
 	width: 100%;
-	padding: 30px;
+	padding: 40px 30px;
 }
 
 .login__field {
-	padding: 20px 0;
+	padding: 0 0 28px 0;
 	position: relative;	
 }
 
 .login__field i {
 	position: absolute;
-	top: 35.5px;
+	top: 15px;
   left: 10px;
 	color: rgba(91,104,235,1);
 }
@@ -1898,7 +1944,7 @@ select {
 .login__field p {
 	position: absolute;	
   left: 0;
-  bottom: -5px;
+  bottom: 5px;
   font-size: 12px;
   color: rgb(250, 0, 0);
   font-weight: 400;
@@ -1911,6 +1957,7 @@ select {
   background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);
   box-shadow: 0 0 20px 5px #fff;
   padding: 10px 30px;
+
   border-radius: 40px;
 }
 
@@ -2020,10 +2067,11 @@ select {
   margin: 10px 0;
   border-radius: 5px;
   transition: background 0.3s;
+  cursor: pointer;
 }
 
 .sidebar nav a:hover,
-.sidebar nav a.active {
+.dash-navs.active {
   background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);
 }
 
@@ -2034,11 +2082,11 @@ select {
   margin-bottom: 50px;
 }
 
-.main-content .dashtabs {
+.dash-tabs {
   display: none;
 }
 
-.main-content .dashtabs.active {
+.dash-tabs.active {
   display: block;
 }
 
@@ -2071,14 +2119,14 @@ select {
 }
 
 /* Cards */
-.cards {
+.dash-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
   margin-bottom: 30px;
 }
 
-.card {
+.dash-card {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -2097,26 +2145,26 @@ select {
   background-color: #19cf65;;
 }
 
-.card:hover {
+.dash-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.card i {
+.dash-card i {
   font-size: 30px;
   margin-bottom: 10px;
+  color: #60fff7;
 }
 
-.card h3 {
-  font-size: 24px;
-  margin-bottom: 10px;
+.dash-card h5 {
+  font-weight: 400;
+  color: #60fff7;
 }
 
-.card p {
-  font-size: 18px;
-  font-weight: 500;
+.dash-card h3 {
+  line-height: 40px;
+  font-weight: 600;
   color: #fff;
-  margin-bottom: 10px;
 }
 
 .chart-container {
@@ -2173,44 +2221,59 @@ select {
   white-space: nowrap;
 }
 
-tbody td .fa-trash-alt {
+tbody .fa-trash-alt,
+tbody .fa-times-circle {
   color: rgb(209, 27, 27);
   cursor: pointer;
 }
 
-/* Responsive table */
-@media (max-width: 768px) {
-  .dashboard {
-    flex-direction: column;
-  }
-  #sidebar_trigger {
-    top: -13px;
-    left: 15px;
-  }
-  #sidebar_trigger2.active {
-    top: -8px;
-    left: 237px;
-  }
-  .sidebar {
-    position: absolute;
-    top: 0;
-    left: -250px;
-  }
-  .sidebar.active {
-    left: 10px;
-    height: 100vh;
-    z-index:999;
-  }
-  .table th, .table td {
-      font-size: 12px;
-  }
+tbody .fa-times-circle {
+  transform: scale(1.3);
 }
 
-@media (max-width: 992px) {
-  .table th, .table td {
-      font-size: 14px;
-  }
+tbody .fa-edit {
+  color: #004fc5;
+  cursor: pointer;
+  transform: scale(1.3);
 }
+
+tbody .fa-check-circle {
+  color: #26da02;
+  cursor: pointer;
+  transform: scale(1.3);
+}
+
+tbody .fa-trash-alt:hover,
+tbody .fa-times-circle:hover,
+tbody .fa-edit:hover,
+tbody .fa-check-circle:hover {
+  transform: scale(1.5);
+}
+
+.edit-package {
+  width: 100%;
+  position: relative;
+  display: none;
+}
+
+#editPackageForm {
+  display: flex;
+  gap: 20px;
+  justify-content: space-evenly;
+}
+
+.edit-package button {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(91,104,235,1) 50%, rgba(40,225,253,1) 100%);
+}
+
+.edit-package button:hover {
+  background: linear-gradient(180deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);
+}
+
+
 
 
 

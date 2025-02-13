@@ -1,13 +1,11 @@
-{% autoescape off %}
 Hi {{ user }},
 
 Please click on the link below to complete your registration:
 
-http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}
 
 
 
 Stapfund Team
-{% endautoescape %}
 
 

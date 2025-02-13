@@ -55,25 +55,25 @@
                     </p>
                     </div>
                     <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-6">
                         <div class="box-item text-center">
                             <img src="{% static "images/secured-investment.png" %}" loading="lazy"/>
                             <h4>Secured Investment</h4>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-6">
                         <div class="box-item text-center">
                             <img src="{% static "images/roi.png" %}" loading="lazy"/>
-                            <h4>Guaranteed ROI</h4>
+                            <h4>100% Guaranteed ROI</h4>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-6">
                         <div class="box-item text-center">
                             <img src="{% static "images/asset-management.png" %}" loading="lazy"/>
                             <h4>Assets Management</h4>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-6">
                         <div class="box-item text-center">
                             <img src="{% static "images/support.png" %}" loading="lazy"/>
                             <h4>24/7 Support &amp; Help</h4>
@@ -404,7 +404,7 @@
                     </div>
                     <div class="modal-footer mf1">
                         {% if request.user.is_authenticated and request.user.is_verified %}
-                            <a href="{% url 'invest_basic' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                            <a href="{% url 'invest_basic' %}" class="btn btn-primary goto_investment">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                         {% elif request.user.is_authenticated and not request.user.is_verified %}
                             <a href="#verifyEmail" class="show_ver_email btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                         {% else %}
@@ -432,7 +432,7 @@
                     </div>
                     <div class="modal-footer mf2">
                         {% if request.user.is_authenticated and request.user.is_verified %}
-                            <a href="{% url 'invest_standard' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                            <a href="{% url 'invest_standard' %}" class="btn btn-primary goto_investment">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                         {% elif request.user.is_authenticated and not request.user.is_verified %}
                             <a href="#verifyEmail" class="show_ver_email btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                         {% else %}
@@ -460,7 +460,7 @@
                     </div>
                     <div class="modal-footer mf3">
                         {% if request.user.is_authenticated and request.user.is_verified %}
-                            <a href="{% url 'invest_premium' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                            <a href="{% url 'invest_premium' %}" class="btn btn-primary goto_investment">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                         {% elif request.user.is_authenticated and not request.user.is_verified %}
                             <a href="#verifyEmail" class="show_ver_email btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                         {% else %}
@@ -488,7 +488,7 @@
                     </div>
                     <div class="modal-footer mf4">
                         {% if request.user.is_authenticated and request.user.is_verified %}
-                            <a href="{% url 'invest_ultimate' %}" class="btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
+                            <a href="{% url 'invest_ultimate' %}" class="btn btn-primary goto_investment">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                         {% elif request.user.is_authenticated and not request.user.is_verified %}
                             <a href="#verifyEmail" class="show_ver_email btn btn-primary">Invest Now &nbsp;<i class="fas fa-chart-line"></i></a>
                         {% else %}

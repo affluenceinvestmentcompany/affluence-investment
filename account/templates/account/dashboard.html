@@ -4,7 +4,7 @@
 {% block content %}
     <div class="container=fluid mt-5 px-0">
         <div class="row mt-5 pt-5">
-            <div class="dashboard">
+            <div class="dashboard" id="dashboard">
                 <!-- Sidebar Trigger -->
                 <div id="sidebar_trigger"><i class="fas fa-th-list"></i></div>
                 <div id="sidebar_trigger2">&times;</div>
@@ -15,44 +15,58 @@
                         <span>{{ request.user.full_name }}</span>
                     </div>
                     <nav>
-                        <a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a>
-                        <a href="#"><i class="fas fa-users"></i> Users</a>
-                        <a href="#"><i class="fas fa-chart-pie"></i> Packages</a>
-                        <a href="#"><i class="fas fa-chart-line"></i> Investments</a>
-                        <a href="#"><i class="fas fa-money-check-alt"></i> Withdrawal</a>
-                        <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                        <a id="goto_dashboard_tab" class="dash-navs"><i class="fas fa-home"></i> Dashboard</a>
+                        {% if request.user.is_admin %}
+                            <a id="goto_users_tab" class="dash-navs"><i class="fas fa-users"></i> Users</a>
+                            <a id="goto_packages_tab" class="dash-navs"><i class="fas fa-chart-pie"></i> Packages</a>
+                        {% endif %}
+                        <a id="goto_investments_tab" class="dash-navs"><i class="fas fa-chart-line"></i> Investments</a>
+                        <a id="goto_withdrawal_tab" class="dash-navs"><i class="fas fa-money-check-alt"></i> Withdrawal</a>
+                        <a id="goto_settings_tab" class="dash-navs"><i class="fas fa-cog"></i> Settings</a>
                     </nav>
                 </div>
             
                 <!-- Main Content -->
                 <div class="main-content">
-                    <div id="dashboard_tab" class="dashtabs">
+                    <div id="dashboard_tab" class="dash-tabs">
                         <!-- Cards -->
-                        <div class="cards">
-                            <div class="card t-users">
-                                <i class="fas fa-users"></i>
-                                <h3>Total Users</h3>
-                                <p>456</p>
-                                <div class="chart-container">
-                                    <canvas id="usersChart" width="100" height="50"></canvas>
+                        <div class="dash-cards">
+                            {% if request.user.is_admin %}
+                                <div class="dash-card t-users">
+                                    <i class="fas fa-users"></i>
+                                    <h6>Total Users</h6>
+                                    <h3>398</h3>
+                                    <div class="chart-container">
+                                        <canvas id="usersChart" width="100" height="50"></canvas>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card t-invest">
+                            {% endif %}
+                            <div class="dash-card t-invest">
                                 <i class="fas fa-dollar-sign"></i>
-                                <h3>Total Investments</h3>
-                                <p>$1,234,567</p>
+                                <h6>Total Investments</h6>
+                                <h3>$581,349</h3>
                                 <div class="chart-container">
                                     <canvas id="investmentChart" width="100" height="50"></canvas>
                                 </div>
                             </div>
-                            <div class="card t-roi">
+                            <div class="dash-card t-roi">
                                 <i class="fas fa-percent"></i>
-                                <h3>Total ROI</h3>
-                                <p>%3.80</p>
+                                <h6>Total ROI</h6>
+                                <h3>%17.43</h3>
                                 <div class="chart-container">
                                     <canvas id="roiChart" width="100" height="50"></canvas>
                                 </div>
                             </div>
+                            {% if not request.user.is_admin %}
+                                <div class="dash-card t-users">
+                                    <i class="fas fa-money-check-alt"></i>
+                                    <h6>Total Withdrawal</h6>
+                                    <h3>$570,000</h3>
+                                    <div class="chart-container">
+                                        <canvas id="usersChart" width="100" height="50"></canvas>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
                 
                         <!-- Investment Table -->
@@ -64,197 +78,565 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
+                                        <th>Plan</th>
                                         <th>Amount ($)</th>
                                         <th>ROI (%)</th>
                                         <th>Status</th>
-                                        <th>Date</th>
                                     </tr>
                                 </thead>
                                 <tbody class="border-0">
                                     <tr>
                                         <td>John Doe</td>
+                                        <td>Premium</td>
                                         <td>$5,000</td>
                                         <td>12%</td>
                                         <td>Active</td>
-                                        <td>2024-01-12</td>
                                     </tr>
                                     <tr>
                                         <td>Jane Smith</td>
+                                        <td>Standard</td>
                                         <td>$7,500</td>
                                         <td>8%</td>
                                         <td>Pending</td>
-                                        <td>2024-02-25</td>
                                     </tr>
                                     <tr>
                                         <td>Sam Johnson</td>
+                                        <td>Ultimate</td>
                                         <td>$2,000</td>
                                         <td>15%</td>
                                         <td>Closed</td>
-                                        <td>2024-03-10</td>
                                     </tr>
                                     <tr>
                                         <td>Anna Lee</td>
+                                        <td>Basic</td>
                                         <td>$10,000</td>
                                         <td>18%</td>
                                         <td>Closed</td>
-                                        <td>2024-01-01</td>
                                     </tr>
                                     <tr>
                                         <td>Mike Brown</td>
+                                        <td>Premium</td>
                                         <td>$4,500</td>
                                         <td>10%</td>
                                         <td>Closed</td>
-                                        <td>2024-04-15</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
 
-                        <div class="row">
-                            <div class="col-lg-5">
-                                <div class="py-2 text-center">
-                                    <h4 class="fs-3">Users</h4>
+                        {% if request.user.is_admin %}
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="py-2 text-center">
+                                        <h4 class="fs-3">Users</h4>
+                                    </div>
+                                    <div class="table-container">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="border-0">
+                                                <tr>
+                                                    <td>John Doe</td>
+                                                    <td class="email-col">johndoe@gmail.com</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Jane Smith</td>
+                                                    <td class="email-col">janesmith@gmail.com</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Affluence Investment</td>
+                                                    <td class="email-col">affluenceinvestmentcompany@gmail.com</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Anna Lee</td>
+                                                    <td class="email-col">annalee@gmail.com</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mike Brown</td>
+                                                    <td class="email-col">mikebrownindaboskibahuseintherealmoffourfortifiedpowers.com</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div class="table-container users-table">
-                                    <table class="table table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="border-0">
-                                            <tr>
-                                                <td>John Doe</td>
-                                                <td class="email-col">johndoe@gmail.com</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Jane Smith</td>
-                                                <td class="email-col">janesmith@gmail.com</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Affluence Investment</td>
-                                                <td class="email-col">affluenceinvestmentcompany@gmail.com</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Anna Lee</td>
-                                                <td class="email-col">annalee@gmail.com</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Mike Brown</td>
-                                                <td class="email-col">mikebrownindaboskibahuseintherealmoffourfortifiedpowers.com</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="col-lg-7">
+                                    <div class="py-2 text-center">
+                                        <h4 class="fs-3">Withdrawal</h4>
+                                    </div>
+                                    <div class="table-container transaction-table">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Amount ($)</th>
+                                                    <th>Status</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="border-0">
+                                                <tr>
+                                                    <td>John Doe</td>
+                                                    <td>$5,000</td>
+                                                    <td>Completed</td>
+                                                    <td>2024-01-12</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Jane Smith</td>
+                                                    <td>$7,500</td>
+                                                    <td>Rejected</td>
+                                                    <td>2024-02-25</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Sam Johnson</td>
+                                                    <td>$2,000</td>
+                                                    <td>Pending</td>
+                                                    <td>2024-03-10</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Anna Lee</td>
+                                                    <td>$10,000</td>
+                                                    <td>Completed</td>
+                                                    <td>2024-01-01</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Mike Brown</td>
+                                                    <td>$4,500</td>
+                                                    <td>Rejected</td>
+                                                    <td>2024-04-15</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-7">
-                                <div class="py-2 text-center">
-                                    <h4 class="fs-3">Withdrawal</h4>
+                        {% endif %}
+                    </div>
+
+                    {% if request.user.is_admin %}
+                        <div id="users_tab" class="dash-tabs">
+                            <div class="pt-2 pb-3 text-center position-relative">
+                                <h4 class="fs-3">Users</h4>
+                                <a href="#addUser" class="dash-btn add-user-btn">Add user</a>
+                            </div>
+                            <div class="table-container users-table mt-0">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th><i class="fas fa-trash-alt"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="border-0">
+                                        <tr>
+                                            <td>John Doe</td>
+                                            <td class="email-col">johndoe@gmail.com</td>
+                                            <td>Verified</td>
+                                            <td>2024-01-12</td>
+                                            <td><i class="fas fa-trash-alt"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Jane Smith</td>
+                                            <td class="email-col">janesmith@gmail.com</td>
+                                            <td>Verified</td>
+                                            <td>2024-02-25</td>
+                                            <td><i class="fas fa-trash-alt"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Affluence Investment</td>
+                                            <td class="email-col">affluenceinvestmentcompany@gmail.com</td>
+                                            <td>Unverified</td>
+                                            <td>2024-03-10</td>
+                                            <td><i class="fas fa-trash-alt"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Anna Lee</td>
+                                            <td class="email-col">annalee@gmail.com</td>
+                                            <td>Unverified</td>
+                                            <td>2024-01-01</td>
+                                            <td><i class="fas fa-trash-alt"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mike Brown</td>
+                                            <td class="email-col">mikebrownindaboskibahuseintherealmoffourfortifiedpowers.com</td>
+                                            <td>Unverified</td>
+                                            <td>2024-04-15</td>
+                                            <td><i class="fas fa-trash-alt"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="packages_tab" class="dash-tabs">
+                            <div class="pt-2 pb-3 text-center position-relative">
+                                <h4 class="fs-3">Packages</h4>
+                            </div>
+                            <div class="table-container packages-table mt-0">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Plan</th>
+                                            <th>Profit</th>
+                                            <th>Bonus</th>
+                                            <th>Min. Amount</th>
+                                            <th>Min. Peroid</th>
+                                            <th><i class="fas fa-edit edit_package_btn"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="border-0">
+                                        <tr>
+                                            <td>Basic</td>
+                                            <td>0.8%</td>
+                                            <td>0.5%</td>
+                                            <td>$100</td>
+                                            <td>30 days</td>
+                                            <td><i class="fas fa-edit edit_package_btn"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Standard</td>
+                                            <td>1.0%</td>
+                                            <td>1.0%</td>
+                                            <td>$500</td>
+                                            <td>60 days</td>
+                                            <td><i class="fas fa-edit edit_package_btn"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Premium</td>
+                                            <td>1.2%</td>
+                                            <td>1.5%</td>
+                                            <td>$1000</td>
+                                            <td>90 days</td>
+                                            <td><i class="fas fa-edit edit_package_btn"></i></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ultimate</td>
+                                            <td>1.5%</td>
+                                            <td>2.0%</td>
+                                            <td>$5000</td>
+                                            <td>120 days</td>
+                                            <td><i class="fas fa-edit edit_package_btn"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="edit-package mt-5 py-3 pb-5">
+                                <h4 class="fs-5 mb-4">Edit Package</h4>
+                                <form id="editPackageForm">
+                                    <div class="form-group">
+                                        <label for="plan">Plan</label>
+                                        <input type="text" name="plan" id="plan" class="form-control" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profit">Daily Profit</label>
+                                        <input type="text" name="profit" id="profit" class="form-control" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="bonus">Bonus</label>
+                                        <input type="text" name="bonus" id="bonus" class="form-control" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="min_amount">Min Amount</label>
+                                        <input type="text" name="min_amount" id="min_amount" class="form-control" value="">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="min_days">Min Period</label>
+                                        <input type="text" name="min_days" id="min_days" class="form-control" value="">
+                                    </div>
+                                </form>
+                                <button class="btn btn-primary lh-sm py-2 mt-3">Update Package</button>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div id="investments_tab" class="dash-tabs">
+                        <div class="pt-2 pb-3 text-center position-relative">
+                            <h4 class="fs-3">Investments</h4>
+                        </div>
+                        <div class="table-container investments-table mt-0">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Plan</th>
+                                        <th>Amount</th>
+                                        <th>ROI</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th><i class="fas fa-check-circle accept_invest_btn"></i></th>
+                                        <th><i class="fas fa-times-circle reject_invest_btn"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="border-0">
+                                    <tr>
+                                        <td>Joh Smith</td>
+                                        <td>Premium</td>
+                                        <td>$700</td>
+                                        <td>$0.45</td>
+                                        <td>Active</td>
+                                        <td>2024-01-12</td>
+                                        <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
+                                        <td><i class="fas fa-times-circle reject_invest_btn"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Poland Welsh</td>
+                                        <td>Ultimate</td>
+                                        <td>$15000</td>
+                                        <td>$18.45</td>
+                                        <td>Pending</td>
+                                        <td>2024-01-12</td>
+                                        <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
+                                        <td><i class="fas fa-times-circle reject_invest_btn"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Maria Latinez</td>
+                                        <td>Basic</td>
+                                        <td>$250</td>
+                                        <td>$0.96</td>
+                                        <td>Active</td>
+                                        <td>2024-01-12</td>
+                                        <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
+                                        <td><i class="fas fa-times-circle reject_invest_btn"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Toby Kehinde</td>
+                                        <td>Basic</td>
+                                        <td>$100</td>
+                                        <td>$0.2</td>
+                                        <td>Closed</td>
+                                        <td>2024-01-12</td>
+                                        <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
+                                        <td><i class="fas fa-times-circle reject_invest_btn"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Patrick Donald</td>
+                                        <td>Standard</td>
+                                        <td>$700</td>
+                                        <td>$3.84</td>
+                                        <td>Closed</td>
+                                        <td>2024-01-12</td>
+                                        <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
+                                        <td><i class="fas fa-times-circle reject_invest_btn"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="withdrawal_tab" class="dash-tabs">
+                        <div class="pt-2 pb-3 text-center position-relative">
+                            <h4 class="fs-3">Withdrawal</h4>
+                        </div>
+                        <div class="table-container withdrawal-table mt-0">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Balance</th>
+                                        <th>Withdraw</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th><i class="fas fa-check-circle accept_invest_btn"></i></th>
+                                        <th><i class="fas fa-times-circle reject_invest_btn"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="border-0">
+                                    <tr>
+                                        <td>Joh Smith</td>
+                                        <td>$700</td>
+                                        <td>$500</td>
+                                        <td>Completed</td>
+                                        <td>2024-01-12</td>
+                                        <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
+                                        <td><i class="fas fa-times-circle reject_invest_btn"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Poland Welsh</td>
+                                        <td>$15000</td>
+                                        <td>$3000</td>
+                                        <td>Pending</td>
+                                        <td>2024-01-12</td>
+                                        <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
+                                        <td><i class="fas fa-times-circle reject_invest_btn"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Maria Latinez</td>
+                                        <td>$250</td>
+                                        <td>$150</td>
+                                        <td>Rejected</td>
+                                        <td>2024-01-12</td>
+                                        <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
+                                        <td><i class="fas fa-times-circle reject_invest_btn"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Toby Kehinde</td>
+                                        <td>$100</td>
+                                        <td>$70</td>
+                                        <td>Rejected</td>
+                                        <td>2024-01-12</td>
+                                        <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
+                                        <td><i class="fas fa-times-circle reject_invest_btn"></i></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Patrick Donald</td>
+                                        <td>$700</td>
+                                        <td>$500</td>
+                                        <td>Pending</td>
+                                        <td>2024-01-12</td>
+                                        <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
+                                        <td><i class="fas fa-times-circle reject_invest_btn"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="settings_tab" class="dash-tabs">
+                        <div class="row pt-3 mx-auto p-0">
+                            <div class="col-lg-6 mb-5 mb-lg-0 mx-auto">
+                                <div class="edit_profile mx-auto">
+                                    <section class="popupBody p-0">
+                                        <div class="form_wrp2">
+                                            <div class="screen rounded-bottom">
+                                                <div class="screen__content">
+                                                    <h3>Edit Profile</h4>
+                                                    <p id="ep_err" class="text-danger p-0 m-0 text-center position-absolute w-100" style="font-size:14px;font-weight:500;top:15px;left:50%;transform:translateX(-50%);"></p>
+                                                    <form id="edit-profile-form" class="login">
+                                                        {% csrf_token %}
+                                                        <div class="login__field">
+                                                            <i class="fas fa-user"></i>
+                                                            <input name="ep_full_name" type="text" class="login__input" placeholder="Full name">
+                                                        </div>
+                                                        <div class="login__field">
+                                                            <i class="fas fa-envelope"></i>
+                                                            <input class="login__input" value="{{ request.user.email }}" disabled>
+                                                        </div>
+                                                        <div class="login__field">
+                                                            <i class="fas fa-phone-alt"></i>
+                                                            <input name="ep_phone" type="text" class="login__input phone-input" placeholder="Phone number">
+                                                        </div>
+                                                        <div class="make-payment-btn mt-3">
+                                                            <button class="w-100 form_buttons" id="updateProfileBtn">Update Profile &nbsp;<i class="fas fa-sync-alt"></i></button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="screen__background rounded">
+                                                    <span class="screen__background__shape screen__background__shape4"></span>
+                                                    <span class="screen__background__shape screen__background__shape3"></span>		
+                                                    <span class="screen__background__shape screen__background__shape2"></span>
+                                                    <span class="screen__background__shape screen__background__shape1"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
                                 </div>
-                                <div class="table-container transaction-table">
-                                    <table class="table table-striped table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Amount</th>
-                                                <th>Status</th>
-                                                <th>Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="border-0">
-                                            <tr>
-                                                <td>John Doe</td>
-                                                <td>$5,000</td>
-                                                <td>Completed</td>
-                                                <td>2024-01-12</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Jane Smith</td>
-                                                <td>$7,500</td>
-                                                <td>Rejected</td>
-                                                <td>2024-02-25</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Sam Johnson</td>
-                                                <td>$2,000</td>
-                                                <td>Pending</td>
-                                                <td>2024-03-10</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Anna Lee</td>
-                                                <td>$10,000</td>
-                                                <td>Completed</td>
-                                                <td>2024-01-01</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Mike Brown</td>
-                                                <td>$4,500</td>
-                                                <td>Rejected</td>
-                                                <td>2024-04-15</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                            </div>
+
+                            <div class="col-lg-6 mx-auto">
+                                <div class="change_password mx-auto">
+                                    <section class="popupBody p-0">
+                                        <div class="form_wrp2">
+                                            <div class="screen rounded-bottom">
+                                                <div class="screen__content">
+                                                    <h3>Change Password</h4>
+                                                    <form id="change-password-form" class="login">
+                                                        {% csrf_token %}
+                                                        <div class="login__field">
+                                                            <i class="fas fa-lock"></i>
+                                                            <input name="old_password" type="password" class="login__input password" placeholder="Old password">
+                                                            <i class="fas fa-eye togglePassword"></i><i class="fas fa-eye-slash togglePassword"></i>
+                                                            <p id="pwderr5"></p>
+                                                        </div>
+                                                        <div class="login__field">
+                                                            <i class="fas fa-lock"></i>
+                                                            <input name="new_password1" type="password" class="login__input password" placeholder="New password">
+                                                            <i class="fas fa-eye togglePassword"></i><i class="fas fa-eye-slash togglePassword"></i>
+                                                            <p id="pwderr6"></p>
+                                                        </div>
+                                                        <div class="login__field">
+                                                            <i class="fas fa-lock"></i>
+                                                            <input name="new_password2" type="password" class="login__input password" placeholder="Confirm new password">
+                                                            <i class="fas fa-eye togglePassword"></i><i class="fas fa-eye-slash togglePassword"></i>
+                                                            <p id="pwderr7"></p>
+                                                        </div>
+                                                        <div class="make-payment-btn mt-3">
+                                                            <button class="w-100 form_buttons" id="changePasswordBtn">Change Password &nbsp;<i class="fas fa-key"></i></button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="screen__background rounded">
+                                                    <span class="screen__background__shape screen__background__shape4"></span>
+                                                    <span class="screen__background__shape screen__background__shape3"></span>		
+                                                    <span class="screen__background__shape screen__background__shape2"></span>
+                                                    <span class="screen__background__shape screen__background__shape1"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div id="users_tab" class="dashtabs active">
-                        <div class="pt-2 pb-3 text-center position-relative">
-                            <h4 class="fs-3">Users</h4>
-                            <button class="dash-btn add-user-btn modal_trigger">Add user</button>
-                        </div>
-                        <div class="table-container users-table mt-0">
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                        <th><i class="fas fa-trash-alt"></i></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="border-0">
-                                    <tr>
-                                        <td>John Doe</td>
-                                        <td class="email-col">johndoe@gmail.com</td>
-                                        <td>Verified</td>
-                                        <td>2024-01-12</td>
-                                        <td><i class="fas fa-trash-alt"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jane Smith</td>
-                                        <td class="email-col">janesmith@gmail.com</td>
-                                        <td>Verified</td>
-                                        <td>2024-02-25</td>
-                                        <td><i class="fas fa-trash-alt"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Affluence Investment</td>
-                                        <td class="email-col">affluenceinvestmentcompany@gmail.com</td>
-                                        <td>Unverified</td>
-                                        <td>2024-03-10</td>
-                                        <td><i class="fas fa-trash-alt"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Anna Lee</td>
-                                        <td class="email-col">annalee@gmail.com</td>
-                                        <td>Unverified</td>
-                                        <td>2024-01-01</td>
-                                        <td><i class="fas fa-trash-alt"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Mike Brown</td>
-                                        <td class="email-col">mikebrownindaboskibahuseintherealmoffourfortifiedpowers.com</td>
-                                        <td>Unverified</td>
-                                        <td>2024-04-15</td>
-                                        <td><i class="fas fa-trash-alt"></i></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+
+                    <!-- Add user modal -->
+                    <div id="addUser" class="add_user" style="display: none; z-index:9999;">
+                        <section class="popupBody p-0">
+                            <div class="form_wrp2">
+                                <div class="screen rounded-bottom">
+                                    <span class="modal_close3"><i class="fas fa-times"></i></span>
+                                    <div class="screen__content">
+                                        <h3>Add User</h4>
+                                        <form id="add_user_form" class="login">
+                                            {% csrf_token %}
+                                            <div class="login__field">
+                                                <i class="fas fa-user"></i>
+                                                <input name="au_full_name" type="text" class="login__input" placeholder="Full name">
+                                                <p id="au_fnerr"></p>
+                                            </div>
+                                            <div class="login__field">
+                                                <i class="fas fa-envelope"></i>
+                                                <input name="au_email" type="email" class="login__input" placeholder="Email">
+                                                <p id="au_emerr"></p>
+                                            </div>
+                                            <div class="login__field">
+                                                <i class="fas fa-phone-alt"></i>
+                                                <input name="au_phone" type="text" class="login__input phone-input" placeholder="Phone number">
+                                                <p id="au_pherr"></p>
+                                            </div>
+                                            <div class="login__field">
+                                                <i class="fas fa-lock"></i>
+                                                <input name="au_password" type="password" class="login__input password" placeholder="Password">
+                                                <i class="fas fa-eye togglePassword"></i><i class="fas fa-eye-slash togglePassword"></i>
+                                                <p id="au_pwderr"></p>
+                                            </div>
+                                            <div class="login__field">
+                                                <i class="fas fa-lock"></i>
+                                                <input name="au_password2" type="password" class="login__input password" placeholder="Confirm password">
+                                                <i class="fas fa-eye togglePassword"></i><i class="fas fa-eye-slash togglePassword"></i>
+                                                <p id="au_pwderr2"></p>
+                                            </div>
+                                            <div class="make-payment-btn mt-3">
+                                                <button class="w-100 form_buttons" id="addUserBtn">Add User &nbsp;<i class="fas fa-user-plus"></i></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="screen__background rounded">
+                                        <span class="screen__background__shape screen__background__shape4"></span>
+                                        <span class="screen__background__shape screen__background__shape3"></span>		
+                                        <span class="screen__background__shape screen__background__shape2"></span>
+                                        <span class="screen__background__shape screen__background__shape1"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>
@@ -270,179 +652,300 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        // Initial Data for charts (empty or default values)
-        const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        let investmentData = Array(12).fill(0);
-        let userData = Array(12).fill(0);
-        let roiData = Array(12).fill(0);
+        document.addEventListener('DOMContentLoaded', function() {
+            let userData, investmentData, roiData, usersChart, investmentChart, roiChart;
 
-        // Create Users Chart
-        const ctxUsers = document.getElementById('usersChart').getContext('2d');
-        const usersChart = new Chart(ctxUsers, {
-            type: 'line',
-            data: {
-                labels: labels,  // months of the year
-                datasets: [{
-                    label: 'Total Users',
-                    data: userData,
-                    borderColor: '#ffffff',
-                    backgroundColor: '#4b8ef1',
-                    borderWidth: 2,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#fff'
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#fff' // White color for x-axis labels
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: '#fff' // White color for y-axis labels
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
-                        },
-                        beginAtZero: true
-                    }
-                }
+            // Initialize data (can be fetched from Django backend)
+            const labels = ['2025'];  // Single label for the year
+
+            function initialData() {
+                // Example initial data, can be updated dynamically from backend
+                userData = [0];  // Initial number of users (starting at 0)
+                investmentData = [0];  // Initial investment value (starting at 0)
+                roiData = [0];  // Initial ROI value (starting at 0)
             }
-        });
 
-        // Create Investment Chart
-        const ctxInvestment = document.getElementById('investmentChart').getContext('2d');
-        const investmentChart = new Chart(ctxInvestment, {
-            type: 'line',
-            data: {
-                labels: labels,  // months of the year
-                datasets: [{
-                    label: 'Investments ($)',
-                    data: investmentData,
-                    borderColor: '#fff',
-                    backgroundColor: '#4b8ef1',
-                    borderWidth: 2,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#fff'
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#fff' // White color for x-axis labels
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
-                        }
+            function createCharts() {
+                // Create the Users chart
+                const ctxUsers = document.getElementById('usersChart').getContext('2d');
+                usersChart = new Chart(ctxUsers, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total Users',
+                            data: userData,
+                            color: '#fff',
+                            borderColor: '#fff',
+                            backgroundColor: '#4a8ef3',
+                            borderWidth: 2,
+                            fill: true
+                        }]
                     },
-                    y: {
-                        ticks: {
-                            color: '#fff' // White color for y-axis labels
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#fff'
+                                }
+                            }
                         },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
-                        },
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Create ROI Chart
-        const ctxROI = document.getElementById('roiChart').getContext('2d');
-        const roiChart = new Chart(ctxROI, {
-            type: 'line',
-            data: {
-                labels: labels,  // months of the year
-                datasets: [{
-                    label: 'ROI (%)',
-                    data: roiData,
-                    borderColor: '#fff',
-                    backgroundColor: '#4b8ef1',
-                    borderWidth: 2,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#fff'
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                },
+                                grid: {
+                                    color: '#fff'
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    color: '#fff'
+                                },
+                                grid: {
+                                    color: '#fff'
+                                },
+                                beginAtZero: true
+                            }
                         }
                     }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#fff' // White color for x-axis labels
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: '#fff' // White color for y-axis labels
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)' // Light grid lines
-                        },
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Function to update the charts dynamically by fetching data from Django (example with axios)
-        /*
-        function updateCharts() {
-            axios.get('/api/get_chart_data/') // Django endpoint to get data
-                .then(function(response) {
-                    const data = response.data;
-                    investmentData = data.investment_data; // New investment data
-                    userData = data.user_data; // New user data
-                    roiData = data.roi_data; // New ROI data
-
-                    // Update chart data
-                    investmentChart.data.datasets[0].data = investmentData;
-                    usersChart.data.datasets[0].data = userData;
-                    roiChart.data.datasets[0].data = roiData;
-
-                    // Update charts
-                    investmentChart.update();
-                    usersChart.update();
-                    roiChart.update();
-                })
-                .catch(function(error) {
-                    console.error('Error fetching chart data:', error);
                 });
-        }
-        setInterval(updateCharts, 5000);
-        */
+
+                // Create the Investment chart
+                const ctxInvestment = document.getElementById('investmentChart').getContext('2d');
+                investmentChart = new Chart(ctxInvestment, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total Investments',
+                            data: investmentData,
+                            color: '#fff',
+                            borderColor: '#fff',
+                            backgroundColor: '#4a8ef3',
+                            borderWidth: 2,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#fff'
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                },
+                                grid: {
+                                    color: '#fff'
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    color: '#fff'
+                                },
+                                grid: {
+                                    color: '#fff'
+                                },
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                // Create the ROI chart
+                const ctxROI = document.getElementById('roiChart').getContext('2d');
+                roiChart = new Chart(ctxROI, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total ROI',
+                            data: roiData,
+                            color: '#fff',
+                            borderColor: '#fff',
+                            backgroundColor: '#4a8ef3',
+                            borderWidth: 2,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#fff'
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: '#fff'
+                                },
+                                grid: {
+                                    color: '#fff'
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    color: '#fff'
+                                },
+                                grid: {
+                                    color: '#fff'
+                                },
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            initialData();
+            createCharts();
+
+            // Function to update chart data dynamically
+            function updateChartData(type, value) {
+                if (type === 'user') {
+                    userData.push(userData[userData.length - 1] + 1);  // Add 1 for new user
+                    usersChart.update();
+                }
+                else if (type === 'investment') {
+                    investmentData.push(investmentData[investmentData.length - 1] + value);  // Add invested amount
+                    investmentChart.update();
+                }
+                else if (type === 'roi') {
+                    roiData.push(roiData[roiData.length - 1] + value);  // Add ROI amount
+                    roiChart.update();
+                }
+            }
+
+            // Function to fetch data from the Django backend
+            /*function fetchDataFromBackend() {
+                fetch('/api/get-dashboard-data/')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Assuming the data structure from backend is:
+                        // { total_users: number, total_investment: number, total_roi: number }
+                        const newUser = data.total_users;  // New total users
+                        const newInvestment = data.total_investment;  // New total investment
+                        const newRoi = data.total_roi;  // New total ROI
+
+                        // Update chart data
+                        updateChartData('user', newUser);
+                        updateChartData('investment', newInvestment);
+                        updateChartData('roi', newRoi);
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            }*/
+
+            // Fetch data every 10 seconds (10000 milliseconds)
+            //setInterval(fetchDataFromBackend, 10000);
+
+
+            const dashNavs = document.querySelectorAll('.dash-navs');
+            const dashTabs = document.querySelectorAll('.dash-tabs');
+
+            function initializeTriggers() {
+                $(".add-user-btn").leanModal({
+                    top: 100,
+                    overlay: 0.7,
+                    closeButton: ".modal_close3"
+                });
+
+                let edit_package_btn = document.querySelectorAll('.edit_package_btn');
+                edit_package_btn.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        $('.edit-package').css({'display': 'block'});
+                    });
+                });
+                
+                document.querySelectorAll('.togglePassword').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        let passwordFields = document.querySelectorAll('.password');
+                        
+                        passwordFields.forEach(function(passwordField) {
+                            if (passwordField.type === "password") {
+                                passwordField.type = "text";
+                                $('.fa-eye').hide(); 
+                                $('.fa-eye-slash').show(); 
+                            } else {
+                                passwordField.type = "password";
+                                $('.fa-eye').show(); 
+                                $('.fa-eye-slash').hide(); 
+                            }
+                        }); 
+                    });
+                });
+            }
+            initializeTriggers();
+
+            function setActiveSection(targetId) {
+                dashTabs.forEach(dashTab => dashTab.classList.remove('active'));
+                dashNavs.forEach(dashNav => dashNav.classList.remove('active'));
+
+                document.getElementById(targetId).classList.add('active');
+                const activeLink = document.querySelector(`#goto_${targetId}`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+
+            const savedLink = localStorage.getItem('activeNavLink');
+            if (savedLink) {
+                setActiveSection(savedLink);
+            } else {
+                setActiveSection('dashboard_tab');
+            }
+
+            dashNavs.forEach(dashNav => {
+                dashNav.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.id.replace('goto_', '');
+                    setActiveSection(targetId);
+                    localStorage.setItem('activeNavLink', targetId);
+                    getActive();
+                    $('#sidebar_trigger').show();
+                    $('#sidebar_trigger2').removeClass('active');
+                    $('.sidebar').removeClass('active');
+                });
+            });
+
+            function getActive() {
+                let activeDash = localStorage.getItem('activeNavLink');
+                refreshSection(activeDash);
+            }
+
+
+
+
+
+
+            function refreshSection(element) {
+                $('#' + element).load(location.href + ' #' + element + ' > *', function () {
+                    initializeTriggers();
+                    if(element === 'dashboard_tab'){
+                        initialData();
+                        createCharts();
+                    }
+                    console.log('Refreshed ' + element);
+                });
+            }
+            /*
+            setInterval(function() {
+                refreshSection(activeDash); 
+            }, 5000);*/
+        });
     </script>
 {% endblock %}
 

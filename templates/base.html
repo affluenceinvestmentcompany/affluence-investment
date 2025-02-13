@@ -80,11 +80,18 @@
                                     <div class="gradient-button dashlog mt-wrp d-md-flex">
                                         {% if request.user.is_authenticated %}
                                             {% if request.user.is_verified %}
-                                                <a class="modal_trig" href="{% url 'dashboard' %}">Dashboard  &nbsp; <i class="fas fa-th-large"></i></a>
+                                                <a id="dashboardLink" class="modal_trig" href="{% url 'dashboard' %}">Dashboard  &nbsp; <i class="fas fa-th-large"></i></a>
                                             {% else %}
                                                 <a class="modal_trig show_ver_email" href="#verifyEmail">Dashboard  &nbsp; <i class="fas fa-th-large"></i></a>
                                             {% endif %}
-                                            <a class="text-danger fw-bold logout" href="{% url 'logout' %}" style="color:red !important;"><span class="d-md-none">Logout &nbsp;</span><i class="fas fa-sign-out-alt"></i></a>
+                                                <form class="logout_form">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="fw-bold logout border-0">
+                                                        <span class="d-md-none">Logout &nbsp;</span>
+                                                        <i class="fas fa-sign-out-alt"></i>
+                                                    </button>
+                                                </form>
+                                                <button class="fw-bold border-0 logout-spinner d-none" disabled><i class="fas fa-spinner fa-spin"></i></button>
                                         {% else %}
                                             <a class="modal_trigger modal_trig text-dark" href="#modal">Get Started &nbsp; <i class="fa fa-sign-in-alt"></i></a>
                                         {% endif %}
@@ -120,9 +127,11 @@
                     </div>
                 </div>
 
-                <div class="user_register frm_wrp">
-                    <div class="screen rounded-bottom">
+                <div class="user_register form_wrp">
+                    <div class="screen">
+                        <span class="modal_close"><i class="fas fa-times"></i></span>
                         <div class="screen__content">
+                            <h3>Sign Up</h4>
                             <form id="reg_form" class="login">
                                 {% csrf_token %}
                                 <div class="login__field">
@@ -137,7 +146,7 @@
                                 </div>
                                 <div class="login__field">
                                     <i class="fas fa-phone-alt"></i>
-                                    <input name="phone" type="text" class="login__input" placeholder="Phone number" id="phoneInput">
+                                    <input name="phone" type="text" class="login__input phone-input" placeholder="Phone number">
                                     <p id="pherr"></p>
                                 </div>
                                 <div class="login__field">
@@ -152,12 +161,11 @@
                                     <i class="fas fa-eye togglePassword"></i><i class="fas fa-eye-slash togglePassword"></i>
                                     <p id="pwderr2"></p>
                                 </div>
-                                <div class="make-payment-btn mt-3">
-                                    <button class="w-100" id="regBtn">Sign Up &nbsp;<i class="fas fa-user-plus"></i></button>
-                                    <button class="w-100 loadingBtn" disable><i class="fas fa-spinner fa-spin text-white"></i></button>
+                                <div class="make-payment-btn">
+                                    <button class="w-100 form_buttons" id="regBtn">Sign Up &nbsp;<i class="fas fa-user-plus"></i></button>
                                 </div>
-                                <div class="forgot-pass d-flex justify-content-evenly mt-3">
-                                    <a id="goto_signin" style="cursor:pointer;color:#4b8ef1;font-weight:500;">Sign In</a>
+                                <div class="forgot-pass d-flex justify-content-evenly mt-2">
+                                    <a class="goto_signin" style="cursor:pointer;color:#4b8ef1;font-weight:500;">Sign In</a>
                                     <a href="{% url 'terms_conditions' %}">Terms &amp; Condition</a>
                                 </div>
                             </form>
@@ -171,9 +179,11 @@
                     </div>
                 </div>
 
-                <div class="user_login frm_wrp">
+                <div class="user_login form_wrp">
                     <div class="screen">
+                        <span class="modal_close"><i class="fas fa-times"></i></span>
                         <div class="screen__content">
+                            <h3>Sign In</h4>
                             <form id="login_form" class="login">
                                 {% csrf_token %}
                                 <p class="" id="invaliderr"></p>
@@ -188,13 +198,12 @@
                                     <i class="fas fa-eye togglePassword"></i><i class="fas fa-eye-slash togglePassword"></i>
                                     <p id="login_pwderr"></p>
                                 </div>
-                                <div class="make-payment-btn mt-3">
-                                    <button class="w-100" id="loginBtn">Sign In &nbsp;<i class="fas fa-sign-in-alt"></i></button>
-                                    <button class="w-100 loadingBtn2" disable><i class="fas fa-spinner fa-spin text-white"></i></button>
+                                <div class="make-payment-btn">
+                                    <button class="w-100 form_buttons" id="loginBtn">Sign In &nbsp;<i class="fas fa-sign-in-alt"></i></button>
                                 </div>
-                                <div class="forgot-pass d-flex justify-content-evenly mt-3">
-                                    <a id="goto_signup" style="cursor:pointer;color:#4b8ef1;font-weight:500;">Sign Up</a>
-                                    <a href="">Forgotten password?</a>
+                                <div class="forgot-pass d-flex justify-content-evenly mt-2">
+                                    <a class="goto_signup" style="cursor:pointer;color:#4b8ef1;font-weight:500;">Sign Up</a>
+                                    <a href="#forgotPassword" class="forgot-password-btn" style="cursor:pointer;color:#4b8ef1;font-weight:400;">Forgotten password?</a>
                                 </div>
                             </form>
                         </div>
@@ -209,26 +218,67 @@
             </section>
         </div>
 
+        <div id="forgotPassword" class="forgot_password" style="display: none; z-index:9999;">
+            <section class="popupBody p-0">
+                <div class="form_wrp2">
+                    <div class="screen">
+                        <span class="modal_close1"><i class="fas fa-times"></i></span>
+                        <div class="screen__content">
+                            <h3>Forgot Password</h4>
+                            <form id="forgot-password-form" class="login">
+                                {% csrf_token %}
+                                <div class="login__field">
+                                    <i class="fas fa-envelope"></i>
+                                    <input name="forgot_pass_email" type="email" class="login__input" placeholder="Email">
+                                    <p id="fp_emerr"></p>
+                                </div>
+                                <div class="make-payment-btn mt-1">
+                                    <button class="w-100 form_buttons" id="forgotPasswordBtn">Submit &nbsp;<i class="fas fa-paper-plan"></i></button>
+                                </div>
+                                <div class="mt-2 text-center">
+                                    Remembered password?&nbsp; <a href="#modal" class="goto_signin2" style="cursor:pointer;color:#4b8ef1;font-weight:500;">Sign In</a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="screen__background rounded">
+                            <span class="screen__background__shape screen__background__shape4"></span>
+                            <span class="screen__background__shape screen__background__shape3"></span>		
+                            <span class="screen__background__shape screen__background__shape2"></span>
+                            <span class="screen__background__shape screen__background__shape1"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
         <div id="verifyEmail" class="verify_email" style="display: none;z-index:9999;">
-            <div class="popupHeader">
-                <span class="header_title">Verification</span>
-                <span class="modal_close2"><i class="fas fa-times"></i></span>
-            </div>
-            <section class="popupBody">
-                <h5 class="text-center border-bottom p-0 m-0 py-1" style="font-size:18px;color: #01377e;">Please verify your email</h5>
-                <p class="fs-6 text-center mt-2" style="line-height:22px;font-weight:400;">
-                    A verification link has been sent to your <br>
-                    email. Please check your email and click <br>
-                    on the link to complete your registration.
-                </p>
-                <div class="d-flex justify-content-end">
-                    <a href="{% url 'resend_link' %}" class="resendEmailBtn btn btn-round btn-sm py-1 px-3 mt-4">Resend link</a>
-                    <a class="resendEmailBtn2 btn btn-round btn-sm py-1 px-5 mt-4"><i class="fas fa-spinner fa-spin text-white"></i></a>
+            <section class="popupBody p-0">
+                <div class="screen">
+                    <span class="modal_close2"><i class="fas fa-times"></i></span>
+                    <div class="screen__content">
+                        <h3>Verification</h4>
+                        <h5 class="text-center border-bottom p-0 m-0 my-2 mt-4" style="font-size:18px;color: #01377e;">Please verify your email</h5>
+                        <p class="fs-6 text-center mt-2" style="line-height:22px;font-weight:400;">
+                            A verification link has been sent to your <br>
+                            email. Please check your email and click <br>
+                            on the link to complete your registration.
+                        </p>
+                        <div class="d-flex justify-content-end">
+                            <a href="{% url 'resend_link' %}" id="resendEmailBtn" class="form_buttons btn btn-round btn-sm py-1 px-3 mt-4 me-4">Resend link</a>
+                        </div>
+                    </div>
+                    <div class="screen__background rounded">
+                        <span class="screen__background__shape screen__background__shape4"></span>
+                        <span class="screen__background__shape screen__background__shape3"></span>		
+                        <span class="screen__background__shape screen__background__shape2"></span>
+                        <span class="screen__background__shape screen__background__shape1"></span>
+                    </div>
                 </div>
             </section>
         </div>
         <a href="#verifyEmail" class="show_ver_email position-absolute d-none" style="bottom:0;right:0;z-index:-9;">show_ver_email</a>
 
+        <input id="userVerStatus" type="hidden" value="{{ request.user.is_verified }}"/>
         {% block content %}
 
         {% endblock content %}
@@ -293,13 +343,42 @@
         <script src="{% static 'js/popup.js' %} "></script>
         <script src="{% static 'js/custom.js' %} "></script>
         <script>
-            $('.msgs_info').fadeIn().delay(5000).fadeOut();
-            $('.dj_err_msg').fadeIn().delay(5000).fadeOut();
+            document.addEventListener('DOMContentLoaded', function() {
+                $('.msgs_info').fadeIn().delay(5000).fadeOut();
+                $('.dj_err_msg').fadeIn().delay(5000).fadeOut();
 
-            $('.close_error').click(function () {
-                $('.msgs_info').hide()
-                $('.dj_err_msg').hide()
-            })
+                $('.close_error').click(function () {
+                    $('.msgs_info').hide()
+                    $('.dj_err_msg').hide()
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                function checkUserVerStatus() {
+                    let userVerStatus = document.getElementById('userVerStatus').value;
+                    if(userVerStatus == 'False') { 
+                        $(".show_ver_email").click();
+                    }
+                }
+                checkUserVerStatus();
+            
+                /*
+                function refreshSection(element) {
+                    $('#' + element).load(location.href + ' #' + element + ' > *', function() {
+                        console.log('Refreshed ' + element); 
+                        console.log(document.getElementById('userVerStatus').value);
+                    });
+                }
+
+                setInterval(function() {
+                    refreshSection('userVerStatus');  
+                    checkUserVerStatus();  
+                }, 5000); 
+                */
+            });
+            
         </script>
     </body>
 </html>
