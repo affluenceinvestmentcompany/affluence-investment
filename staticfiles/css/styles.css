@@ -1267,12 +1267,12 @@ PopUp
 }
 
 .btn_red {
-  background: #4b8ef1;
+  background: linear-gradient(105deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);
   color: #FFF;
 }
 
 .btn:hover {
-  background: #E4E4E2;
+  background: linear-gradient(105deg, rgba(40,225,253,1) 0%, rgba(91,104,235,1) 100%);
 }
 
 .btn_red:hover {
@@ -1584,16 +1584,21 @@ a.btn_red {
   color: rgba(91,104,235,1);
 }
 
-.slider-content .scl h6 {
+.slider-content .scl h3 {
+  font-size: 26px;
   color: #01377e;
+  padding: 0;
+  margin: 0;
+  border: none;
 }
 
 .slider-content .scr ul li {
   list-style-type: square;
   font-size: 1.7rem;
   font-weight: 500;
-  line-height: 4rem;
+  line-height: 2rem;
   color: #01377e;
+  margin-bottom: 20px;
 }
 
 .slider-content .scr ul li span {
@@ -1603,6 +1608,11 @@ a.btn_red {
 .slider-content .scr ul small {
   font-weight: 400;
 }
+
+#slider3 #sel_method,
+  #slider3 #sel_address {
+    font-size: 22px;
+  }
 
 .slider-container button {
   border: none;
@@ -1623,12 +1633,12 @@ a.btn_red {
 }
 
 .slider-container #paid:hover {
-  background: rgb(19,175,240);
   background: linear-gradient(105deg, rgba(40,225,253,1) 0%, rgba(91,104,235,1) 100%);
 }
 
 .slider-container #paid:disabled {
-  background: #adadad;
+  color: #01377e;
+  background: rgb(155, 225, 255);
   cursor: not-allowed;
 }
 
@@ -1659,12 +1669,13 @@ a.btn_red {
   width: 200px;
 }
 
-/* ========== Enter Amount ======= */
+/* ========== Enter Amount &  CUSTOM SELECT ======= */
 .amount-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 40px;
+  margin-bottom: 45px;
 }
 .amount-container label {
   margin-bottom: 4px;
@@ -1678,19 +1689,18 @@ a.btn_red {
   border-radius: 4px;
   background-color: rgba(255, 255, 255, 0.5);
 }
+.custom-select {
+  position: relative;
+  width: 100%;
+}
 .amount-container .error,
 .custom-select .error {
   color: red;
   font-size: 12px;
   margin-top: 3px;
-}
-
-
-
-/* ========== CUSTOM SELECT======= */
-.custom-select {
-  position: relative;
-  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: -20px;
 }
 
 select {
@@ -1739,6 +1749,9 @@ select {
   display: block;
 }
 
+.pay-img {
+  display: none;
+}
 
 
 

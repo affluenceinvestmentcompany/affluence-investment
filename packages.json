@@ -1,0 +1,46 @@
+[
+    {
+        "model": "home.packages",
+        "pk": 1,
+        "fields": {
+            "plan": "Basic Plan",
+            "profit": "0.8",
+            "bonus": "0.5",
+            "min_amount": "100",
+            "min_days": "30"
+        }
+    },
+    {
+        "model": "home.packages",
+        "pk": 2,
+        "fields": {
+            "plan": "Standard Plan",
+            "profit": "1.0",
+            "bonus": "1.0",
+            "min_amount": "500",
+            "min_days": "60"
+        }
+    },
+    {
+        "model": "home.packages",
+        "pk": 3,
+        "fields": {
+            "plan": "Premium Plan",
+            "profit": "1.2",
+            "bonus": "1.5",
+            "min_amount": "1000",
+            "min_days": "90"
+        }
+    },
+    {
+        "model": "home.packages",
+        "pk": 3,
+        "fields": {
+            "plan": "Ultimate Plan",
+            "profit": "1.5",
+            "bonus": "2.0",
+            "min_amount": "5000",
+            "min_days": "120"
+        }
+    }
+]

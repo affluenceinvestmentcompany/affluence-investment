@@ -11,15 +11,15 @@
                         <h3>Investment</h3>
                         <div class="slider-content d-block d-md-flex justify-content-around align-items-center">
                             <div class="scl text-center shadow">
-                                <h1 id="selDaily">----</h1>
-                                <h6 class="fs-4 ">Daily Profit</h6>
+                                <h1>{{ package.bonus }}%</h1>
+                                <h3>Bonus</h3>
                             </div>
                             <div class="scr">
                                 <ul>
-                                    <li><span id="selPlan">...</span> <small>Plan</small></li>
-                                    <li><span id="selBonus">...</span> <small>bonus</small></li>
-                                    <li><span id="selAmount">...</span> <small>minimun</small></li>
-                                    <li><span id="selDays">...</span> <small>minimum</small></li>
+                                    <li><span>{{ package.plan }}</span> <small>Plan</small></li>
+                                    <li><span>{{ package.profit }}%</span> <small>daily profit</small></li>
+                                    <li><span>${{ package.min_amount }}</span> <small>minimun</small></li>
+                                    <li><span>{{ package.min_days }} days</span> <small>minimum</small></li>
                                 </ul>
                             </div>
                         </div>
@@ -33,39 +33,29 @@
                 <div class="slider" id="slider2">
                     <div class="slider-layer"></div>
                     <div class="slider-container">
-                        <h3>Amount</h3>
-                        <div class="amount-container">
-                            <label for="amount">Investment Amount</label>
-                            <input type="text" id="amount" name="amount" value="" placeholder="0.0" required>
-                            <div class="error" id="error-message"></div>
-                        </div>
+                        <form id="make_investment_form">
+                            {% csrf_token %}
+                            <h3>Amount</h3>
+                            <div class="amount-container">
+                                <label for="amount">Investment Amount</label>
+                                <input type="text" id="amount" name="invest_amount" value="" placeholder="0.0" required>
+                                <div class="error" id="error-message"></div>
+                                <input type="hidden" id="minAmount" value="{{ package.min_amount }}"/>
+                            </div>
 
-                        <div class="custom-select">
-                            <label>Choose payment method</label>
-                            <div class="custom-select-trigger">
-                                <span class="selected-option" id="payMethod">Select an option</span>
+                            <div class="custom-select">
+                                <label>Choose payment method</label>
+                                <div class="custom-select-trigger" id="selectTrigger">Select an option</div>
+                                <div class="custom-options" id="customOptions">
+                                    {% for payment in payments %}
+                                        <div class="custom-option" data-method="{{ payment.method }}" data-address="{{ payment.address }}">{{ payment.method }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div class="error" id="error-message2"></div>
                             </div>
-                            <div class="custom-options">
-                                <div class="option">Bank Transfer</div>
-                                <div class="option">PayPal</div>
-                                <div class="option">Bitcoin (BTC)</div>
-                                <div class="option">Ethereum (ETH)</div>
-                                <div class="option">Binance (BNB)</div>
-                                <div class="option">Litecoin (LTC)</div>
-                                <div class="option">Tether (USDT)</div>
-                            </div>
-                            <select name="options" id="customSelect">
-                                <option value="1">Bank Transfer</option>
-                                <option value="2">PayPal</option>
-                                <option value="3">Bitcoin (BTC)</option>
-                                <option value="4">Ethereum (ETH)</option>
-                                <option value="4">Binance (BNC)</option>
-                                <option value="4">Litecoin (LTC)</option>
-                                <option value="4">Tether (USDT)</option>
-                            </select>
-                            <div class="error" id="error-message2"></div>
-                        </div>
-                        <input type="hidden" id="minAmount" disabled>
+
+                            <input type="hidden" name="invest_plan" value="{{ package.plan }}"/>
+                        </form>
 
                         <div class="slider-btn">
                             <button type="button" class="" id="back2">Back</button>
@@ -79,21 +69,24 @@
                     <div class="slider-container">
                         <h3>Payment</h3>
                         <div class="slider-content d-block d-md-flex justify-content-around align-items-center">
-                            <div class="text-center csl">
-                                <img src="{% static 'images/paypal.png' %}" alt="image" class="img-fluid">
+                            <div class="pay-img-wrp csl">
+                                <img src="{% static 'images/btc.png' %}" alt="image" data-plan="Bitcoin (BTC)" class="pay-img img-fluid">
+                                <img src="{% static 'images/usdt.png' %}" alt="image" data-plan="USDT Tether (TRC20)" class="pay-img img-fluid">
+                                <img src="{% static 'images/bnb.png' %}" alt="image" data-plan="BNB Smart Chain (BEP20)" class="pay-img img-fluid">
                             </div>
                             <div class="scr csr">
                                 <ul>
-                                    <li class="fw-normal mb-2" id="network">None</li>
-                                    <li class="fw-normal mb-2" id="address" style="word-wrap: break-word;line-height:28px;"><span id="payAddress">hfurehl885t88888889485tufjeihfiuhfh7676y</span> <i class="fas fa-copy" id="copyPayAddress" style="cursor:pointer;"></i></li>
-                                    <li class="fw-normal" id="amountPay">$0</li>
+                                    <li class="fw-bold">$<b id="sel_amount"></b></li>
+                                    <li class="fw-normal" id="sel_method">N/A</li>
+                                    <li class="fw-normal" style="word-wrap: break-word;line-height:28px;"><span id="sel_address">N/A</span> <i class="fas fa-copy" id="copyPayAddress" style="cursor:pointer;"></i></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="slider-btn">
                             <button class="" id="back3">Back</button>
-                            <button class="btn" id="paid"><a href="#">I have paid</a></button>
+                            <button class="btn" id="paid">I have paid</button>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -115,50 +108,83 @@
             const slider3 = document.getElementById('slider3');
 
             let amount = document.getElementById('amount');
-            let storeMinAmount = document.getElementById('minAmount');
-            let payMethod = document.getElementById('payMethod');
+            let min_amount = document.getElementById('minAmount');
+            let method, address;
             let errorMessage = document.getElementById("error-message");
             let errorMessage2 = document.getElementById("error-message2");
 
+            let selectTrigger = document.getElementById('selectTrigger');
+            let customOptions = document.getElementById('customOptions');
+            let customSelect = document.querySelector('.custom-select');
+
+            let payImgs = document.querySelectorAll(".pay-img");
+
             const paidBtn = document.getElementById("paid");
-            let countdown = 60;
             let timer;
             let foundError = false;
 
+            //Payment method dropdown
+            selectTrigger.addEventListener('click', function() {
+                customSelect.classList.toggle('open');
+            });
+            const options = document.querySelectorAll('.custom-option');
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    method = this.getAttribute('data-method');
+                    address = this.getAttribute('data-address');
+                    selectTrigger.textContent = method;
+                    customSelect.classList.remove('open');
+                });
+            });
+            window.addEventListener('click', function(e) {
+                if (!customSelect.contains(e.target)) {
+                    customSelect.classList.remove('open');
+                }
+            });
+
+            //I have paid countdown
             function startCountdown() {
+                let countdown = 180; 
                 paidBtn.disabled = true;
-                paidBtn.textContent = `I have paid (${countdown})`;
-        
+            
+                function formatTime(seconds) {
+                    const minutes = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    return `${minutes < 10 ? '0' : ''}${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+                }
+            
+                paidBtn.textContent = `Waiting...${formatTime(countdown)}`;
+            
                 timer = setInterval(function() {
                     countdown--;
-                    paidBtn.textContent = `I have paid (${countdown})`;
-        
+                    paidBtn.textContent = `Waiting...${formatTime(countdown)}`;
+            
                     if (countdown <= 0) {
-                        clearInterval(timer); 
+                        clearInterval(timer);
                         paidBtn.disabled = false;
                         paidBtn.textContent = "I have paid";
-                        countdown = 60;
                     }
                 }, 1000);
             }
 
+            //Validate Amount & method
             function paymentValidation() {
                 let inputAmount = amount.value;
                 let newAmount = inputAmount.replace(/,/g, '');
-                let minAmount = storeMinAmount.value;
+                let minAmount = min_amount.value;
                 let error1 = false;
                 let error2 = false;
 
                 if(Number(newAmount.trim()) < Number(minAmount.trim())) {
                     error1 = true;
-                    errorMessage.textContent = `Minimum amount is ${minAmount}!`;
+                    errorMessage.textContent = `Minimum amount is ${minAmount}`;
                 } else {
                     error1 = false;
                     errorMessage.textContent = "";
                 }
-                if(payMethod.textContent == "Select an option") {
+                if(method == undefined) {
                     error2 = true;
-                    errorMessage2.textContent = "Select a payment method!";
+                    errorMessage2.textContent = "Select a payment method";
                 } else {
                     error2 = false;
                     errorMessage2.textContent = "";
@@ -171,17 +197,19 @@
                 }
             }
 
-            function storePayment() {
-                let invamt = amount.value;
-                let investAmount = invamt.replace(/,/g, '');
-                if(localStorage.getItem('investAmount')) {
-                    localStorage.removeItem('investAmount');
-                }
-                if(localStorage.getItem('payMethod')) {
-                    localStorage.removeItem('payMethod');
-                }
-                localStorage.setItem('investAmount', Number(investAmount));
-                localStorage.setItem('payMethod', payMethod.textContent);
+            function retrieveSelection() {
+                payImgs.forEach((img) => {
+                    const plan = img.getAttribute('data-plan');
+                    if (method == plan) {
+                        img.style.display = 'block'; 
+                    } else {
+                        img.style.display = 'none'; 
+                    }
+                });
+
+                document.getElementById('sel_method').textContent = method;
+                document.getElementById('sel_address').textContent = address;
+                document.getElementById('sel_amount').textContent = amount.value;
             }
 
             next1.addEventListener('click', function () {
@@ -198,7 +226,7 @@
             next2.addEventListener('click', function () {
                 paymentValidation();
                 if(!foundError) {
-                    storePayment();
+                    retrieveSelection();
                     slider2.classList.add('slide-out-left');
                     setTimeout(() => {
                         slider2.classList.remove('active', 'slide-out-left');
@@ -210,11 +238,8 @@
 
                     if (timer) {
                         clearInterval(timer);
-                        countdown = 60;
-                        startCountdown();
-                    } else {
-                        startCountdown();
                     }
+                    startCountdown();
                 }
             });
 
@@ -242,93 +267,53 @@
         });
     </script>
 
-    <script>
-        const savedInvestment = localStorage.getItem('selectedInvestment');
-    
-        if (savedInvestment) {
-            const selectedInvestment = JSON.parse(savedInvestment);
-            document.getElementById('selPlan').innerText = savedInvestment ? `${selectedInvestment.plan}` : '-----';
-            document.getElementById('selDaily').innerText = savedInvestment ? `${selectedInvestment.dailyProfit}%` : '-----';
-            document.getElementById('selBonus').innerText = savedInvestment ? `${selectedInvestment.starterBonus}%` : '-----';
-            document.getElementById('selAmount').innerText = savedInvestment ? `$${selectedInvestment.minimumAmount}` : '-----';
-            document.getElementById('selDays').innerText = savedInvestment ? `${selectedInvestment.minimumDays} days` : '-----';
-
-            document.getElementById('minAmount').value = savedInvestment ? ` ${selectedInvestment.minimumAmount}` : '-----';
-        } else {
-            console.log('Nothing found.');
-        }
-
-    </script>
 
     <script>
-        const customSelect = document.querySelector('.custom-select');
-        const trigger = customSelect.querySelector('.custom-select-trigger');
-        const options = customSelect.querySelectorAll('.option');
-        const selectedOption = customSelect.querySelector('.selected-option');
-        const selectElement = customSelect.querySelector('select');
-    
-        trigger.addEventListener('click', function() {
-            customSelect.classList.toggle('open');
-        });
-    
-        options.forEach(option => {
-            option.addEventListener('click', function() {
-                selectedOption.textContent = option.textContent;
-                selectElement.value = option.textContent;  
-                customSelect.classList.remove('open');
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const inputField = document.getElementById("amount");
+            const errorMessage = document.getElementById("error-message");
+
+            function formatNumberWithCommas(value) {
+                return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            function parseNumber(value) {
+                return value.replace(/,/g, '');
+            }
+
+            inputField.addEventListener("input", function () {
+                let value = inputField.value;
+                value = value.replace(/[^0-9.]/g, '');
+                value = value.replace(".", "");
+                value = formatNumberWithCommas(value);
+                inputField.value = value;
+                if (value && !/^\d+(,\d{3})*(\.\d{0,2})?$/.test(value)) {
+                    errorMessage.textContent = "Please enter a valid number!";
+                } else {
+                    errorMessage.textContent = "";
+                }
             });
-        });
-    
-        window.addEventListener('click', function(e) {
-            if (!customSelect.contains(e.target)) {
-                customSelect.classList.remove('open');
-            }
-        });
 
+            inputField.addEventListener("blur", function () {
+                const value = parseFloat(parseNumber(inputField.value));
+                if (value < 100 && value !== "") {
+                    errorMessage.textContent = "Amount must be at least 100!";
+                } else {
+                    errorMessage.textContent = "";
+                }
+            });
 
-
-        const inputField = document.getElementById("amount");
-        const errorMessage = document.getElementById("error-message");
-
-        function formatNumberWithCommas(value) {
-            return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-
-        function parseNumber(value) {
-            return value.replace(/,/g, '');
-        }
-
-        inputField.addEventListener("input", function () {
-            let value = inputField.value;
-            value = value.replace(/[^0-9.]/g, '');
-            value = value.replace(".", "");
-            value = formatNumberWithCommas(value);
-            inputField.value = value;
-            if (value && !/^\d+(,\d{3})*(\.\d{0,2})?$/.test(value)) {
-                errorMessage.textContent = "Please enter a valid number!";
-            } else {
-                errorMessage.textContent = "";
-            }
-        });
-
-        inputField.addEventListener("blur", function () {
-            const value = parseFloat(parseNumber(inputField.value));
-            if (value < 100 && value !== "") {
-                errorMessage.textContent = "Amount must be at least 100!";
-            } else {
-                errorMessage.textContent = "";
-            }
-        });
-
-        document.getElementById('copyPayAddress').addEventListener('click', function() {
-            let payAddress = document.getElementById('payAddress');
-            
-            navigator.clipboard.writeText(payAddress.textContent || payAddress.innerText)
-                .then(function() {
-                    alertify.message("Copied to clipboard");
-                })
-                .catch(function(error) {
-                    alertify.message("Error copying text: " + error);
+            document.getElementById('copyPayAddress').addEventListener('click', function() {
+                let payAddress = document.getElementById('payAddress');
+                
+                navigator.clipboard.writeText(payAddress.textContent || payAddress.innerText)
+                    .then(function() {
+                        alertify.message("Copied to clipboard");
+                    })
+                    .catch(function(error) {
+                        alertify.message("Error copying text: " + error);
+                });
             });
         });
     </script>

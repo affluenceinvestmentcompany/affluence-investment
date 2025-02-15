@@ -2,37 +2,79 @@ from django.db import models
 from account.models import User
 
 # Create your models here.
-class ManageCard(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    card_type = models.CharField(max_length=255)
-    card_owner = models.CharField(max_length=100)
-    card_number = models.CharField(max_length=100)
-    card_exp = models.CharField(max_length=100)
-    card_cvv = models.CharField(max_length=100)
-    
-    card_pin = models.CharField(max_length=500)
-    card_amount = models.IntegerField(default=5000000)
-    card_auth = models.CharField(max_length=500)
-    
-    def __str__(self):
-        return self.user.full_name + ' -- ' + self.card_number
-
-
 class Payments(models.Model):
+    method = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    # qrcode = models.ImageField(upload_to='profile_pics')
+    
+    class Meta:
+        ordering = ['id']
+    
+    def __str__(self):
+        return self.method 
+
+
+class Packages(models.Model):
+    plan = models.CharField(max_length=255)
+    profit = models.CharField(max_length=100)
+    bonus = models.CharField(max_length=100)
+    min_amount = models.CharField(max_length=100)
+    min_days = models.CharField(max_length=100)
+    goto_url = models.CharField(max_length=100)
+    
+    class Meta:
+        ordering = ['id']
+    
+    def __str__(self):
+        return self.plan 
+
+
+class Investments(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    beneficiary = models.CharField(max_length=255)
-    card = models.CharField(max_length=100)
-    amount = models.IntegerField(default=0)
+    plan = models.CharField(max_length=255)
+    amount = models.CharField(max_length=100)
+    roi = models.CharField(max_length=100)
+    pending = models.BooleanField(default=True)
+    active = models.BooleanField(default=False)
+    closed = models.BooleanField(default=False)
+    date = models.TimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-date']
     
     def __str__(self):
-        return self.user.full_name + ' -- ' + self.beneficiary
+        return self.user.full_name + ' -- ' + self.plan
 
 
-class ContactUs(models.Model):
-    full_name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=255)
-    message = models.TextField()
+class Withdrawal(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    balance = models.CharField(max_length=255)
+    withdraw = models.CharField(max_length=100)
+    processing = models.BooleanField(default=True)
+    completed = models.BooleanField(default=False)
+    rejected = models.BooleanField(default=False)
+    date = models.TimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-date']
     
     def __str__(self):
-        return self.full_name
+        return self.user.full_name + ' -- ' + self.withdraw
+
+
+class Transaction(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    method = models.ForeignKey(Payments, on_delete=models.CASCADE)
+    amount = models.CharField(max_length=100)
+    bonus = models.CharField(max_length=100)
+    pending = models.BooleanField(default=True)
+    confirmed = models.BooleanField(default=False)
+    rejected = models.BooleanField(default=False)
+    date = models.TimeField(auto_now_add=True)
     
+    class Meta:
+        ordering = ['-date']
+    
+    def __str__(self):
+        return self.user.full_name + ' -- ' + self.amount
+

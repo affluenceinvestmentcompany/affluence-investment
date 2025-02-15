@@ -3,10 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    # path('invest', views.invest, name='invest'),
-    path('invest/basic-plan', views.invest, name='invest_basic'),
-    path('invest/standard-plan', views.invest, name='invest_standard'),
-    path('invest/premium-plan', views.invest, name='invest_premium'),
-    path('invest/ultimate-plan', views.invest, name='invest_ultimate'),
+    path('invest/<str:goto_url>/', views.invest, name='invest'),
+    path('create-investment/', views.create_investment, name='create_investment'),
 ]
 

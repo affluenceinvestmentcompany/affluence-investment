@@ -643,6 +643,42 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
+        // =============== MAKE INVESTMENT AJAX===================
+        $(document).on('click', '#paid', function (e) {
+            e.preventDefault()
+            var plan = $('input[name=invest_plan]').val()
+            var method = $('#selectTrigger').text()
+            var amount = $('input[name=invest_amount]').val()
+            var token = $('input[name=csrfmiddlewaretoken]').val()
+
+            showSpinner('paid');
+
+            $.ajax({
+                method: 'POST',
+                url: '/create-investment/',
+                data: {
+                    'plan': plan,
+                    'method': method,
+                    'amount': amount,
+                    csrfmiddlewaretoken: token
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alertify.success(response.success);
+                        localStorage.setItem('activeNavLink', 'dashboard_tab');
+                        window.location.href = '/account/dashboard/'
+                    } else if (response.error) {
+                        alertify.error(response.error);
+                        hideSpinner('paid');
+                    }
+                },
+                error: function() {
+                    alertify.error('An error occurred...');
+                    hideSpinner('paid');
+                }
+            });
+        })
+
         // =============RESEND EMAIL===============
         $('#resendEmailBtn').on('click', function () {
             showSpinner('resendEmailBtn');

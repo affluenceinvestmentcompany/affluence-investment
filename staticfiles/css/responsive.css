@@ -293,7 +293,7 @@
     padding: 50px;
   }
   .slider-content .scr {
-    margin-top: 25px;
+    margin-top: 20px;
     padding-left: 20px;
   }
   .slider-content .scr ul li {
@@ -302,6 +302,21 @@
   }
   .slider-content .csr {
     margin-top: 25px;
+  }
+  #slider1 ul li {
+    margin-bottom: 3px;
+  }
+  #slider3 ul li {
+    margin-bottom: 7px;
+  }
+  #slider3 .pay-img-wrp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #slider3 #sel_method,
+  #slider3 #sel_address {
+    font-size: 16px;
   }
   .header-area .nav li:first-child {
     display: inline-block;
