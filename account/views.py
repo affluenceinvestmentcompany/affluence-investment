@@ -8,16 +8,15 @@ from django.http import JsonResponse
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
-import base64
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from .tokens import account_activation_token
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import SetPasswordForm
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-from django.core.exceptions import ObjectDoesNotExist
+from home.models import *
+import random
+import string
+import secrets
 
 def activate(request, uidb64, token):
     # user = User()
@@ -120,6 +119,15 @@ def resendLink(request):
     messages.success(request, 'Verification email resent.')
     return redirect('index')
 
+def generate_secret(length=64):
+    secret = ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+    return secret
+
+def generate_token(length=64):
+    alphabet = string.ascii_letters + string.digits
+    token = ''.join(secrets.choice(alphabet) for _ in range(length))
+    return token
+
 #Forgotten password
 def password_reset_request(request):
     if request.method == 'POST':
@@ -127,13 +135,19 @@ def password_reset_request(request):
             email = request.POST.get('email')
             user = User.objects.get(email=email)
             if user:
+                
+                user_uid = generate_secret()
+                user_token = generate_token()
+                reset_password = ResetPassword.objects.create(user=user, uid=user_uid, token=user_token)
+                reset_password.save()
+                
                 verification_email = EmailMessage(
                     subject = 'Password reset request',
                     body = render_to_string('account/password_reset_email.html', {
                         'user': user.full_name,
                         'domain': get_current_site(request).domain,
-                        'uid': urlsafe_base64_encode(force_bytes(user.id)),
-                        'token': default_token_generator.make_token(user),
+                        'uid': user_uid,
+                        'token': user_token,
                         'protocol': 'https' if request.is_secure() else 'http'
                     }),
                     to = [email],
@@ -151,35 +165,44 @@ def password_reset_request(request):
         return JsonResponse({"error": "Invalid request"})
 
 #Reset password
-def password_reset_confirm(request, uidb64, token):
+def password_reset_confirm(request, uid, token):
     try:
-        uid = urlsafe_base64_decode(uidb64).decode()
-        user = get_user_model().objects.get(pk=uid)
-    except Exception as e:
-        print(e)
-        user = None
-    if user is not None and default_token_generator.check_token(user, token):
+        reset_password_instance = ResetPassword.objects.get(uid=uid, token=token)
+        usr = reset_password_instance.user
+    except ResetPassword.DoesNotExist:
+        raise Http404("Page not found")
+
+    if usr is not None:
         if request.method == 'POST':
-            try:
-                new_password1 = request.POST.get('new_password')
-                if new_password1:
-                    user.set_password(new_password1)
-                    user.save()
-                    messages.success(request, 'Your reset successful')
-                    return redirect('index')
-                else:
-                    messages.error(request, 'Please provide a valid password.')
-            except Exception as e:
-                print(e)
-        
+            new_password1 = request.POST.get('password')
+            if new_password1:
+                usr.set_password(new_password1)
+                usr.save()
+                ResetPassword.objects.filter(user=usr).delete()
+                return JsonResponse({'success': "Password reset successful"})
+            else:
+                return JsonResponse({'error': "Password field is empty"}, status=400)
         return render(request, 'account/password_reset_confirm.html', {'uid': uid, 'token': token})
     else:
-        raise Http404("Invalid password reset link")
+        raise Http404("Page not found")
 
 # Dashboard
 def dashboard(request):
-    if request.user.is_authenticated and request.user.is_verified:
-        return render(request, 'account/dashboard.html')
+    if request.user.is_authenticated and request.user.is_verified: 
+        users = User.objects.all()
+        payments = Payments.objects.all()
+        packages = Packages.objects.all()
+        transactions = Transaction.objects.all()
+        investments = Investments.objects.all()
+        withdrawals = Withdrawal.objects.all()
+        
+        context = {
+            'users':users, 'payments':payments, 'packages':packages,
+            'transactions':transactions, 'investments':investments,
+            'withdrawals':withdrawals, 
+        }
+        
+        return render(request, 'account/dashboard.html', context)
     else:
         raise Http404("Page not found")
 
@@ -250,4 +273,16 @@ def get_dashboard_data(request):
         'total_investment': total_investment,
         'total_roi': total_roi
     })
+
+#Delete User
+def delete_user(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            user_id = int(request.POST.get('user_id'))
+            User.objects.filter(id=user_id).delete()
+            
+            return JsonResponse({'success':"User deleted successfully"})
+        else:
+            return JsonResponse({'error':"An error occured..."})
+
 

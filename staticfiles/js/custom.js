@@ -426,10 +426,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // =============RESET PASSWORD AJAX===============
-        $(document).on('click', '#resetPasswordBtn', function () {
-            // e.preventDefault();
+        $(document).on('submit', '#reset_password_form', function (e) {
+            e.preventDefault();
             var password = $('input[name=new_password]').val();
             var password2 = $('input[name=new_password2]').val();
+            var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+            var uid = $('#reset_password_form').data('uid');
+            var token = $('#reset_password_form').data('token');
 
             if (password == "" || !regex.test(password)) {
                 document.getElementById('pwderr3').innerHTML = 'Minimum of 8 alphabets & numbers'
@@ -444,28 +447,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('pwderr4').innerHTML = "."
             }
 
-            // $.ajax({
-            //     method: 'POST',
-            //     url: '/account/reset/<uidb64>/<token>/',
-            //     data: {
-            //         'password': password,
-            //         csrfmiddlewaretoken: token
-            //     },
-            //     success: function (response) {
-            //         if (response.success == 'Password reset successful') {
-            //             alertify.success(response.success);
-            //             window.location.href = '/';
-            //         } else if (response.error == 'Invalid or expired token/link') {
-            //             alertify.error(response.error);
-            //             window.location.href = '/';
-            //         } else {
-            //             alertify.error(response.error)
-            //             $('.loadingBtn4').hide()
-            //             $('#resetPasswordBtn').show()
-            //             return false;
-            //         }
-            //     }
-            // })
+            showSpinner('resetPasswordBtn')
+
+            $.ajax({
+                method: 'POST',
+                url: '/account/reset/' + uid + '/' + token + '/',
+                data: {
+                    'password': password,
+                    csrfmiddlewaretoken: csrfToken
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alertify.success(response.success);
+                        window.location.href = '/';
+                    } else if (response.error == 'Invalid or expired token/link') {
+                        alertify.error(response.error);
+                        window.location.href = '/';
+                    } else {
+                        alertify.error(response.error)
+                        hideSpinner('resetPasswordBtn')
+                        return false;
+                    }
+                }
+            })
         });
 
         // =============== ADD USER AJAX===================
@@ -683,6 +687,31 @@ document.addEventListener('DOMContentLoaded', function() {
         $('#resendEmailBtn').on('click', function () {
             showSpinner('resendEmailBtn');
         });
+
+         // =============DELETE USER AJAX===============
+        $(document).on('click', '.del__user', function (e) {
+            e.preventDefault()
+            let row = this.closest('tr');
+            let user_id = row.getAttribute('data-user-id');
+            let token = $('input[name=csrfmiddlewaretoken]').val()
+
+            showSpinner(this.closest('#del__user'));
+
+            $.ajax({
+                method: 'POST',
+                url: '/account/dashboard/users/delete-user/',
+                data: { 'user_id': user_id, csrfmiddlewaretoken: token },
+                success: function (response) {
+                    if(response.success) {
+                        alertify.success(response.success)
+                        hideSpinner(this.closest('#del__user'));
+                        refreshSection('user-table')
+                    } else {
+                        alertify.error(response.error)
+                    }
+                }
+            })
+        })  
         
 
 

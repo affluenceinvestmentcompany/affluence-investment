@@ -5,6 +5,7 @@ from account.models import User
 class Payments(models.Model):
     method = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
+    
     # qrcode = models.ImageField(upload_to='profile_pics')
     
     class Meta:
@@ -37,7 +38,7 @@ class Investments(models.Model):
     pending = models.BooleanField(default=True)
     active = models.BooleanField(default=False)
     closed = models.BooleanField(default=False)
-    date = models.TimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         ordering = ['-date']
@@ -53,7 +54,7 @@ class Withdrawal(models.Model):
     processing = models.BooleanField(default=True)
     completed = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
-    date = models.TimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         ordering = ['-date']
@@ -70,7 +71,7 @@ class Transaction(models.Model):
     pending = models.BooleanField(default=True)
     confirmed = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
-    date = models.TimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         ordering = ['-date']
