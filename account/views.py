@@ -192,7 +192,7 @@ def dashboard(request):
         users = User.objects.all()
         payments = Payments.objects.all()
         packages = Packages.objects.all()
-        transactions = Transaction.objects.all()
+        transactions = Transactions.objects.all()
         investments = Investments.objects.all()
         withdrawals = Withdrawal.objects.all()
         
@@ -211,7 +211,7 @@ def get_dashboard_data(request):
     users = User.objects.all().values('id', 'full_name', 'email')  # Replace with actual field names
     payments = Payments.objects.all().values('id', 'method', 'address')  # Replace with actual field names
     packages = Packages.objects.all().values('id', 'plan', 'profit')  # Replace with actual field names
-    transactions = Transaction.objects.all().values('id', 'method', 'amount')  # Replace with actual field names
+    transactions = Transactions.objects.all().values('id', 'method', 'amount')  # Replace with actual field names
     investments = Investments.objects.all().values('id', 'plan', 'amount')  # Replace with actual field names
     withdrawals = Withdrawal.objects.all().values('id', 'user', 'balance')  # Replace with actual field names
 
@@ -346,6 +346,36 @@ def edit_package(request):
         package.min_days = min_days
         package.save()
         return JsonResponse({'success': 'Package update successful'})
+
+#Accept Transaction
+def accept_transaction(request):
+    if request.method == 'POST':
+        if request.user.is_admin:
+            transaction_id = int(request.POST.get('transaction_id'))
+            transaction = Transactions.objects.get(id=transaction_id)
+            transaction.pending = False
+            transaction.confirmed = True
+            transaction.rejected = False
+            transaction.save()
+
+            return JsonResponse({'success':"Transaction confirmed"})
+        else:
+            return JsonResponse({'error':"An error occured..."})
+
+
+def reject_transaction(request):
+    if request.method == 'POST':
+        if request.user.is_admin:
+            transaction_id = int(request.POST.get('transaction_id'))
+            transaction = Transactions.objects.filter(id=transaction_id)
+            transaction.pending = False
+            transaction.confirmed = False
+            transaction.rejected = True
+            transaction.save()
+
+            return JsonResponse({'success':"Transaction rejected"})
+        else:
+            return JsonResponse({'error':"An error occured..."})
 
 
 

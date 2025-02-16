@@ -554,50 +554,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
         });
 
-        // =============== EDIT PROFILE AJAX===================
-        $(document).on('click', '#updateProfileBtn', function (e) {
-            e.preventDefault()
-            var button = this;
-            var full_name = $('input[name=ep_full_name]').val()
-            var phone = $('input[name=ep_phone]').val()
-            var token = $('input[name=csrfmiddlewaretoken]').val()
-
-            document.getElementById('ep_err').innerHTML = '';
-
-            if (full_name == "" && phone == "") {
-                document.getElementById('ep_err').innerHTML = 'Name or phone number blank';
-                return false;
-            }
-
-            showSpinner(button);
-
-            $.ajax({
-                method: 'POST',
-                url: '/account/dashboard/edit-profile/',
-                data: {
-                    'full_name': full_name,
-                    'phone': phone,
-                    csrfmiddlewaretoken: token
-                },
-                success: function (response) {
-                    if (response.success) {
-                        alertify.success(response.success);
-                        $('#edit-profile-form')[0].reset();
-                        refreshSection('nav');
-                        refreshSection('user');
-                    } else if (response.error) {
-                        alertify.error(response.error);
-                    }
-                },
-                error: function () {
-                    alertify.error('An error occurred!');
-                },
-                complete: function() {
-                    hideSpinner(button);
-                }
-            });
-        })
-
         // =============CHANGE PASSWORD AJAX===============
         $(document).on('click', '#changePasswordBtn', function (e) {
             e.preventDefault();
@@ -654,97 +610,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         });
-
-        // =============== MAKE INVESTMENT AJAX===================
-        $(document).on('click', '#paid', function (e) {
-            e.preventDefault()
-            var button = this;
-            var plan = $('input[name=invest_plan]').val()
-            var method = $('#selectTrigger').text()
-            var amount = $('input[name=invest_amount]').val()
-            var token = $('input[name=csrfmiddlewaretoken]').val()
-
-            showSpinner(button);
-
-            $.ajax({
-                method: 'POST',
-                url: '/create-investment/',
-                data: {
-                    'plan': plan,
-                    'method': method,
-                    'amount': amount,
-                    csrfmiddlewaretoken: token
-                },
-                success: function (response) {
-                    if (response.success) {
-                        alertify.success(response.success);
-                        localStorage.setItem('activeNavLink', 'dashboard_tab');
-                        window.location.href = '/account/dashboard/'
-                    } else if (response.error) {
-                        alertify.error(response.error);
-                    }
-                },
-                error: function () {
-                    alertify.error('An error occurred!');
-                },
-                complete: function() {
-                    hideSpinner(button);
-                }
-            });
-        })
-
-        // =============== ADD PAYMENT AJAX===================
-        $(document).on('click', '#addPaymentBtn', function (e) {
-            e.preventDefault()
-            var button = this;
-            var method = $('input[name=pay_method]').val()
-            var address = $('input[name=pay_address]').val()
-            var token = $('input[name=csrfmiddlewaretoken]').val()
-
-            if (method == "" || method.length < 2) {
-                document.getElementById('pm_err').innerHTML = 'Enter a valid method'
-                return false
-            } else {
-                document.getElementById('pm_err').innerHTML = "."
-            }
-            if (address == "") {
-                document.getElementById('add_err').innerHTML = 'Enter a valid address'
-                return false
-            } else {
-                document.getElementById('add_err').innerHTML = "."
-            }
-
-            showSpinner(button);
-
-            $.ajax({
-                method: 'POST',
-                url: '/account/dashboard/add-payment/',
-                data: {
-                    'method': method, 'address': address,
-                    csrfmiddlewaretoken: token
-                },
-                success: function (response) {
-                    if (response.success) {
-                        alertify.success(response.success)
-                        refreshSection('payments-table');
-                        $('#add_payment_form')[0].reset();
-                        $(".modal_close6").click();
-                        $('#lean_overlay2').css({
-                            'display': 'none',
-                        });
-                    } else {
-                        alertify.error('An error occurred...')
-                        return false;
-                    }
-                },
-                error: function () {
-                    alertify.error('An error occurred!');
-                },
-                complete: function() {
-                    hideSpinner(button);
-                }
-            })
-        })
 
         // =============== ADD USER AJAX===================
         $(document).on('click', '#addUserBtn', function (e) {
@@ -849,16 +714,112 @@ document.addEventListener('DOMContentLoaded', function () {
                         refreshSection('users-table')
                     } else {
                         alertify.error(response.error);
+                        hideSpinner(button);
+                    }
+                },
+                error: function () {
+                    alertify.error('An error occurred!');
+                    hideSpinner(button);
+                }
+            });
+        });
+
+        // =============== EDIT PROFILE AJAX===================
+        $(document).on('click', '#updateProfileBtn', function (e) {
+            e.preventDefault()
+            var button = this;
+            var full_name = $('input[name=ep_full_name]').val()
+            var phone = $('input[name=ep_phone]').val()
+            var token = $('input[name=csrfmiddlewaretoken]').val()
+
+            document.getElementById('ep_err').innerHTML = '';
+
+            if (full_name == "" && phone == "") {
+                document.getElementById('ep_err').innerHTML = 'Name or phone number blank';
+                return false;
+            }
+
+            showSpinner(button);
+
+            $.ajax({
+                method: 'POST',
+                url: '/account/dashboard/edit-profile/',
+                data: {
+                    'full_name': full_name,
+                    'phone': phone,
+                    csrfmiddlewaretoken: token
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alertify.success(response.success);
+                        $('#edit-profile-form')[0].reset();
+                        refreshSection('nav');
+                        refreshSection('user');
+                    } else if (response.error) {
+                        alertify.error(response.error);
                     }
                 },
                 error: function () {
                     alertify.error('An error occurred!');
                 },
                 complete: function() {
-                    hideSpinner2(button);
+                    hideSpinner(button);
                 }
             });
-        });
+        })
+
+        // =============== ADD PAYMENT AJAX===================
+        $(document).on('click', '#addPaymentBtn', function (e) {
+            e.preventDefault()
+            var button = this;
+            var method = $('input[name=pay_method]').val()
+            var address = $('input[name=pay_address]').val()
+            var token = $('input[name=csrfmiddlewaretoken]').val()
+
+            if (method == "" || method.length < 2) {
+                document.getElementById('pm_err').innerHTML = 'Enter a valid method'
+                return false
+            } else {
+                document.getElementById('pm_err').innerHTML = "."
+            }
+            if (address == "") {
+                document.getElementById('add_err').innerHTML = 'Enter a valid address'
+                return false
+            } else {
+                document.getElementById('add_err').innerHTML = "."
+            }
+
+            showSpinner(button);
+
+            $.ajax({
+                method: 'POST',
+                url: '/account/dashboard/add-payment/',
+                data: {
+                    'method': method, 'address': address,
+                    csrfmiddlewaretoken: token
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alertify.success(response.success)
+                        refreshSection('payments-table');
+                        $('#add_payment_form')[0].reset();
+                        $(".modal_close6").click();
+                        $('#lean_overlay2').css({
+                            'display': 'none',
+                        });
+                    } else {
+                        alertify.error('An error occurred...')
+                        return false;
+                    }
+                },
+                error: function () {
+                    alertify.error('An error occurred!');
+                },
+                complete: function() {
+                    hideSpinner(button);
+                }
+            })
+        })
 
         // =============== DELETE PAYMENT AJAX===================
         $(document).on('click', '.delete_payment_btn', function (e) {
@@ -883,13 +844,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         refreshSection('payments-table')
                     } else {
                         alertify.error(response.error);
+                        hideSpinner(button);
                     }
                 },
                 error: function () {
                     alertify.error('An error occurred!');
-                },
-                complete: function() {
-                    hideSpinner2(button);
+                    hideSpinner(button);
                 }
             });
         });
@@ -982,6 +942,107 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
+        // =============== MAKE TRANSACTION AJAX===================
+        $(document).on('click', '#paid', function (e) {
+            e.preventDefault()
+            var button = this;
+            var plan = $('input[name=invest_plan]').val()
+            var method = $('#selectTrigger').text()
+            var amount = $('input[name=invest_amount]').val()
+            var token = $('input[name=csrfmiddlewaretoken]').val()
+
+            showSpinner(button);
+
+            $.ajax({
+                method: 'POST',
+                url: '/create-investment/',
+                data: {
+                    'plan': plan,
+                    'method': method,
+                    'amount': amount,
+                    csrfmiddlewaretoken: token
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alertify.success(response.success);
+                        localStorage.setItem('activeNavLink', 'dashboard_tab');
+                        window.location.href = '/account/dashboard/'
+                    } else if (response.error) {
+                        alertify.error(response.error);
+                        hideSpinner(button);
+                    }
+                },
+                error: function () {
+                    alertify.error('An error occurred!');
+                    hideSpinner(button);
+                }
+            });
+        })
+
+        // =============== ACCEPT TRANSACTION AJAX===================
+        $(document).on('click', '.accept_transaction_btn', function (e) {
+            e.preventDefault();
+            var button = this;
+            let transaction_id = $(this).closest('tr').data('transaction-id');
+            let token = $('input[name=csrfmiddlewaretoken]').val();
+
+            showSpinner2(button, 'text-primary');
+        
+            $.ajax({
+                method: 'POST',
+                url: '/account/dashboard/transactions/accept-transaction/',
+                data: { 
+                    'transaction_id': transaction_id, 
+                    csrfmiddlewaretoken: token 
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alertify.success(response.success);
+                        refreshSection('transactions-table')
+                    } else {
+                        alertify.error(response.error);
+                        hideSpinner(button);
+                    }
+                },
+                error: function () {
+                    alertify.error('An error occurred!');
+                    hideSpinner(button);
+                }
+            });
+        });
+
+        // =============== REJECT TRANSACTION AJAX===================
+        $(document).on('click', '.reject_transaction_btn', function (e) {
+            e.preventDefault();
+            var button = this;
+            let transaction_id = $(this).closest('tr').data('transaction-id');
+            let token = $('input[name=csrfmiddlewaretoken]').val();
+
+            showSpinner2(button);
+        
+            $.ajax({
+                method: 'POST',
+                url: '/account/dashboard/transactions/reject-transaction/',
+                data: { 
+                    'transaction_id': transaction_id, 
+                    csrfmiddlewaretoken: token 
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alertify.success(response.success);
+                        refreshSection('transactions-table')
+                    } else {
+                        alertify.error(response.error);
+                        hideSpinner(button);
+                    }
+                },
+                error: function () {
+                    alertify.error('An error occurred!');
+                    hideSpinner(button);
+                }
+            });
+        });
+
 
         $(document).on('click', '.modal_close4', function () {
             $('.edit-package-form').hide();
@@ -1004,10 +1065,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Function to show spinner for a parent element
-        function showSpinner2(button) {
+        function showSpinner2(button, color="text-danger") {
             buttonContent = button.outerHTML;
             parent = button.closest('td');
-            parent.innerHTML = `<i class="fas fa-spinner fa-spin text-danger"></i>`;
+            parent.innerHTML = `<i class="fas fa-spinner fa-spin ${color}"></i>`;
             button.disabled = true;
         }
         

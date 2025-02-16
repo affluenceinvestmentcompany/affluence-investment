@@ -19,6 +19,8 @@ urlpatterns = [
     
     path('dashboard/users/delete-user/', views.delete_user, name='delete_user'),
     path('dashboard/payments/delete-payment/', views.delete_payment, name='delete_payment'),
+    path('dashboard/transactions/accept-transaction/', views.accept_transaction, name='accept_transaction'),
+    path('dashboard/transactions/reject-transaction/', views.reject_transaction, name='reject_transaction'),
     
 ]
 

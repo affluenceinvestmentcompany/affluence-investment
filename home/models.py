@@ -49,8 +49,10 @@ class Investments(models.Model):
 
 class Withdrawal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount = models.CharField(max_length=100)
     balance = models.CharField(max_length=255)
-    withdraw = models.CharField(max_length=100)
+    method = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
     processing = models.BooleanField(default=True)
     completed = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
@@ -63,7 +65,7 @@ class Withdrawal(models.Model):
         return self.user.full_name + ' -- ' + self.withdraw
 
 
-class Transaction(models.Model):
+class Transactions(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     method = models.ForeignKey(Payments, on_delete=models.CASCADE)
     amount = models.CharField(max_length=100)

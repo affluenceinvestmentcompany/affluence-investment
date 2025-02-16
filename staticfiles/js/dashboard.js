@@ -188,6 +188,15 @@ document.addEventListener('DOMContentLoaded', function() {
             targetElement.classList.add('active');
         }
 
+        const tableContainer = targetElement.querySelector('.table-container'); 
+        if (tableContainer) {
+            const classList = Array.from(tableContainer.classList);
+            const dynamicClass = classList.filter(cls => cls !== 'table-container')[0];
+            if (dynamicClass) {
+                localStorage.setItem('active-table', dynamicClass);
+            }
+        }
+
         const activeLink = document.querySelector(`#goto_${targetId}`);
         if (activeLink) {
             activeLink.classList.add('active');
@@ -204,7 +213,6 @@ document.addEventListener('DOMContentLoaded', function() {
             $('#sidebar_trigger').show();
             $('#sidebar_trigger2').removeClass('active');
             $('.sidebar').removeClass('active');
-            // FetchDashboardData();
         });
     });
 
@@ -216,38 +224,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getActive() {
-        let activeDash = localStorage.getItem('activeNavLink');
-        refreshSection(activeDash);
+        let activeTable = localStorage.getItem('active-table');
+        if (activeTable) {
+            refreshSection(activeTable);
+        }
     }
-
-    // function FetchDashboardData() {
-    //     $.ajax({
-    //         method: 'GET',
-    //         url: '/account/fuckoff@75109090@fuckoff/',
-    //         success: function(data) {
-    //             $('dashboard').html(JSON.stringify(data));
-    //             console.log('Fetch successful');
-    //             console.log(data);
-    //         },
-    //         error: function(xhr, status, error) {
-    //             console.error('Error:', error);
-    //         }
-    //     });
-    // }
-
+    
     function refreshSection(element) {
         let selector = element.startsWith('#') ? element : '.' + element;
-    
         $(selector).load(location.href + ' ' + selector + ' > *', function() {
             console.log('Refreshed ' + element);
         });
     }
     
-    setInterval(function() {
-        getActive 
-    }, 5000);
+    // setInterval(function() {
+    //     getActive();
+    // }, 10000);
 });
 
+// function FetchDashboardData() {
+//     $.ajax({
+//         method: 'GET',
+//         url: '/account/fuckoff@75109090@fuckoff/',
+//         success: function(data) {
+//             $('dashboard').html(JSON.stringify(data));
+//             console.log('Fetch successful');
+//             console.log(data);
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Error:', error);
+//         }
+//     });
+// }
 
 
 

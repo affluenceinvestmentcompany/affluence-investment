@@ -32,7 +32,7 @@ def create_investment(request):
             plan_bonuses = {'Basic': 0.5, 'Standard': 1.0, 'Premium': 1.5, 'Ultimate': 2.0}
             return int(amount) * plan_bonuses.get(plan, 0) / 100
         
-        transaction = Transaction.objects.create(user = user, method = method, amount = amount, bonus = bonus(amount))
+        transaction = Transactions.objects.create(user = user, method = method, amount = amount, bonus = bonus(amount))
         transaction.save()
         
         investment = Investments.objects.create(user = user, plan = plan, amount = amount, roi = 0)
