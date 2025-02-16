@@ -101,23 +101,23 @@ def logout(request):
     return JsonResponse({'error': 'An error occurred...'}, status=400)
 
 # Resend verification link
-def resendLink(request):
-    user = request.user
-    email = request.user.email
-    verification_email = EmailMessage(
-        subject = 'Verify your email',
-        body = render_to_string('account/verify-email.html', {
-            'user': user.full_name,
-            'domain': get_current_site(request).domain,
-            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token': account_activation_token.make_token(user),
-            'protocol': 'https' if request.is_secure() else 'http'
-        }),
-        to = [email],
-    )
-    verification_email.send()
-    messages.success(request, 'Verification email resent.')
-    return redirect('index')
+def resend_link(request):
+    if request.method == 'POST':
+        user = request.user
+        email = request.user.email
+        verification_email = EmailMessage(
+            subject = 'Verify your email',
+            body = render_to_string('account/verify-email.html', {
+                'user': user.full_name,
+                'domain': get_current_site(request).domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+                'protocol': 'https' if request.is_secure() else 'http'
+            }),
+            to = [email],
+        )
+        verification_email.send()
+        return JsonResponse({'success': 'Verification email resent.'})
 
 def generate_secret(length=64):
     secret = ''.join(random.choices(string.ascii_letters + string.digits, k=length))
@@ -206,6 +206,41 @@ def dashboard(request):
     else:
         raise Http404("Page not found")
 
+# Get dashboard data
+def get_dashboard_data(request):
+    users = User.objects.all().values('id', 'full_name', 'email')  # Replace with actual field names
+    payments = Payments.objects.all().values('id', 'method', 'address')  # Replace with actual field names
+    packages = Packages.objects.all().values('id', 'plan', 'profit')  # Replace with actual field names
+    transactions = Transaction.objects.all().values('id', 'method', 'amount')  # Replace with actual field names
+    investments = Investments.objects.all().values('id', 'plan', 'amount')  # Replace with actual field names
+    withdrawals = Withdrawal.objects.all().values('id', 'user', 'balance')  # Replace with actual field names
+
+    data = {
+        'users': list(users),
+        # 'payments': list(payments),
+        # 'packages': list(packages),
+        # 'transactions': list(transactions),
+        # 'investments': list(investments),
+        # 'withdrawals': list(withdrawals),
+    }
+
+    return JsonResponse(data)
+
+#Add Payment
+def add_payment(request):
+    if request.method == 'POST':
+        try:
+            method = request.POST['method']
+            address = request.POST['address']
+            payment = Payments.objects.create(
+                method=method, address=address, 
+            )
+            payment.save()
+            return JsonResponse({"success": 'Payment added successfully'})
+        except Exception as e:
+            print(e)
+            return JsonResponse({'error': 'An error occurred...'})
+
 #Add User
 def add_user(request):
     if request.method == 'POST':
@@ -214,19 +249,30 @@ def add_user(request):
             email = request.POST['email']
             phone = request.POST['phone']
             password = request.POST['password']
+            is_admin = request.POST['makeUserAdmin']
+            
+            print(is_admin)
+            print(is_admin)
+            print(is_admin)
+            print(is_admin)
             
             if User.objects.filter(email__iexact=email).exists():
                 return JsonResponse({'error':"User already exist"})
             
-            user = User.objects.create_user(full_name=full_name, email=email, 
-                                            phone=phone, password=password,
-                                            is_verified=True
-                                            )
+            user = User.objects.create_user(
+                full_name=full_name, email=email, 
+                phone=phone, password=password,
+                is_verified=True
+            )
+            user.save()
             
+            if is_admin == 'true':
+                user.is_admin = True
             user.save()
             
             return JsonResponse({"success": 'User added successfully'})
         except Exception as e:
+            print(e)
             return JsonResponse({'error': 'An error occurred...'})
 
 #Edit Profile
@@ -260,29 +306,49 @@ def change_password(request):
         update_session_auth_hash(request, user)
         return JsonResponse({"success": "Password change successful"})
 
-# Get dashboard data
-def get_dashboard_data(request):
-    # Replace these with actual data fetching logic
-    total_users = 1000  # Example total users
-    total_investment = 50000  # Example total investment
-    total_roi = 15  # Example total ROI percentage
-
-    # Return the data as a JSON response
-    return JsonResponse({
-        'total_users': total_users,
-        'total_investment': total_investment,
-        'total_roi': total_roi
-    })
-
 #Delete User
 def delete_user(request):
     if request.method == 'POST':
-        if request.user.is_authenticated:
+        if request.user.is_admin:
             user_id = int(request.POST.get('user_id'))
             User.objects.filter(id=user_id).delete()
             
             return JsonResponse({'success':"User deleted successfully"})
         else:
             return JsonResponse({'error':"An error occured..."})
+
+#Delete Payment
+def delete_payment(request):
+    if request.method == 'POST':
+        if request.user.is_admin:
+            payment_id = int(request.POST.get('payment_id'))
+            Payments.objects.filter(id=payment_id).delete()
+            
+            return JsonResponse({'success':"Payment deleted successfully"})
+        else:
+            return JsonResponse({'error':"An error occured..."})
+
+#Edit Package
+def edit_package(request):
+    if request.method == 'POST':
+        package_id = request.POST.get('package_id')
+        plan = request.POST.get('plan')
+        profit = request.POST.get('profit')
+        bonus = request.POST.get('bonus')
+        min_amount = request.POST.get('min_amount')
+        min_days = request.POST.get('min_days')
+        
+        package = Packages.objects.get(id=package_id)
+        package.plan = plan
+        package.profit = profit
+        package.bonus = bonus
+        package.min_amount = min_amount
+        package.min_days = min_days
+        package.save()
+        return JsonResponse({'success': 'Package update successful'})
+
+
+
+
 
 

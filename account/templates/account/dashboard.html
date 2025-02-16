@@ -228,6 +228,7 @@
                                 <table class="table table-striped table-hover">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Status</th>
@@ -237,14 +238,17 @@
                                     </thead>
                                     <tbody class="border-0">
                                         {% for user in users %}
-                                            <tr data-user-id="{{ user.id }}">
-                                                {% csrf_token %}
-                                                <td>{{ user.full_name }}</td>
-                                                <td class="email-col">{{ user.email }}</td>
-                                                <td>{% if user.is_verified %} Verified {% else %} Unverified {% endif %}</td>
-                                                <td>{{ user.date_joined|date:"Y/m/d" }}</td>
-                                                <td><i class="fas fa-trash-alt" class="del__user" id="del__user"></i></td>
-                                            </tr>
+                                            {% if not user.is_superuser %}
+                                                <tr data-user-id="{{ user.id }}">
+                                                    {% csrf_token %}
+                                                    <td>{{ forloop.counter0 }}</td>
+                                                    <td>{{ user.full_name }}</td>
+                                                    <td class="email-col">{{ user.email }}</td>
+                                                    <td>{% if user.is_verified %} Verified {% else %} Unverified {% endif %}</td>
+                                                    <td>{{ user.date_joined|date:"Y/m/d" }}</td>
+                                                    <td>{% if not user.is_superuser and not user.is_admin %}<i class="fas fa-trash-alt del_user_btn"></i>{% else %}<i class="fas fa-user text-primary"></i>{% endif %}</td>
+                                                </tr>
+                                            {% endif %}
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -254,12 +258,13 @@
                         <div id="payments_tab" class="dash-tabs">
                             <div class="pt-2 pb-3 text-center position-relative">
                                 <h4 class="fs-3">Payments</h4>
-                                <a href="#addPayment" class="dash-btn add-user-btn">Add payment</a>
+                                <a href="#addPayment" class="dash-btn add-payment-btn">Add payment</a>
                             </div>
-                            <div class="table-container mt-0">
+                            <div class="table-container payments-table mt-0">
                                 <table class="table table-striped table-hover">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>Method</th>
                                             <th>Address</th>
                                             <th>QR Code</th>
@@ -268,11 +273,13 @@
                                     </thead>
                                     <tbody class="border-0">
                                         {% for payment in payments %}
-                                            <tr>
+                                            <tr data-payment-id="{{ payment.id }}">
+                                                {% csrf_token %}
+                                                <td>{{ forloop.counter }}</td>
                                                 <td>{{ payment.method }}</td>
                                                 <td class="email-col">{{ payment.address }}</td>
                                                 <td><img src="" alt="qr code" class="img-fluid" style="width:50px;"/></td>
-                                                <td><i class="fas fa-trash-alt"></i></td>
+                                                <td><i class="fas fa-trash-alt delete_payment_btn"></i></td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -288,76 +295,81 @@
                                 <table class="table table-striped table-hover">
                                     <thead>
                                         <tr>
+                                            <th>#</th>
                                             <th>Plan</th>
                                             <th>Profit</th>
                                             <th>Bonus</th>
                                             <th>Min. Amount</th>
                                             <th>Min. Peroid</th>
-                                            <th><i class="fas fa-edit edit_package_btn"></i></th>
+                                            <th><i class="fas fa-edit"></i></th>
                                         </tr>
                                     </thead>
-                                    <tbody class="border-0">
-                                        <tr>
-                                            <td>Basic</td>
-                                            <td>0.8%</td>
-                                            <td>0.5%</td>
-                                            <td>$100</td>
-                                            <td>30 days</td>
-                                            <td><i class="fas fa-edit edit_package_btn"></i></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Standard</td>
-                                            <td>1.0%</td>
-                                            <td>1.0%</td>
-                                            <td>$500</td>
-                                            <td>60 days</td>
-                                            <td><i class="fas fa-edit edit_package_btn"></i></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Premium</td>
-                                            <td>1.2%</td>
-                                            <td>1.5%</td>
-                                            <td>$1000</td>
-                                            <td>90 days</td>
-                                            <td><i class="fas fa-edit edit_package_btn"></i></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ultimate</td>
-                                            <td>1.5%</td>
-                                            <td>2.0%</td>
-                                            <td>$5000</td>
-                                            <td>120 days</td>
-                                            <td><i class="fas fa-edit edit_package_btn"></i></td>
-                                        </tr>
+                                    <tbody class="border-0 position-relative">
+                                        {% for package in packages %}
+                                            <tr data-package-id="{{ package.id }}">
+                                                {% csrf_token %}
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ package.plan }}</td>
+                                                <td>{{ package.profit }}%</td>
+                                                <td>{{ package.bonus }}%</td>
+                                                <td>${{ package.min_amount }}</td>
+                                                <td>{{ package.min_days }} days</td>
+                                                <td><i class="fas fa-edit edit_package_btn"></i></td>
+                                            </tr>
+
+
+                                            <div id="edit-form-{{ package.id }}" class="edit-package-form" style="display:none;z-index:9999;">
+                                                <section class="popupBody p-0">
+                                                    <div class="form_wrp2">
+                                                        <div class="screen rounded-bottom">
+                                                            <span class="modal_close4"><i class="fas fa-times"></i></span>
+                                                            <div class="screen__content">
+                                                                <h3>Edit Package</h4>
+                                                                <form class="login" style="padding:30px !important;">
+                                                                    {% csrf_token %}
+                                                                    <div class="login__field">
+                                                                        <label>Plan</label>
+                                                                        <input name="plan" type="text" class="login__input" value="{{ package.plan }}">
+                                                                        <p id="pl_err"></p>
+                                                                    </div>
+                                                                    <div class="login__field">
+                                                                        <label>Daily Profit</label>
+                                                                        <input name="profit" type="text" class="login__input phone-input2" value="{{ package.profit }}">
+                                                                        <p id="pt_err"></p>
+                                                                    </div>
+                                                                    <div class="login__field">
+                                                                        <label>Bonus</label>
+                                                                        <input name="bonus" type="text" class="login__input phone-input2" value="{{ package.bonus }}">
+                                                                        <p id="bn_err"></p>
+                                                                    </div>
+                                                                    <div class="login__field">
+                                                                        <label>Minimum Amount</label>
+                                                                        <input name="min_amount" type="text" class="login__input phone-input2" value="{{ package.min_amount }}">
+                                                                        <p id="ma_err"></p>
+                                                                    </div>
+                                                                    <div class="login__field">
+                                                                        <label>Minimum Days</label>
+                                                                        <input name="min_days" type="text" class="login__input phone-input2" value="{{ package.min_days }}">
+                                                                        <p id="md_err"></p>
+                                                                    </div>
+                                                                    <div class="make-payment-btn mt-2 mb-4 d-flex justify-content-center">
+                                                                        <button class="form_buttons updatePackageBtn" style="width:85%;">Update Package &nbsp;<i class="fas fa-chart-pie"></i></button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="screen__background rounded">
+                                                                <span class="screen__background__shape screen__background__shape4"></span>
+                                                                <span class="screen__background__shape screen__background__shape3"></span>		
+                                                                <span class="screen__background__shape screen__background__shape2"></span>
+                                                                <span class="screen__background__shape screen__background__shape1"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
-                            </div>
-
-                            <div class="edit-package mt-5 py-3 pb-5">
-                                <h4 class="fs-5 mb-4">Edit Package</h4>
-                                <form id="editPackageForm">
-                                    <div class="form-group">
-                                        <label for="plan">Plan</label>
-                                        <input type="text" name="plan" id="plan" class="form-control" value="">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="profit">Daily Profit</label>
-                                        <input type="text" name="profit" id="profit" class="form-control" value="">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="bonus">Bonus</label>
-                                        <input type="text" name="bonus" id="bonus" class="form-control" value="">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="min_amount">Min Amount</label>
-                                        <input type="text" name="min_amount" id="min_amount" class="form-control" value="">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="min_days">Min Period</label>
-                                        <input type="text" name="min_days" id="min_days" class="form-control" value="">
-                                    </div>
-                                </form>
-                                <button class="btn btn-primary lh-sm py-2 mt-3">Update Package</button>
                             </div>
                         </div>
                     {% endif %}
@@ -486,7 +498,7 @@
                                                             <i class="fas fa-phone-alt"></i>
                                                             <input name="ep_phone" type="text" class="login__input phone-input" placeholder="Phone number">
                                                         </div>
-                                                        <div class="make-payment-btn mt-3">
+                                                        <div class="make-payment-btn upbtn mt-3">
                                                             <button class="w-100 form_buttons" id="updateProfileBtn">Update Profile &nbsp;<i class="fas fa-sync-alt"></i></button>
                                                         </div>
                                                     </form>
@@ -549,7 +561,6 @@
                         </div>
                     </div>
 
-
                     <!-- Add user modal -->
                     <div id="addUser" class="add_user" style="display: none; z-index:9999;">
                         <section class="popupBody p-0">
@@ -587,8 +598,49 @@
                                                 <i class="fas fa-eye togglePassword"></i><i class="fas fa-eye-slash togglePassword"></i>
                                                 <p id="au_pwderr2"></p>
                                             </div>
+                                            <div class="login__field pb-2 mua">
+                                                <label class="custom-checkbox">
+                                                <input name="is_admin" type="checkbox" class="login__input" id="makeUserAdmin">
+                                                <span class="checkmark"></span><b>Make User Admin</b>
+                                            </div>
                                             <div class="make-payment-btn mt-3">
                                                 <button class="w-100 form_buttons" id="addUserBtn">Add User &nbsp;<i class="fas fa-user-plus"></i></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="screen__background rounded">
+                                        <span class="screen__background__shape screen__background__shape4"></span>
+                                        <span class="screen__background__shape screen__background__shape3"></span>		
+                                        <span class="screen__background__shape screen__background__shape2"></span>
+                                        <span class="screen__background__shape screen__background__shape1"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Add payment modal -->
+                    <div id="addPayment" class="add_user" style="display: none; z-index:9999;">
+                        <section class="popupBody p-0">
+                            <div class="form_wrp2">
+                                <div class="screen rounded-bottom">
+                                    <span class="modal_close6"><i class="fas fa-times"></i></span>
+                                    <div class="screen__content">
+                                        <h3>Add Payment</h4>
+                                        <form id="add_payment_form" class="login">
+                                            {% csrf_token %}
+                                            <div class="login__field">
+                                                <i class="fas fa-money-bill"></i>
+                                                <input name="pay_method" type="text" class="login__input" placeholder="Payment method">
+                                                <p id="pm_err"></p>
+                                            </div>
+                                            <div class="login__field">
+                                                <i class="fab fa-bitcoin"></i>
+                                                <input name="pay_address" type="text" class="login__input" placeholder="Address">
+                                                <p id="add_err"></p>
+                                            </div>
+                                            <div class="make-payment-btn mt-3">
+                                                <button class="w-100 form_buttons" id="addPaymentBtn">Add Payment &nbsp;<i class="fas fa-wallet"></i></button>
                                             </div>
                                         </form>
                                     </div>
@@ -615,301 +667,6 @@
 {% block altjs %}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let userData, investmentData, roiData, usersChart, investmentChart, roiChart;
-
-            // Initialize data (can be fetched from Django backend)
-            const labels = ['2025'];  // Single label for the year
-
-            function initialData() {
-                // Example initial data, can be updated dynamically from backend
-                userData = [0];  // Initial number of users (starting at 0)
-                investmentData = [0];  // Initial investment value (starting at 0)
-                roiData = [0];  // Initial ROI value (starting at 0)
-            }
-
-            function createCharts() {
-                // Create the Users chart
-                const ctxUsers = document.getElementById('usersChart').getContext('2d');
-                usersChart = new Chart(ctxUsers, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Total Users',
-                            data: userData,
-                            color: '#fff',
-                            borderColor: '#fff',
-                            backgroundColor: '#4a8ef3',
-                            borderWidth: 2,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                labels: {
-                                    color: '#fff'
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                ticks: {
-                                    color: '#fff'
-                                },
-                                grid: {
-                                    color: '#fff'
-                                }
-                            },
-                            y: {
-                                ticks: {
-                                    color: '#fff'
-                                },
-                                grid: {
-                                    color: '#fff'
-                                },
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-
-                // Create the Investment chart
-                const ctxInvestment = document.getElementById('investmentChart').getContext('2d');
-                investmentChart = new Chart(ctxInvestment, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Total Investments',
-                            data: investmentData,
-                            color: '#fff',
-                            borderColor: '#fff',
-                            backgroundColor: '#4a8ef3',
-                            borderWidth: 2,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                labels: {
-                                    color: '#fff'
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                ticks: {
-                                    color: '#fff'
-                                },
-                                grid: {
-                                    color: '#fff'
-                                }
-                            },
-                            y: {
-                                ticks: {
-                                    color: '#fff'
-                                },
-                                grid: {
-                                    color: '#fff'
-                                },
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-
-                // Create the ROI chart
-                const ctxROI = document.getElementById('roiChart').getContext('2d');
-                roiChart = new Chart(ctxROI, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Total ROI',
-                            data: roiData,
-                            color: '#fff',
-                            borderColor: '#fff',
-                            backgroundColor: '#4a8ef3',
-                            borderWidth: 2,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                labels: {
-                                    color: '#fff'
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                ticks: {
-                                    color: '#fff'
-                                },
-                                grid: {
-                                    color: '#fff'
-                                }
-                            },
-                            y: {
-                                ticks: {
-                                    color: '#fff'
-                                },
-                                grid: {
-                                    color: '#fff'
-                                },
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            }
-
-            initialData();
-            createCharts();
-
-            // Function to update chart data dynamically
-            function updateChartData(type, value) {
-                if (type === 'user') {
-                    userData.push(userData[userData.length - 1] + 1);  // Add 1 for new user
-                    usersChart.update();
-                }
-                else if (type === 'investment') {
-                    investmentData.push(investmentData[investmentData.length - 1] + value);  // Add invested amount
-                    investmentChart.update();
-                }
-                else if (type === 'roi') {
-                    roiData.push(roiData[roiData.length - 1] + value);  // Add ROI amount
-                    roiChart.update();
-                }
-            }
-
-            // Function to fetch data from the Django backend
-            /*function fetchDataFromBackend() {
-                fetch('/api/get-dashboard-data/')
-                    .then(response => response.json())
-                    .then(data => {
-                        // Assuming the data structure from backend is:
-                        // { total_users: number, total_investment: number, total_roi: number }
-                        const newUser = data.total_users;  // New total users
-                        const newInvestment = data.total_investment;  // New total investment
-                        const newRoi = data.total_roi;  // New total ROI
-
-                        // Update chart data
-                        updateChartData('user', newUser);
-                        updateChartData('investment', newInvestment);
-                        updateChartData('roi', newRoi);
-                    })
-                    .catch(error => console.error('Error fetching data:', error));
-            }*/
-
-            // Fetch data every 10 seconds (10000 milliseconds)
-            //setInterval(fetchDataFromBackend, 10000);
-
-
-            const dashNavs = document.querySelectorAll('.dash-navs');
-            const dashTabs = document.querySelectorAll('.dash-tabs');
-
-            function initializeTriggers() {
-                $(".add-user-btn").leanModal({
-                    top: 100,
-                    overlay: 0.7,
-                    closeButton: ".modal_close3"
-                });
-
-                let edit_package_btn = document.querySelectorAll('.edit_package_btn');
-                edit_package_btn.forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        $('.edit-package').css({'display': 'block'});
-                    });
-                });
-                
-                document.querySelectorAll('.togglePassword').forEach(function(button) {
-                    button.addEventListener('click', function() {
-                        let passwordFields = document.querySelectorAll('.password');
-                        
-                        passwordFields.forEach(function(passwordField) {
-                            if (passwordField.type === "password") {
-                                passwordField.type = "text";
-                                $('.fa-eye').hide(); 
-                                $('.fa-eye-slash').show(); 
-                            } else {
-                                passwordField.type = "password";
-                                $('.fa-eye').show(); 
-                                $('.fa-eye-slash').hide(); 
-                            }
-                        }); 
-                    });
-                });
-            }
-            initializeTriggers();
-
-            function setActiveSection(targetId) {
-                dashTabs.forEach(dashTab => dashTab.classList.remove('active'));
-                dashNavs.forEach(dashNav => dashNav.classList.remove('active'));
-
-                document.getElementById(targetId).classList.add('active');
-                const activeLink = document.querySelector(`#goto_${targetId}`);
-                if (activeLink) {
-                    activeLink.classList.add('active');
-                }
-            }
-
-            const savedLink = localStorage.getItem('activeNavLink');
-            if (savedLink) {
-                setActiveSection(savedLink);
-            } else {
-                setActiveSection('dashboard_tab');
-            }
-
-            dashNavs.forEach(dashNav => {
-                dashNav.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.id.replace('goto_', '');
-                    setActiveSection(targetId);
-                    localStorage.setItem('activeNavLink', targetId);
-                    getActive();
-                    $('#sidebar_trigger').show();
-                    $('#sidebar_trigger2').removeClass('active');
-                    $('.sidebar').removeClass('active');
-                });
-            });
-
-            function getActive() {
-                let activeDash = localStorage.getItem('activeNavLink');
-                refreshSection(activeDash);
-            }
-
-
-
-
-
-
-            function refreshSection(element) {
-                $('#' + element).load(location.href + ' #' + element + ' > *', function () {
-                    initializeTriggers();
-                    if(element === 'dashboard_tab'){
-                        initialData();
-                        createCharts();
-                    }
-                    console.log('Refreshed ' + element);
-                });
-            }
-            /*
-            setInterval(function() {
-                refreshSection(activeDash); 
-            }, 5000);*/
-        });
-    </script>
+    <script src="{% static 'js/dashboard.js' %}" ></script>
 {% endblock %}
 

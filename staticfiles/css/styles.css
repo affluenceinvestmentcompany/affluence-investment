@@ -1230,14 +1230,15 @@ PopUp
   left: 0px;
   height: 100%;
   width: 100%;
-  background: #000;
+  background: rgba(0, 0, 0, 0.7);
   display: none;
 }
 
 .popupContainer,
 .verify_email,
 .add_user,
-.forgot_password {
+.forgot_password,
+.edit-package-form {
   position: absolute;
   width: 360px;
   height: auto;
@@ -1248,6 +1249,11 @@ PopUp
   overflow: hidden;
   transform: translateX(-50%);
   transform: translateY(-55px);
+}
+
+.edit-package-form {
+  left: 50%;
+  transform: translateX(-50%) !important;
 }
 
 .edit_profile,
@@ -1822,6 +1828,29 @@ select {
   outline: none;
 }
 
+.edit-package-form .form_wrp2 .login__input {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 10px;
+
+}
+.edit-package-form .form_wrp2 label {
+  position: absolute;
+  top: -22px;
+  left: 30px;
+}
+.edit-package-form .form_wrp2 input {
+  padding-left: 20px;
+  width: 85%;
+  margin: 0 auto;
+}
+.edit-package-form .form_wrp2 p {
+  /* display: block; */
+  left: 10px;
+  padding-left: 20px;
+}
+
 .login__input:active,
 .login__input:focus,
 .login__input:hover {
@@ -1929,6 +1958,10 @@ select {
 .login {
 	width: 100%;
 	padding: 40px 30px;
+}
+
+.edit-package-form .login {
+  width: 80%;
 }
 
 .login__field {
@@ -2124,7 +2157,8 @@ select {
   background: linear-gradient(180deg, rgba(91,104,235,1) 0, rgba(40,225,253,1) 100%);
 }
 
-.main-content .add-user-btn {
+.main-content .add-user-btn, 
+.main-content .add-payment-btn {
   position: absolute;
   right: 0;
   top: 50%;
@@ -2201,14 +2235,14 @@ select {
 .table th, .table td {
   padding: 15px;
   text-align: center;
-  font-size: 16px;
+  font-size: 14px;
   border: 1px solid #e6e6e6;
 }
 
 .table th {
   background: linear-gradient(180deg, rgba(91,104,235,1) 10%, rgba(40,225,253,1) 100%);
   color: #fff;
-  font-size: 15.5px;
+  font-size: 15px;
   font-weight: 600;
   text-transform: uppercase;
 }
@@ -2263,30 +2297,55 @@ tbody .fa-check-circle:hover {
   transform: scale(1.5);
 }
 
-.edit-package {
-  width: 100%;
-  position: relative;
+
+/* CUSTOM CHECK BOX */
+/* Hide the default checkbox */
+.custom-checkbox input[type="checkbox"] {
   display: none;
 }
 
-#editPackageForm {
-  display: flex;
-  gap: 20px;
-  justify-content: space-evenly;
+/* Create a custom checkmark */
+.custom-checkbox .checkmark {
+  position: relative;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background-color: #fff;
+  border: 3px solid #3498db;
+  border-radius: 4px;
+  margin-right: 10px;
+  transition: all 0.15s ease;
 }
 
-.edit-package button {
+/* When the checkbox is checked, change the background color */
+.custom-checkbox input[type="checkbox"]:checked + .checkmark {
+  color: #fff;
+  background-color: #3498db;
+  border-color: #3498db;
+}
+
+/* Add a tick mark when checked */
+.custom-checkbox input[type="checkbox"]:checked + .checkmark::after {
+  content: '';
   position: absolute;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(180deg, rgba(91,104,235,1) 50%, rgba(40,225,253,1) 100%);
+  left: 5px;
+  top: 0;
+  width: 9px;
+  height: 15px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
 }
 
-.edit-package button:hover {
-  background: linear-gradient(180deg, rgba(91,104,235,1) 0%, rgba(40,225,253,1) 100%);
+/* Optional: Hover effect */
+.custom-checkbox:hover .checkmark {
+  border-color: #3498db;
 }
 
-
-
-
+.mua b {
+  position: absolute;
+  top: 2px;
+  color: #062553;
+  font-size: 16px;
+}
 

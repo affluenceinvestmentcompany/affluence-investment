@@ -264,7 +264,8 @@
                             on the link to complete your registration.
                         </p>
                         <div class="d-flex justify-content-end">
-                            <a href="{% url 'resend_link' %}" id="resendEmailBtn" class="form_buttons btn btn-round btn-sm py-1 px-3 mt-4 me-4">Resend link</a>
+                            {% csrf_token %}
+                            <a id="resendEmailBtn" class="form_buttons btn btn-round btn-sm py-1 px-3 mt-4 me-4">Resend link</a>
                         </div>
                     </div>
                     <div class="screen__background rounded">
@@ -362,7 +363,7 @@
                         $(".show_ver_email").click();
                     }
                 }
-                checkUserVerStatus();
+                setTimeout(checkUserVerStatus, 5000);
             
                 /*
                 function refreshSection(element) {
