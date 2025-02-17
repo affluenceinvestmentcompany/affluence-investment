@@ -49,8 +49,8 @@ class Investments(models.Model):
 
 class Withdrawal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    plan = models.CharField(max_length=100)
     amount = models.CharField(max_length=100)
-    balance = models.CharField(max_length=255)
     method = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
     processing = models.BooleanField(default=True)

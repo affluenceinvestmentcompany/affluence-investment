@@ -1238,7 +1238,8 @@ PopUp
 .verify_email,
 .add_user,
 .forgot_password,
-.edit-package-form {
+.edit-package-form,
+.withdraw-form {
   position: absolute;
   width: 360px;
   height: auto;
@@ -1251,7 +1252,8 @@ PopUp
   transform: translateY(-55px);
 }
 
-.edit-package-form {
+.edit-package-form,
+.withdraw-form {
   left: 50%;
   transform: translateX(-50%) !important;
 }
@@ -1698,6 +1700,7 @@ a.btn_red {
 .custom-select {
   position: relative;
   width: 100%;
+  z-index: 1000;
 }
 .amount-container .error,
 .custom-select .error {
@@ -1724,7 +1727,8 @@ select {
   border-radius: 4px;
   cursor: pointer;
 }
-.custom-select-trigger:after {
+.custom-select-trigger:after,
+.custom-select-trigger2:after {
   content: "▼";
   font-size: 12px;
   margin-left: 10px;
@@ -1741,7 +1745,7 @@ select {
   background-color: #fff;
   max-height: 150px;
   overflow-y: auto;
-  z-index: 100;
+  z-index: 1000;
 }
 .custom-options div {
   padding: 10px;
@@ -1828,7 +1832,8 @@ select {
   outline: none;
 }
 
-.edit-package-form .form_wrp2 .login__input {
+.edit-package-form .form_wrp2 .login__input,
+.withdraw-form .form_wrp2 .li2 {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1840,7 +1845,8 @@ select {
   top: -22px;
   left: 30px;
 }
-.edit-package-form .form_wrp2 input {
+.edit-package-form .form_wrp2 input,
+.withdraw-form .form_wrp2 input {
   padding-left: 20px;
   width: 85%;
   margin: 0 auto;
@@ -1850,6 +1856,7 @@ select {
   left: 10px;
   padding-left: 20px;
 }
+
 
 .login__input:active,
 .login__input:focus,
@@ -1960,7 +1967,8 @@ select {
 	padding: 40px 30px;
 }
 
-.edit-package-form .login {
+.edit-package-form .login,
+.withdraw-form .login {
   width: 80%;
 }
 

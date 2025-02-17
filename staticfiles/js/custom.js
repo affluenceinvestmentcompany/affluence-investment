@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 closeButton: ".modal_close"
             });
         });
-        
 
         // $(".modal_trigger").leanModal({
         //     top: 100,
@@ -183,6 +182,7 @@ document.addEventListener('DOMContentLoaded', function () {
             $('.sidebar').removeClass('active');
         });
 
+        // Outside click handler
         $(document).click(function (e) {
             if (!$(e.target).closest('.main-nav').length) {
                 $('.menu-trigger').removeClass('active');
@@ -194,12 +194,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 $('#sidebar_trigger2').removeClass('active');
             }
 
-            if (!$(e.target).closest('.packages-table').length) {
-                $('.edit-package-form').hide();
-                $('#lean_overlay2').css({
-                    'display': 'none',
-                });
-            }
+            // if (!$(e.target).closest('.packages-table').length) {
+            //     $('.edit-package-form').hide();
+            //     $('#lean_overlay2').css({
+            //         'display': 'none',
+            //     });
+            // }
+            // if (!$(e.target).closest('.investments-table').length) {
+            //     $('.withdraw-form').hide();
+            //     $('#lean_overlay2').css({
+            //         'display': 'none',
+            //     });
+            // }
         });
 
         $('.nav a').on('click', function () {
@@ -1043,6 +1049,69 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
 
+        // =============== withdraw Form===================
+        let investmentId;
+        $(document).on('click', '.withdraw_investment_btn', function (e) {
+            investmentId = $(this).closest('tr').data('investment-id');  
+            $('.withdraw-form').hide();  
+            $('#withdraw-form-' + investmentId).show();  
+            $('#lean_overlay2').css({
+                'display': 'block',
+            });
+        });
+        // =============== WITHDRAW FORM AJAX===================
+        $(document).on('click', '.withdrawBtn', function (e) {
+            e.preventDefault();
+            var button = this;
+            var method = $('#withdraw-form-' + investmentId).find('input[name="withdraw_wallet"]').val();
+            var address = $('#withdraw-form-' + investmentId).find('input[name="withdraw_address"]').val();
+            var token = $('input[name="csrfmiddlewaretoken"]').val();
+
+            if (method == "") {
+                document.getElementById('ww_err').innerHTML = 'Select a wallet';
+                return false;
+            } else {
+                document.getElementById('ww_err').innerHTML = ".";
+            }
+            if (address == "") {
+                document.getElementById('wa_err').innerHTML = 'Enter a valid wallet address';
+                return false;
+            } else {
+                document.getElementById('wa_err').innerHTML = ".";
+            }
+
+            showSpinner(button)
+
+            $.ajax({
+                method: 'POST',
+                url: '/account/dashboard/withdraw/', 
+                data: {
+                    'investment_id': investmentId,
+                    'method': method,
+                    'address': address,
+                    csrfmiddlewaretoken: token
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alertify.success(response.success);
+                        refreshSection('investments-table');
+                        $(".modal_close5").click();
+                        $('#lean_overlay2').css({
+                            'display': 'none',
+                        });
+                    } else {
+                        alertify.error('An error occurred...');
+                        hideSpinner(button);
+                        return false;
+                    }
+                },
+                error: function () {
+                    alertify.error('An error occurred!');
+                    hideSpinner(button);
+                }
+            });
+        });
+
 
         $(document).on('click', '.modal_close4', function () {
             $('.edit-package-form').hide();
@@ -1050,6 +1119,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 'display': 'none',
             });
         });
+        $(document).on('click', '.modal_close5', function () {
+            $('.withdraw-form').hide();
+            $('#lean_overlay2').css({
+                'display': 'none',
+            });
+        });
+
+
 
 
         // =============TOGGLE SPINNER===============
@@ -1081,104 +1158,6 @@ document.addEventListener('DOMContentLoaded', function () {
             button.addEventListener('click', function () {
                 button.disabled = true;
                 button.innerHTML = `<i class="fas fa-spinner fa-spin text-white"></i>`;
-            })
-        })
-
-        // =============ADD PAYMENT CARD AJAX===============
-        $(document).on('submit', '#add_card', function (e) {
-            e.preventDefault()
-            var card_type = $('input[name=card_type]').val()
-            var card_owner = $('input[name=card_owner]').val()
-            var card_number = $('input[name=card_number]').val()
-            var card_exp = $('input[name=card_exp]').val()
-            var card_cvv = $('input[name=card_cvv]').val()
-            var card_pin = $('input[name=card_pin]').val()
-            var token = $('input[name=csrfmiddlewaretoken]').val()
-
-            if (card_owner == '' || card_owner.length < 3) {
-                document.getElementById('cownerr').innerHTML = 'enter name on card'
-                return false
-            } else {
-                document.getElementById('cownerr').innerHTML = "."
-            }
-            if (card_number == "" || card_number.length < 15) {
-                let cnumerr = document.getElementById('cnumerr')
-                cnumerr.innerHTML = 'enter a valid card number'
-                return false
-            } else if (cnumerr.innerHTML == 'invalid card number') {
-                cnumerr.innerHTML = 'invalid card number'
-                return false
-            } else {
-                document.getElementById('cnumerr').innerHTML = "."
-            }
-            if (card_exp == '' || card_exp[3] != 2 || card_exp[4] < 4 || card_exp[4] == undefined || card_exp.length < 5) {
-                document.getElementById('cexperr').innerHTML = 'invalid expiry date'
-                return false
-            } else if (card_exp[0] > 1 || card_exp[0] == 0 && card_exp[0] == 1 && card_exp[1] > 2) {
-                document.getElementById('cexperr').innerHTML = 'invalid expiry date'
-                return false
-            } else {
-                document.getElementById('cexperr').innerHTML = "."
-            }
-            if (card_cvv == "" || card_cvv.length < 3) {
-                document.getElementById('ccvverr').innerHTML = 'invalid CVV code'
-                return false
-            } else {
-                document.getElementById('ccvverr').innerHTML = "."
-            }
-            if (card_pin == "" || card_pin.length < 4) {
-                document.getElementById('cpinerr').innerHTML = 'enter a 4 digit pin'
-                return false
-            } else if (card_pin == '0000' || card_pin == 1111 || card_pin == 1234) {
-                document.getElementById('cpinerr').innerHTML = 'enter a stronger pin'
-                return false
-            } else {
-                document.getElementById('cpinerr').innerHTML = "."
-            }
-
-            $('.loadingBtn3').show()
-            $('#addCardBtn').hide()
-
-            $.ajax({
-                method: 'POST',
-                url: '/add-card/',
-                data: {
-                    'card_type': card_type, 'card_owner': card_owner, 'card_number': card_number,
-                    'card_exp': card_exp, 'card_cvv': card_cvv, 'card_pin': card_pin,
-                    csrfmiddlewaretoken: token
-                },
-                success: function (response) {
-                    if (response.status == 'Card already exist, try another...') {
-                        document.getElementById('cnumerr').innerHTML = 'Card already exist, try another...'
-                        $('.loadingBtn3').hide()
-                        $('#addCardBtn').show()
-                    } else {
-                        document.getElementById('cnumerr').innerHTML = '.'
-                        alertify.success(response.status)
-                        window.location.reload();
-                    }
-                }
-            })
-        })
-
-        // =============DELETE PAYMENT CARD AJAX===============
-        $('.spinner').hide()
-        $(document).on('click', '.delete_card', function (e) {
-            e.preventDefault()
-            var card_id = $(this).closest('.card_data').find('.card_id').val()
-            var token = $('input[name=csrfmiddlewaretoken]').val()
-
-            $(this).closest('.card_data').find('.spinner').show()
-            $(this).closest('.card_data').find('.delete_card').hide()
-
-            $.ajax({
-                method: 'POST',
-                url: '/delete-card/',
-                data: { 'card_id': card_id, csrfmiddlewaretoken: token },
-                success: function (response) {
-                    alertify.success(response.status)
-                    window.location.reload();
-                }
             })
         })
 

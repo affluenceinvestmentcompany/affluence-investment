@@ -389,27 +389,30 @@
                                         <th>Bonus</th>
                                         <th>Status</th>
                                         <th>Date</th>
-                                        <th><i class="fas fa-check-circle"></i> / <i class="fas fa-times-circle"></i></th>
+                                        {% if request.user.is_admin %}
+                                            <th><i class="fas fa-check-circle"></i></th>
+                                            <th><i class="fas fa-times-circle"></i></th>
+                                        {% endif %}
                                     </tr>
                                 </thead>
                                 <tbody class="border-0">
                                     {% for trans in transactions %}
-                                        <tr data-transaction-id="{{ trans.id }}">
-                                            {% csrf_token %}
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ trans.user.full_name }}</td>
-                                            <td>{{ trans.method }}</td>
-                                            <td>${{ trans.amount }}</td>
-                                            <td>${{ trans.bonus }}</td>
-                                            <td> {% if trans.pending %} Pending {% elif trans.confirmed %} Confirmed {% else %} Rejected {% endif %}</td>
-                                            <td>{{ trans.date }}</td>
-                                            <td>{% if trans.pending or trans.rejected %} 
-                                                    <i class="fas fa-check-circle accept_transaction_btn"></i>
-                                                {% else %}
-                                                    <i class="fas fa-times-circle reject_transaction_btn"></i>
+                                        {% if request.user.is_admin or request.user == trans.user %}
+                                            <tr data-transaction-id="{{ trans.id }}">
+                                                {% csrf_token %}
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ trans.user.full_name }}</td>
+                                                <td>{{ trans.method }}</td>
+                                                <td>${{ trans.amount }}</td>
+                                                <td>${{ trans.bonus }}</td>
+                                                <td> {% if trans.pending %} Pending {% elif trans.confirmed %} Confirmed {% else %} Rejected {% endif %}</td>
+                                                <td>{{ trans.date|date:"Y/m/d" }}</td>
+                                                {% if request.user.is_admin %}
+                                                    <td>{% if trans.pending %}<i class="fas fa-check-circle accept_transaction_btn"></i>{% elif trans.rejected %}<i class="fas fa-check text-white"></i>{% else %}<i class="fas fa-check text-primary"></i>{% endif %}</td>
+                                                    <td>{% if trans.pending %}<i class="fas fa-times-circle reject_transaction_btn"></i>{% elif trans.confirmed %}<i class="fas fa-times text-white"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
                                                 {% endif %}
-                                            </td>
-                                        </tr>
+                                            </tr>
+                                        {% endif %}
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -431,19 +434,76 @@
                                         <th>ROI</th>
                                         <th>Status</th>
                                         <th>Date</th>
+                                        <th>Withdraw</th>
                                     </tr>
                                 </thead>
                                 <tbody class="border-0">
                                     {% for investment in investments %}
-                                        <tr>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ investment.user.full_name }}</td>
-                                            <td>{{ investment.plan }}</td>
-                                            <td>${{ investment.amount }}</td>
-                                            <td>${{ investment.roi }}</td>
-                                            <td>{% if investment.pending %} Pending {% elif investment.active %} Active {% else %} Closed {% endif %} </td>
-                                            <td>{{ investment.date }}</td>
-                                        </tr>
+                                        {% if request.user.is_admin or request.user == investment.user %}
+                                            <tr data-investment-id="{{ investment.id }}">
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ investment.user.full_name }}</td>
+                                                <td>{{ investment.plan }}</td>
+                                                <td>${{ investment.amount }}</td>
+                                                <td>${{ investment.roi }}</td>
+                                                <td>{% if investment.pending %} Pending {% elif investment.active %} Active {% else %} Closed {% endif %} </td>
+                                                <td>{{ investment.date|date:"Y/m/d" }}</td>
+                                                <td>
+                                                    {% if investment.active %}
+                                                        <a class="position-relative dash-btn withdraw_investment_btn py-1" style="cursor:pointer;">withdraw</a>
+                                                    {% else %}
+                                                        <a class="position-relative dash-btn py-1" style="cursor:not-allowed;background:#888;" disabled>Unavailable</a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+
+                                            <div id="withdraw-form-{{ investment.id }}" class="withdraw-form" style="display:none;z-index:9999;">
+                                                <section class="popupBody p-0">
+                                                    <div class="form_wrp2">
+                                                        <div class="screen rounded-bottom">
+                                                            <span class="modal_close5"><i class="fas fa-times"></i></span>
+                                                            <div class="screen__content">
+                                                                <h3>Wallet Details</h3>
+                                                                <form class="login" style="padding:30px !important;">
+                                                                    {% csrf_token %}
+                                                                    <div class="login__field mb-1 mx-auto">
+                                                                        <div class="custom-select mx-auto" style="width:85%; position: relative;">
+                                                                            <div class="d-flex align-items-center justify-content-center w-100 selDiv">
+                                                                                <input class="login__input child" name="withdraw_wallet" value="" placeholder="Select wallet" readonly style="width:80%;"/>
+                                                                                <input value="▼" class="custom-select-trigger2 login__input text-primary" readonly style="width:20%;cursor:pointer;"/>
+                                                                            </div>
+                                                                            <div class="custom-options" id="customOptions">
+                                                                                <div class="custom-option" data-wallet="Bitcoin (BTC)">Bitcoin (BTC)</div>
+                                                                                <div class="custom-option" data-wallet="Ethereum (ETH)">Ethereum (ETH)</div>
+                                                                                <div class="custom-option" data-wallet="USDT Tether (TRC20)">USDT Tether (TRC20)</div>
+                                                                                <div class="custom-option" data-wallet="Binance (BEP20)">Binance (BEP20)</div>
+                                                                                <div class="custom-option" data-wallet="Litcoin (LTC)">Litcoin (LTC)</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <p id="ww_err" style="left:30px;"></p>
+                                                                    </div>
+                                                                    <div class="login__field">
+                                                                        <i class="fab fa-bitcoin" style="left:35px;"></i>
+                                                                        <input name="withdraw_address" type="text" class="login__input li2" placeholder="Address" style="padding-left:35px;">
+                                                                        <p id="wa_err" style="left:30px;"></p>
+                                                                    </div>
+                                                                    <div class="make-payment-btn mt-2 mb-4 d-flex justify-content-center">
+                                                                        <button class="form_buttons withdrawBtn" style="width:85%;">Withdraw &nbsp;<i class="fas fa-wallet"></i></button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="screen__background rounded">
+                                                                <span class="screen__background__shape screen__background__shape4"></span>
+                                                                <span class="screen__background__shape screen__background__shape3"></span>
+                                                                <span class="screen__background__shape screen__background__shape2"></span>
+                                                                <span class="screen__background__shape screen__background__shape1"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                            
+                                        {% endif %}
                                     {% endfor %}
                                 </tbody>
                             </table>
@@ -460,26 +520,37 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Name</th>
+                                        <th>Plan</th>
                                         <th>Amount</th>
-                                        <th>Balance</th>
                                         <th>Method</th>
                                         <th>Address</th>
                                         <th>Status</th>
                                         <th>Date</th>
-                                        <th><i class="fas fa-check-circle accept_invest_btn"></i></th>
-                                        <th><i class="fas fa-times-circle reject_invest_btn"></i></th>
+                                        {% if request.user.is_admin %}
+                                            <th><i class="fas fa-check-circle accept_invest_btn"></i></th>
+                                            <th><i class="fas fa-times-circle reject_invest_btn"></i></th>
+                                        {% endif %}
                                     </tr>
                                 </thead>
                                 <tbody class="border-0">
-                                    <tr>
-                                        <td>Joh Smith</td>
-                                        <td>$700</td>
-                                        <td>$500</td>
-                                        <td>Completed</td>
-                                        <td>2024-01-12</td>
-                                        <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
-                                        <td><i class="fas fa-times-circle reject_invest_btn"></i></td>
-                                    </tr>
+                                    {% for withdrawal in withdrawals %}
+                                        {% if request.user.is_admin or request.user == withdrawal.user %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{ withdrawal.user.full_name }}</td>
+                                                <td>{{ withdrawal.plan }}</td>
+                                                <td>${{ withdrawal.amount }}</td>
+                                                <td>{{ withdrawal.method }}</td>
+                                                <td class="email-col">{{ withdrawal.address }}</td>
+                                                <td>{% if withdrawal.completed %}Completed{% elif withdrawal.rejected %}Rejected{% else %}Processing{% endif %}</td>
+                                                <td>{{ withdrawal.date }}</td>
+                                                {% if request.user.is_admin %}
+                                                    <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
+                                                    <td><i class="fas fa-times-circle reject_invest_btn"></i></td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>

@@ -306,16 +306,17 @@
 
             document.getElementById('copyPayAddress').addEventListener('click', function() {
                 let payAddress = document.getElementById('payAddress');
-                
-                navigator.clipboard.writeText(payAddress.textContent || payAddress.innerText)
+                let trimmedText = (payAddress.textContent || payAddress.innerText).trim();
+
+                navigator.clipboard.writeText(trimmedText)
                     .then(function() {
-                        alertify.message("Copied to clipboard");
+                        alertify.success("Copied to clipboard");
                     })
                     .catch(function(error) {
-                        alertify.message("Error copying text: " + error);
-                });
-            });
-        });
+                        alertify.error("Error copying text: " + error);
+                    });
+                        });
+                    });
     </script>
 
 {% endblock %}

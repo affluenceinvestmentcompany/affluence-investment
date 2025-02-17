@@ -357,27 +357,79 @@ def accept_transaction(request):
             transaction.confirmed = True
             transaction.rejected = False
             transaction.save()
+            
+            investment = Investments.objects.get(id=transaction_id)
+            if transaction.confirmed:
+                investment.active = True
+                investment.pending = False
+                investment.closed = False
+            else: 
+                investment.pending = True
+                investment.active = False
+                investment.closed = False
+
+            investment.save()
 
             return JsonResponse({'success':"Transaction confirmed"})
         else:
             return JsonResponse({'error':"An error occured..."})
 
-
+#Reject Transaction
 def reject_transaction(request):
     if request.method == 'POST':
         if request.user.is_admin:
             transaction_id = int(request.POST.get('transaction_id'))
-            transaction = Transactions.objects.filter(id=transaction_id)
+            transaction = Transactions.objects.get(id=transaction_id)
             transaction.pending = False
             transaction.confirmed = False
             transaction.rejected = True
             transaction.save()
+            
+            investment = Investments.objects.get(id=transaction_id)
+            if transaction.rejected:
+                investment.active = False
+                investment.pending = False
+                investment.closed = True
+            else: 
+                investment.pending = True
+                investment.active = False
+                investment.closed = False
+
+            investment.save()
 
             return JsonResponse({'success':"Transaction rejected"})
         else:
             return JsonResponse({'error':"An error occured..."})
 
-
+#Withdrawal
+def withdraw(request):
+    if request.method == 'POST':
+        investment_id = request.POST.get('investment_id')
+        method = request.POST.get('method')
+        address = request.POST.get('address')
+        
+        if not method:
+            return JsonResponse({'error': 'Select a wallet'})
+        if not address:
+            return JsonResponse({'error': 'Enter a valid address'})
+        else:
+            investment = Investments.objects.get(id=investment_id)
+            investment.closed = True
+            investment.save()
+            
+            w_amount = float(investment.amount)
+            w_roi = float(investment.roi)
+            t_amount = w_amount + w_roi
+            
+            withdrawal = Withdrawal.objects.create(
+                user=request.user, plan=investment.plan,
+                amount=t_amount, method=method,
+                address=address
+            )
+            withdrawal.save()
+            
+            return JsonResponse({'success': 'Withdrawal request successful'})
+    return JsonResponse({'error': 'An error occurred'})
 
 
 

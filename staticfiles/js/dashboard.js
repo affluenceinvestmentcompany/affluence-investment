@@ -233,6 +233,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function refreshSection(element) {
         let selector = element.startsWith('#') ? element : '.' + element;
         $(selector).load(location.href + ' ' + selector + ' > *', function() {
+            $('#lean_overlay2').css({
+                'display': 'none',
+            });
             console.log('Refreshed ' + element);
         });
     }
@@ -240,8 +243,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // setInterval(function() {
     //     getActive();
     // }, 10000);
-});
 
+
+    //wallet details dropdown
+    $(document).on('click', '.custom-select-trigger2', function () {
+        $('.custom-options').toggleClass('d-block');
+    });
+
+    $(document).on('click', '.custom-option', function () {
+        let wallet = $(this).data('wallet');
+        let upd = $(`<input class="login__input child" name="withdraw_wallet" value="${wallet}" style="width:80%;" readonly/>`);
+        $('.child').attr('name', '');
+        $('.child').attr('value', '');
+        $('.child').addClass('d-none');
+        $('.selDiv').prepend(upd);
+    
+        $('.custom-options').removeClass('d-block'); 
+    });
+
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.custom-select').length) {
+            $('.custom-options').removeClass('d-block');
+        }
+    });
+});
 // function FetchDashboardData() {
 //     $.ajax({
 //         method: 'GET',
