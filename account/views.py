@@ -103,21 +103,43 @@ def logout(request):
 # Resend verification link
 def resend_link(request):
     if request.method == 'POST':
+        # try:
         user = request.user
-        email = request.user.email
+        email = user.email
+        subject = "Verify Your Email"
+        title = "Email Verification"
+        message = "Thank you for registering with us! Please click the link below to verify your email and complete your registration."
+        cta_url = f"{get_current_site(request).domain}/account/activate/{urlsafe_base64_encode(force_bytes(user.pk))}/{account_activation_token.make_token(user)}"
+        cta_text = "Verify Email"
+        logo_url = f"{get_current_site(request).domain}/static/images/logo2.png"
+        company_name = "Stapfund"
+        website_url = 'https://192.168.43.88:8000'
+        
         verification_email = EmailMessage(
-            subject = 'Verify your email',
-            body = render_to_string('account/verify-email.html', {
+            subject=subject,
+            body=render_to_string('account/email-template.html', {
                 'user': user.full_name,
-                'domain': get_current_site(request).domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-                'protocol': 'https' if request.is_secure() else 'http'
+                'subject': subject,
+                'title': title,
+                'message': message,
+                'protocol': 'https' if request.is_secure() else 'http',
+                'cta_url': cta_url,
+                'cta_text': cta_text,
+                'logo_url': logo_url,
+                'company_name': company_name,
+                'website_url': website_url,
             }),
-            to = [email],
+            to=[email],
         )
+        verification_email.content_subtype = 'html'
         verification_email.send()
         return JsonResponse({'success': 'Verification email resent.'})
+        # except Exception as e:
+        #     print(e)
+        #     return JsonResponse({'error': 'Error sending email'}, status=500)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
 
 def generate_secret(length=64):
     secret = ''.join(random.choices(string.ascii_letters + string.digits, k=length))
@@ -135,24 +157,36 @@ def password_reset_request(request):
             email = request.POST.get('email')
             user = User.objects.get(email=email)
             if user:
-                
                 user_uid = generate_secret()
                 user_token = generate_token()
                 reset_password = ResetPassword.objects.create(user=user, uid=user_uid, token=user_token)
                 reset_password.save()
+                subject = "Reset Your Password"
+                title = "Password Reset Request"
+                message = "We received a request to reset your password. Click the link below to reset your password."
+                cta_url = f"{get_current_site(request).domain}/account/reset/{user_uid}/{user_token}"
+                cta_text = "Reset Password"
+                logo_url = f"{get_current_site(request).domain}/static/images/logo2.png"
+                company_name = "Stapfund"
+                website_url = 'https://192.168.43.88:8000'
                 
-                verification_email = EmailMessage(
-                    subject = 'Password reset request',
-                    body = render_to_string('account/password_reset_email.html', {
-                        'user': user.full_name,
-                        'domain': get_current_site(request).domain,
-                        'uid': user_uid,
-                        'token': user_token,
-                        'protocol': 'https' if request.is_secure() else 'http'
-                    }),
-                    to = [email],
+                password_reset_email = EmailMessage(
+                subject=subject,
+                body=render_to_string('account/email-template.html', {
+                    'subject': subject,
+                    'title': title,
+                    'message': message,
+                    'protocol': 'https' if request.is_secure() else 'http',
+                    'cta_url': cta_url,
+                    'cta_text': cta_text,
+                    'logo_url': logo_url,
+                    'company_name': company_name,
+                    'website_url': website_url,
+                }),
+                to=[email],
                 )
-                verification_email.send()
+                password_reset_email.content_subtype = 'html'
+                password_reset_email.send()
                 return JsonResponse({"success": "Password reset email sent"})
             else:
                 return JsonResponse({"error": "Email is not registered"})
@@ -414,6 +448,8 @@ def withdraw(request):
             return JsonResponse({'error': 'Enter a valid address'})
         else:
             investment = Investments.objects.get(id=investment_id)
+            investment.pending = False
+            investment.active = False
             investment.closed = True
             investment.save()
             

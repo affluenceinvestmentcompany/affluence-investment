@@ -33,9 +33,11 @@
 
         p {
             color: #333;
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.5;
             margin: 10px 0;
+            font-weight: 400;
+            color: #444;
         }
 
         .cta-button {
@@ -48,7 +50,6 @@
             text-decoration: none;
             border-radius: 5px;
             margin-top: 20px;
-            margin-bottom: 20px;
         }
 
         .footer {
@@ -76,27 +77,30 @@
 <body>
     <div class="email-container">
         <div style="text-align: center;">
-            <!-- Replace with your company logo -->
-            <img src="{{ logo_url }}" alt="Stapfund Logo" class="company-logo">
+            <img src="{{ protocol }}://{{ logo_url }}" alt="Company Logo" class="company-logo">
         </div>
 
-        <h1>Password Reset</h1>
+        <h1>{{ title }}</h1>
 
-        <p>Hi {{ user }},</p>
+        {% if user %}
+            <h3 style="font-weight:600;font-size:17px;color:#444;">Hi {{ user }}</h3>
+        {% endif %}
 
-        <p>You made a request to reset your password. Please click the link below to reset your password:</p>
+        <p>{{ message }}</p>
 
-        <p><a href="{{ protocol }}://{{ domain }}/account/reset/{{ uid }}/{{ token }}/" class="cta-button" style="color:#ffffff !important;">Reset Password</a></p>
+        {% if title == 'Password Reset Request' %}
+            <b>Ignore this email if you did not request for a password reset!</b>
+        {% endif %}
 
-        <p>If you didn't request a password reset, please ignore this email.</p>
+        {% if cta_url %}
+            <p><a href="{{ protocol }}://{{ cta_url }}" class="cta-button" style="color:#fff !important;">{{ cta_text }}</a></p>
+        {% endif %}
 
         <div class="footer">
-            <p>Best regards, <br> The Stapfund Team</p>
+            <p>Best regards, <br> <b>The {{ company_name }} Team</b></p>
             <p><a href="{{ website_url }}">Visit our website</a></p>
         </div>
     </div>
 </body>
 </html>
-
-
 

@@ -548,13 +548,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         window.location.href = '/';
                     } else {
                         alertify.error(response.error)
+                        hideSpinner(button);
                         return false;
                     }
                 },
                 error: function () {
                     alertify.error('An error occurred!');
-                },
-                complete: function() {
                     hideSpinner(button);
                 }
             })

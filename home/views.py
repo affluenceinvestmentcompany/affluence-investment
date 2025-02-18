@@ -30,12 +30,15 @@ def create_investment(request):
         
         def bonus(amount):
             plan_bonuses = {'Basic': 0.5, 'Standard': 1.0, 'Premium': 1.5, 'Ultimate': 2.0}
-            return int(amount) * plan_bonuses.get(plan, 0) / 100
+            return float(amount) * plan_bonuses.get(plan, 0) / 100
         
-        transaction = Transactions.objects.create(user = user, method = method, amount = amount, bonus = bonus(amount))
+        bonus_amount = bonus(amount)
+        total_investment = float(amount) + bonus_amount 
+        
+        transaction = Transactions.objects.create(user=user, method=method, amount=amount, bonus=bonus_amount)
         transaction.save()
         
-        investment = Investments.objects.create(user = user, plan = plan, amount = amount, roi = 0)
+        investment = Investments.objects.create(user=user, plan=plan, amount=total_investment, roi=0)
         investment.save()
         return JsonResponse({'success':"Transaction successful"})
 

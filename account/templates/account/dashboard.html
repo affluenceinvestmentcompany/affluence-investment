@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% load static %} 
+{% load static %}
+{% load humanize %}
 
 {% block content %}
     <div class="container=fluid mt-5 px-0">
@@ -23,7 +24,7 @@
                         {% endif %}
                         <a id="goto_transactions_tab" class="dash-navs"><i class="fas fa-exchange-alt"></i> Transactions</a>
                         <a id="goto_investments_tab" class="dash-navs"><i class="fas fa-chart-line"></i> Investments</a>
-                        <a id="goto_withdrawal_tab" class="dash-navs"><i class="fas fa-money-check-alt"></i> Withdrawal</a>
+                        <a id="goto_withdrawal_tab" class="dash-navs"><i class="fas fa-money-check-alt"></i> Withdrawals</a>
                         <a id="goto_settings_tab" class="dash-navs"><i class="fas fa-cog"></i> Settings</a>
                     </nav>
                 </div>
@@ -312,7 +313,7 @@
                                                 <td>{{ package.plan }}</td>
                                                 <td>{{ package.profit }}%</td>
                                                 <td>{{ package.bonus }}%</td>
-                                                <td>${{ package.min_amount }}</td>
+                                                <td>${{ package.min_amount|intcomma }}</td>
                                                 <td>{{ package.min_days }} days</td>
                                                 <td><i class="fas fa-edit edit_package_btn"></i></td>
                                             </tr>
@@ -403,8 +404,8 @@
                                                 <td>{{ forloop.counter }}</td>
                                                 <td>{{ trans.user.full_name }}</td>
                                                 <td>{{ trans.method }}</td>
-                                                <td>${{ trans.amount }}</td>
-                                                <td>${{ trans.bonus }}</td>
+                                                <td>${{ trans.amount|intcomma }}</td>
+                                                <td>${{ trans.bonus|intcomma }}</td>
                                                 <td> {% if trans.pending %} Pending {% elif trans.confirmed %} Confirmed {% else %} Rejected {% endif %}</td>
                                                 <td>{{ trans.date|date:"Y/m/d" }}</td>
                                                 {% if request.user.is_admin %}
@@ -444,15 +445,19 @@
                                                 <td>{{ forloop.counter }}</td>
                                                 <td>{{ investment.user.full_name }}</td>
                                                 <td>{{ investment.plan }}</td>
-                                                <td>${{ investment.amount }}</td>
-                                                <td>${{ investment.roi }}</td>
+                                                <td>${{ investment.amount|intcomma }}</td>
+                                                <td>${{ investment.roi|intcomma }}</td>
                                                 <td>{% if investment.pending %} Pending {% elif investment.active %} Active {% else %} Closed {% endif %} </td>
                                                 <td>{{ investment.date|date:"Y/m/d" }}</td>
                                                 <td>
-                                                    {% if investment.active %}
-                                                        <a class="position-relative dash-btn withdraw_investment_btn py-1" style="cursor:pointer;">withdraw</a>
+                                                    {% if request.user == investment.user %}
+                                                        {% if investment.active %}
+                                                            <a class="position-relative dash-btn withdraw_investment_btn py-1" style="cursor:pointer;">withdraw</a>
+                                                        {% else %}
+                                                            <a class="position-relative dash-btn py-1" style="cursor:not-allowed;background:#999;" disabled>Unavailable</a>
+                                                        {% endif %}
                                                     {% else %}
-                                                        <a class="position-relative dash-btn py-1" style="cursor:not-allowed;background:#888;" disabled>Unavailable</a>
+                                                        <a class="position-relative dash-btn withdraw_investment_btn py-1" style="cursor:not-allowed;background:#999;"></a>
                                                     {% endif %}
                                                 </td>
                                             </tr>
@@ -512,7 +517,7 @@
 
                     <div id="withdrawal_tab" class="dash-tabs">
                         <div class="pt-2 pb-3 text-center position-relative">
-                            <h4 class="fs-3">Withdrawal</h4>
+                            <h4 class="fs-3">Withdrawals</h4>
                         </div>
                         <div class="table-container withdrawal-table mt-0">
                             <table class="table table-striped table-hover">
@@ -539,11 +544,11 @@
                                                 <td>{{ forloop.counter }}</td>
                                                 <td>{{ withdrawal.user.full_name }}</td>
                                                 <td>{{ withdrawal.plan }}</td>
-                                                <td>${{ withdrawal.amount }}</td>
+                                                <td>${{ withdrawal.amount|intcomma }}</td>
                                                 <td>{{ withdrawal.method }}</td>
                                                 <td class="email-col">{{ withdrawal.address }}</td>
                                                 <td>{% if withdrawal.completed %}Completed{% elif withdrawal.rejected %}Rejected{% else %}Processing{% endif %}</td>
-                                                <td>{{ withdrawal.date }}</td>
+                                                <td>{{ withdrawal.date|date:"Y/m/d" }}</td>
                                                 {% if request.user.is_admin %}
                                                     <td><i class="fas fa-check-circle accept_invest_btn"></i></td>
                                                     <td><i class="fas fa-times-circle reject_invest_btn"></i></td>

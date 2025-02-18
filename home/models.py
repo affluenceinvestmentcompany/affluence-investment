@@ -62,7 +62,7 @@ class Withdrawal(models.Model):
         ordering = ['-date']
     
     def __str__(self):
-        return self.user.full_name + ' -- ' + self.withdraw
+        return self.user.full_name + ' -- ' + self.plan
 
 
 class Transactions(models.Model):
