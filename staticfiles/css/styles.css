@@ -1,6 +1,6 @@
 :root {
   --marquee-width: 100vw;
-  --marquee-height: 85px;
+  --marquee-height: 250px;
   --marquee-elements: 12; /* defined with JavaScript */
   --marquee-elements-displayed: 5;
   --marquee-element-width: calc(var(--marquee-width) / var(--marquee-elements-displayed));
@@ -1430,7 +1430,7 @@ a.btn_red {
 }
 .alertify-notifier .ajs-message.ajs-success {
   color: #fff;
-  background: #16b316;
+  background: #0066ff;
 }
 .alertify-notifier .ajs-message.ajs-error {
   color: #fff;
@@ -1444,31 +1444,35 @@ a.btn_red {
 
 /*Scrolling banner*/
 .marquee {
-  width: var(--marquee-width);
-  height: var(--marquee-height);
+  width: 100vw;
+  height: 250px;
   background-image: url('../images/invest.png');
   background-size: cover;
   background-position: center;
-  overflow: hidden;
+  overflow-x: hidden;
   position: relative;
 }
-.marquee .m-layer {
+.marquee::after {
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, .85);
+  background-color: rgba(0, 0, 0, .9);
 }
 .marquee-content {
+  position: relative;
   list-style: none;
-  height: 100%;
+  height: 40%;
   display: flex;
   animation: scrolling var(--marquee-animation-duration) linear infinite;
+  z-index: 9;
 }
 .marquee-content:hover {
   animation-play-state: paused;
 }
+
 @keyframes scrolling {
   0% { transform: translateX(0); }
   100% { transform: translateX(calc(-1 * var(--marquee-element-width) * var(--marquee-elements))); }
@@ -1480,7 +1484,7 @@ a.btn_red {
   flex-shrink: 0;
   width: var(--marquee-element-width);
   max-height: 100%;
-  font-size: 14px;
+  font-size: 16px;
   white-space: nowrap;
   padding: 0 20px;
 }
@@ -1495,6 +1499,39 @@ a.btn_red {
   }
 }
 
+.data-set {
+  position: relative;
+  height: 60%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 50px;
+  flex-wrap: wrap;
+  text-align: center;
+  z-index: 9;
+}
+
+h3.counter {
+  font-size: 50px;
+  font-weight: 700;
+  color: #44d9e4;
+  margin: 0;
+  letter-spacing: 3px;
+  transition: font-size 0.3s ease;
+  opacity: 0;
+}
+.data-set i {
+  font-size: 40px;
+  color: #fff;
+}
+.data-set small {
+  display: block;
+  color: #44d9e4;
+}
+
+.dash-tables tr:nth-child(n+6) {
+  display: none;
+}
 
 /* ============ invest page ================= */
 .slider-wrp {
@@ -1890,6 +1927,7 @@ select {
 	padding: 0;
   margin: 0 0 10px 0;
   line-height: 0;
+  font-size: 1.2rem;
   text-align: center;
   font-weight: 600;
   color: #01377e;
@@ -2191,13 +2229,13 @@ select {
 }
 
 .t-users {
-  background-color: #a217dd; 
+  background-color: #4a8ef3; 
 }
 .t-invest {
-  background-color: #1e8fdb; 
+  background-color: #4caf50; 
 }
 .t-roi {
-  background-color: #19cf65;;
+  background-color: #ff9800;;
 }
 
 .dash-card:hover {
@@ -2206,7 +2244,7 @@ select {
 }
 
 .dash-card i {
-  font-size: 30px;
+  font-size: 50px;
   margin-bottom: 10px;
   color: #60fff7;
 }
@@ -2224,6 +2262,16 @@ select {
 
 .chart-container {
   margin-top: 20px;
+}
+
+.chartSpinner {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 20px;
+  color: #0048a7;
+  transform: translate(-50%, -50%);
 }
 
 /* Table Container */

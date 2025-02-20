@@ -20,7 +20,11 @@ urlpatterns = [
     path('dashboard/payments/delete-payment/', views.delete_payment, name='delete_payment'),
     path('dashboard/transactions/accept-transaction/', views.accept_transaction, name='accept_transaction'),
     path('dashboard/transactions/reject-transaction/', views.reject_transaction, name='reject_transaction'),
+    path('dashboard/withdrawals/accept-withdrawal/', views.accept_withdrawal, name='accept_withdrawal'),
+    path('dashboard/withdrawals/reject-withdrawal/', views.reject_withdrawal, name='reject_withdrawal'),
     
-    # path('fuckoff@75109090@fuckoff/', views.get_dashboard_data, name='get_dashboard_data'),
+    path('api/fuckof/@/fuckof/get-chart-data/', views.get_chart_data, name='get_chart_data'),
+    path('api/fuckof/@/fuckof/get-user-chart-data/', views.get_user_chart_data, name='get_user_chart_data'),
+    path('api/update-roi/', views.update_roi, name='update_roi'),
 ]
 

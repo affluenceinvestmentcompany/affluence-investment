@@ -92,7 +92,7 @@
 
     <div class="why-us section mt-5 py-lg-3">
         <div class="container-fluid px-0">
-            <div class="row justify-content-center p-5">
+            <div class="row justify-content-center px-3 px-sm-5 py-5">
                 <div class="layer"></div>
                 <div class="col-12 position-relative">
                 <div class="">
@@ -118,25 +118,41 @@
     <div class="section my-4 py-0 my-md-5 py-md-2">
         <h4 class="p-0 px-4 m-0 mb-4 text-center" style="color:#062553;">Trusted by world-class investment and research teams</h4>
         <div class="container-fluid px-0">
-            <div class="marquee">
-                <div class="m-layer">
-                    <ul class="marquee-content">
-                        <li><img src="https://imgur.com/bRLrW9o.png" loading="lazy" alt="Image 1"></li>
-                        <li><img src="https://imgur.com/rgnlDBK.png" loading="lazy" alt="Image 2"></li>
-                        <li><img src="https://imgur.com/xfVozpR.png" loading="lazy" alt="Image 3"></li>
-                        <li><img src="https://imgur.com/hw7HLFt.png" loading="lazy" alt="Image 4"></li>
-                        <li><img src="https://imgur.com/QZhNFuq.png" loading="lazy" alt="Image 5"></li>
-                        <li><img src="https://imgur.com/ZFLwhdY.png" loading="lazy" alt="Image 6"></li>
-                        <li><img src="https://imgur.com/ux10D0l.png" loading="lazy" alt="Image 7"></li>
-                        <li><img src="https://imgur.com/4tSMyZT.png" loading="lazy" alt="Image 8"></li>
-                        <li><img src="https://imgur.com/jESEpVx.png" loading="lazy" alt="Image 9"></li>
-                        <li><img src="https://imgur.com/qRQpfeW.png" loading="lazy" alt="Image 10"></li>
-                        <li><img src="https://imgur.com/bRLrW9o.png" loading="lazy" alt="Image 11"></li>
-                        <li><img src="https://imgur.com/rgnlDBK.png" loading="lazy" alt="Image 12"></li>
-                        <li><img src="https://imgur.com/xfVozpR.png" loading="lazy" alt="Image 13"></li>
-                        <li><img src="https://imgur.com/hw7HLFt.png" loading="lazy" alt="Image 14"></li>
-                        <li><img src="https://imgur.com/QZhNFuq.png" loading="lazy" alt="Image 15"></li>
-                    </ul>
+            <div class="marquee py-2">
+                <ul class="marquee-content">
+                    <li><img src="https://imgur.com/bRLrW9o.png" loading="lazy" alt="Image 1"></li>
+                    <li><img src="https://imgur.com/rgnlDBK.png" loading="lazy" alt="Image 2"></li>
+                    <li><img src="https://imgur.com/xfVozpR.png" loading="lazy" alt="Image 3"></li>
+                    <li><img src="https://imgur.com/hw7HLFt.png" loading="lazy" alt="Image 4"></li>
+                    <li><img src="https://imgur.com/QZhNFuq.png" loading="lazy" alt="Image 5"></li>
+                    <li><img src="https://imgur.com/ZFLwhdY.png" loading="lazy" alt="Image 6"></li>
+                    <li><img src="https://imgur.com/ux10D0l.png" loading="lazy" alt="Image 7"></li>
+                    <li><img src="https://imgur.com/4tSMyZT.png" loading="lazy" alt="Image 8"></li>
+                    <li><img src="https://imgur.com/jESEpVx.png" loading="lazy" alt="Image 9"></li>
+                    <li><img src="https://imgur.com/qRQpfeW.png" loading="lazy" alt="Image 10"></li>
+                    <li><img src="https://imgur.com/bRLrW9o.png" loading="lazy" alt="Image 11"></li>
+                    <li><img src="https://imgur.com/rgnlDBK.png" loading="lazy" alt="Image 12"></li>
+                    <li><img src="https://imgur.com/xfVozpR.png" loading="lazy" alt="Image 13"></li>
+                    <li><img src="https://imgur.com/hw7HLFt.png" loading="lazy" alt="Image 14"></li>
+                    <li><img src="https://imgur.com/QZhNFuq.png" loading="lazy" alt="Image 15"></li>
+                </ul>
+
+                <div class="data-set">
+                    <div>
+                        <h3 class="counter" data-target="724000">0</h3>
+                        <i class="fas fa-users"></i>
+                        <small>Users</small>
+                    </div>
+                    <div>
+                        <h3 class="counter" data-target="582000">0</h3>
+                        <i class="fas fa-chart-line"></i>
+                        <small>Investments</small>
+                    </div>
+                    <div>
+                        <h3 class="counter" data-target="284000000">0</h3>
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <small>Funds</small>
+                    </div>
                 </div>
             </div>
         </div>
@@ -430,6 +446,61 @@
                     window.location.href = `/invest/${getSelectedPackage}/`;
                 });
             });
+        });
+    </script>
+
+    <script>
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            let delay = 0; // Starting delay for sequential animation
+
+            counters.forEach((counter, index) => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000; // 2 seconds for each counter
+                const step = Math.ceil(target / duration * 50); // Increase steps based on target
+
+                let current = 0;
+                const updateCounter = () => {
+                    current += step;
+                    if (current <= target) {
+                        counter.innerText = formatNumber(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.innerText = formatNumber(target);
+                    }
+                };
+
+                setTimeout(() => {
+                    counter.style.opacity = 1;
+                    updateCounter();
+                }, delay);
+                delay += 2000;
+            });
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000) + 'M';
+            } else if (num >= 1000) {
+                return (num / 1000) + 'K';
+            } else {
+                return num;
+            }
+        }
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target); // Stop observing once animation starts
+                }
+            });
+        }, {
+            threshold: 0.5 
+        });
+
+        document.querySelectorAll('.counter').forEach(counter => {
+            observer.observe(counter);
         });
     </script>
     

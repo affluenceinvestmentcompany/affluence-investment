@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.models import auth, User
 from django.contrib.auth import authenticate
 from .models import *
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -13,6 +14,9 @@ from django.utils.encoding import force_bytes, force_str
 from .tokens import account_activation_token
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import update_session_auth_hash
+from datetime import datetime
+from django.utils.timezone import now
+from django.views.decorators.csrf import csrf_exempt
 from home.models import *
 import random
 import string
@@ -44,6 +48,13 @@ def register(request):
             email = request.POST['email']
             phone = request.POST['phone']
             password = request.POST['password']
+            subject = "Verify Your Email"
+            title = "Email Verification"
+            message = "Thank you for registering with us! Please click the link below to verify your email and complete your registration."
+            cta_text = "Verify Email"
+            logo_url = f"{get_current_site(request).domain}/static/images/logo2.png"
+            company_name = "Stapfund"
+            website_url = 'https://192.168.43.88:8000'
             
             if User.objects.filter(email__iexact=email).exists():
                 return JsonResponse({'error':"Email already exist, try login..."})
@@ -60,20 +71,27 @@ def register(request):
             auth.login(request, user)
             
             verification_email = EmailMessage(
-                subject = 'Verify your email',
-                body = render_to_string('account/verify-email.html', {
-                    'user': user.full_name,
-                    'domain': get_current_site(request).domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': account_activation_token.make_token(user),
-                    'protocol': 'https' if request.is_secure() else 'http'
+                subject=subject,
+                body=render_to_string('account/email-template.html', {
+                    # 'user': user.full_name,
+                    'subject': subject,
+                    'title': title,
+                    'message': message,
+                    'protocol': 'https' if request.is_secure() else 'http',
+                    'cta_url': f"{get_current_site(request).domain}/account/activate/{urlsafe_base64_encode(force_bytes(user.pk))}/{account_activation_token.make_token(user)}",
+                    'cta_text': cta_text,
+                    'logo_url': logo_url,
+                    'company_name': company_name,
+                    'website_url': website_url,
                 }),
-                to = [email],
+                to=[email],
             )
+            verification_email.content_subtype = 'html'
             verification_email.send()
             
             return JsonResponse({"success": 'Account created successfully'})
         except Exception as e:
+            print(e)
             return JsonResponse({'error': 'An error occurred...'})
 
 # User Login
@@ -138,7 +156,6 @@ def resend_link(request):
         #     print(e)
         #     return JsonResponse({'error': 'Error sending email'}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
-
 
 
 def generate_secret(length=64):
@@ -229,11 +246,33 @@ def dashboard(request):
         transactions = Transactions.objects.all()
         investments = Investments.objects.all()
         withdrawals = Withdrawal.objects.all()
+        total_users = User.objects.filter(is_superuser=False)
         
+        total_amount = Investments.objects.aggregate(Sum('amount'))['amount__sum']
+        total_roi = Investments.objects.aggregate(Sum('roi'))['roi__sum']
+        
+        user_amount = Investments.objects.filter(user=request.user)
+        user_roi = Investments.objects.filter(user=request.user)
+        user_withdraw = Withdrawal.objects.filter(user=request.user, completed=True)
+        user_total_amount = user_amount.aggregate(Sum('amount'))['amount__sum']
+        user_total_roi = user_roi.aggregate(Sum('roi'))['roi__sum']
+        user_withdrawal = user_withdraw.aggregate(Sum('amount'))['amount__sum']
+        if total_amount == None:
+            total_amount = 0
+        if total_roi == None:
+            total_roi = 0
+        if user_total_amount == None:
+            user_total_amount = 0
+        if user_total_roi == None:
+            user_total_roi = 0
+
         context = {
             'users':users, 'payments':payments, 'packages':packages,
             'transactions':transactions, 'investments':investments,
-            'withdrawals':withdrawals, 
+            'withdrawals':withdrawals, 'total_amount':total_amount,
+            'total_roi':total_roi, 'user_total_amount':user_total_amount,
+            'user_total_roi':user_total_roi, 'total_users':total_users,
+            'user_withdrawal':user_withdrawal
         }
         
         return render(request, 'account/dashboard.html', context)
@@ -384,29 +423,28 @@ def edit_package(request):
 #Accept Transaction
 def accept_transaction(request):
     if request.method == 'POST':
-        if request.user.is_admin:
-            transaction_id = int(request.POST.get('transaction_id'))
-            transaction = Transactions.objects.get(id=transaction_id)
-            transaction.pending = False
-            transaction.confirmed = True
-            transaction.rejected = False
-            transaction.save()
-            
-            investment = Investments.objects.get(id=transaction_id)
-            if transaction.confirmed:
-                investment.active = True
-                investment.pending = False
-                investment.closed = False
-            else: 
-                investment.pending = True
-                investment.active = False
-                investment.closed = False
+        transaction_id = int(request.POST.get('transaction_id'))
+        transaction = Transactions.objects.get(id=transaction_id)
+        transaction.pending = False
+        transaction.confirmed = True
+        transaction.rejected = False
+        transaction.save()
+        
+        investment = Investments.objects.get(id=transaction_id)
+        if transaction.confirmed:
+            investment.active = True
+            investment.pending = False
+            investment.closed = False
+        else: 
+            investment.pending = True
+            investment.active = False
+            investment.closed = False
 
-            investment.save()
+        investment.save()
 
-            return JsonResponse({'success':"Transaction confirmed"})
-        else:
-            return JsonResponse({'error':"An error occured..."})
+        return JsonResponse({'success':"Transaction confirmed"})
+    else:
+        return JsonResponse({'error':"An error occured..."})
 
 #Reject Transaction
 def reject_transaction(request):
@@ -467,6 +505,101 @@ def withdraw(request):
             return JsonResponse({'success': 'Withdrawal request successful'})
     return JsonResponse({'error': 'An error occurred'})
 
+#Accept Transaction
+def accept_withdrawal(request):
+    if request.method == 'POST':
+        withdrawal_id = int(request.POST.get('withdrawal_id'))
+        withdrawal = Withdrawal.objects.get(id=withdrawal_id)
+        withdrawal.processing = False
+        withdrawal.completed = True
+        withdrawal.rejected = False
+        withdrawal.save()
 
+        return JsonResponse({'success':"Withdrawal confirmed"})
+    else:
+        return JsonResponse({'error':"An error occured..."})
 
+#Reject Transaction
+def reject_withdrawal(request):
+    if request.method == 'POST':
+        withdrawal_id = int(request.POST.get('withdrawal_id'))
+        withdrawal = Withdrawal.objects.get(id=withdrawal_id)
+        withdrawal.processing = False
+        withdrawal.completed = False
+        withdrawal.rejected = True
+        withdrawal.save()
+
+        return JsonResponse({'success':"Withdrawal rejected"})
+    else:
+        return JsonResponse({'error':"An error occured..."})
+
+#Get chart data
+def get_chart_data(request):
+    # Get labels for each month from January to December
+    labels = [datetime(2025, month, 1).strftime('%b') for month in range(1, 13)]
+
+    # Example: Count of users per month
+    user_counts = []
+    for month in range(1, 13):
+        count = User.objects.filter(date_joined__year=2025, date_joined__month=month).count()
+        user_counts.append(count)
+
+    # Example: Sum of investments per month
+    investment_sums = []
+    for month in range(1, 13):
+        total = Investments.objects.filter(date__year=2025, date__month=month).aggregate(total=Sum('amount'))['total'] or 0
+        investment_sums.append(total)
+
+    # Example: Sum of ROI per month
+    roi_sums = []
+    for month in range(1, 13):
+        total = Investments.objects.filter(date__year=2025, date__month=month).aggregate(total=Sum('roi'))['total'] or 0
+        roi_sums.append(total)
+
+    return JsonResponse({
+        'labels': labels,
+        'users': user_counts,
+        'investments': investment_sums,
+        'roi': roi_sums
+    })
+
+#Get user chart data
+def get_user_chart_data(request):
+    user = request.user
+    labels = [datetime(2025, month, 1).strftime('%b') for month in range(1, 13)]
+
+    # Example: Sum of investments per month for the user
+    user_investment_sums = []
+    for month in range(1, 13):
+        total = Investments.objects.filter(user=user, date__year=2025, date__month=month).aggregate(total=Sum('amount'))['total'] or 0
+        user_investment_sums.append(total)
+
+    # Example: Sum of ROI per month for the user
+    user_roi_sums = []
+    for month in range(1, 13):
+        total = Investments.objects.filter(user=user, date__year=2025, date__month=month).aggregate(total=Sum('roi'))['total'] or 0
+        user_roi_sums.append(total)
+
+    return JsonResponse({
+        'labels': labels,
+        'investments': user_investment_sums,
+        'roi': user_roi_sums
+    })
+
+#update ROI
+@csrf_exempt  # Remove this if using CSRF protection
+def update_roi(request):
+    """Update ROI for all active investments"""
+    if request.method == 'POST':
+        investments = Investments.objects.filter(active=True)
+
+        if not investments.exists():
+            return JsonResponse({'error': 'No active investments found'}, status=404)
+
+        for investment in investments:
+            investment.update_roi()  # ✅ Call the update method
+
+        return JsonResponse({'success': 'ROI updated successfully'})
+
+    return JsonResponse({'error': 'Invalid request method'}, status=400)
 

@@ -20,19 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#js-preloader').addClass('loaded');
         });
 
-        $(document).on('click', '.modal_trigger', function() {
-            $(this).leanModal({
-                top: 100,
-                overlay: 0.7,
-                closeButton: ".modal_close"
-            });
+        $(".modal_trigger").leanModal({
+            top: 100,
+            overlay: 0.7,
+            closeButton: ".modal_close"
         });
-
-        // $(".modal_trigger").leanModal({
-        //     top: 100,
-        //     overlay: 0.7,
-        //     closeButton: ".modal_close"
-        // });
         $(".forgot-password-btn").leanModal({
             top: 100,
             overlay: 0.7,
@@ -69,13 +61,18 @@ document.addEventListener('DOMContentLoaded', function () {
             closeButton: ".modal_close3"
         });
 
-
         $('.modal_trigger').on('click', function () {
             $(".closeModal").click();
         });
 
         $('.show_ver_email').on('click', function () {
             $(".closeModal").click();
+        });
+
+        $(".modal_close").click(function () {
+            $('#lean_overlay2').css({
+                'display': 'none',
+            });
         });
 
         $(".modal_close1").click(function () {
@@ -222,21 +219,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Hide/Show Password
-        document.querySelectorAll('.togglePassword').forEach(function (button) {
-            button.addEventListener('click', function () {
-                let passwordFields = document.querySelectorAll('.password');
-
-                passwordFields.forEach(function (passwordField) {
-                    if (passwordField.type === "password") {
-                        passwordField.type = "text";
-                        $('.fa-eye').hide();
-                        $('.fa-eye-slash').show();
-                    } else {
-                        passwordField.type = "password";
-                        $('.fa-eye').show();
-                        $('.fa-eye-slash').hide();
-                    }
-                });
+        $(document).on('click', '.togglePassword', function () {
+            let passwordFields = document.querySelectorAll('.password');
+            passwordFields.forEach(function (passwordField) {
+                if (passwordField.type === "password") {
+                    passwordField.type = "text";
+                    $('.fa-eye').hide();
+                    $('.fa-eye-slash').show();
+                } else {
+                    passwordField.type = "password";
+                    $('.fa-eye').show();
+                    $('.fa-eye-slash').hide();
+                }
             });
         });
 
@@ -324,17 +318,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         alertify.success(response.success)
                         window.location.reload();
                     } else if (response.error == 'Email already exist, try login...') {
-                        document.getElementById('emerr').innerHTML = 'Email already exist, try login...'
+                        document.getElementById('emerr').innerHTML = 'Email already exist, Sign In...'
+                        hideSpinner(button);
                         return false;
                     } else {
-                        alertify.error('An error occurred...')
+                        alertify.error('An error occurred...');
+                        hideSpinner(button);
                         return false;
                     }
                 },
                 error: function () {
                     alertify.error('An error occurred!');
-                },
-                complete: function() {
                     hideSpinner(button);
                 }
             })
@@ -378,17 +372,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         window.location.reload();
                     } else if (response.error == 'Invalid email or password') {
                         document.getElementById('invaliderr').innerHTML = 'Invalid login details'
+                        hideSpinner(button);
                         return false;
                     } else {
                         alertify.error(response.error)
+                        hideSpinner(button);
                         return false;
                     }
                 },
                 error: function () {
-                    alertify.error('An error occurred!');
-                },
-                complete: function() {
                     hideSpinner(button);
+                    alertify.error('An error occurred!');
                 }
             })
         })
@@ -1102,6 +1096,70 @@ document.addEventListener('DOMContentLoaded', function () {
                         alertify.error('An error occurred...');
                         hideSpinner(button);
                         return false;
+                    }
+                },
+                error: function () {
+                    alertify.error('An error occurred!');
+                    hideSpinner(button);
+                }
+            });
+        });
+
+        // =============== ACCEPT TRANSACTION AJAX===================
+        $(document).on('click', '.accept_withdrawal_btn', function (e) {
+            e.preventDefault();
+            var button = this;
+            let withdrawal_id = $(this).closest('tr').data('withdrawal-id');
+            let token = $('input[name=csrfmiddlewaretoken]').val();
+
+            showSpinner2(button, 'text-primary');
+        
+            $.ajax({
+                method: 'POST',
+                url: '/account/dashboard/withdrawals/accept-withdrawal/',
+                data: { 
+                    'withdrawal_id': withdrawal_id, 
+                    csrfmiddlewaretoken: token 
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alertify.success(response.success);
+                        refreshSection('withdrawal-table')
+                    } else {
+                        alertify.error(response.error);
+                        hideSpinner(button);
+                    }
+                },
+                error: function () {
+                    alertify.error('An error occurred!');
+                    hideSpinner(button);
+                }
+            });
+        });
+
+        // =============== REJECT TRANSACTION AJAX===================
+        $(document).on('click', '.reject_withdrawal_btn', function (e) {
+            e.preventDefault();
+            var button = this;
+            let withdrawal_id = $(this).closest('tr').data('withdrawal-id');
+            let token = $('input[name=csrfmiddlewaretoken]').val();
+
+            showSpinner2(button);
+        
+            $.ajax({
+                method: 'POST',
+                url: '/account/dashboard/withdrawals/reject-withdrawal/',
+                data: { 
+                    'withdrawal_id': withdrawal_id, 
+                    csrfmiddlewaretoken: token 
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alertify.success(response.success);
+                        refreshSection('withdrawal-table')
+                    } else {
+                        alertify.error(response.error);
+                        hideSpinner(button);
                     }
                 },
                 error: function () {

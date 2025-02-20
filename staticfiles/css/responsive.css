@@ -9,6 +9,9 @@
   .header-area .main-nav .nav li:last-child {
     padding-left: 20px;
   }
+  .data-set {
+    gap: 30px;
+  }
 }
 
 @media (max-width: 1180px) {
@@ -167,6 +170,12 @@
   #editPackageForm {
     flex-wrap: wrap;
     gap: 15px;
+  }
+  .data-set {
+    gap: 20px;
+  }
+  h3.counter {
+    font-size: 40px;
   }
 }
 
@@ -361,6 +370,15 @@
   .table th, .table td {
       font-size: 12px;
   }
+  .data-set {
+    gap: 20px;
+  }
+  h3.counter {
+      font-size: 32px;
+  }
+  .data-set i {
+    font-size: 30px;
+  }
 }
 
 @media (max-width: 450px) {
@@ -373,12 +391,17 @@
   .screen {
     width: 95vw;
   }
-
   .edit_profile,
   .change_password,
   .edit_profile .screen,
   .change_password .screen {
       width: 300px;
+  }
+  h3.counter {
+    font-size: 25px;
+  }
+  .data-set i {
+      font-size: 20px;
   }
 }
 

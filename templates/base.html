@@ -10,6 +10,7 @@
         />
         <meta name="description" content="" />
         <meta name="author" content="" />
+        <meta name="csrf-token" content="{{ csrf_token }}">
         {% block title %}
             <link rel="shortcut icon" href="{% static 'images/logo2.png' %}" type="image/x-icon"/>
             <title>Stapfund Investment</title>
@@ -337,6 +338,7 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
         {% comment %} <script src="{% static 'jquery/jquery.min.js' %} "></script> {% endcomment %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %} "></script>
         <script src="{% static 'js/owl-carousel.js' %} "></script>
         <script src="{% static 'js/animation.js' %} "></script>

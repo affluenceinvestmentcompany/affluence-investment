@@ -1,181 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let userData, investmentData, roiData, usersChart, investmentChart, roiChart;
-
-    // Initialize data (can be fetched from Django backend)
-    const labels = ['2025'];  // Single label for the year
-
-    function initialData() {
-        // Example initial data, can be updated dynamically from backend
-        userData = [0];  // Initial number of users (starting at 0)
-        investmentData = [0];  // Initial investment value (starting at 0)
-        roiData = [0];  // Initial ROI value (starting at 0)
-    }
-
-    function createCharts() {
-        // Create the Users chart
-        const ctxUsers = document.getElementById('usersChart').getContext('2d');
-        usersChart = new Chart(ctxUsers, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Total Users',
-                    data: userData,
-                    color: '#fff',
-                    borderColor: '#fff',
-                    backgroundColor: '#4a8ef3',
-                    borderWidth: 2,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#fff'
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#fff'
-                        },
-                        grid: {
-                            color: '#fff'
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: '#fff'
-                        },
-                        grid: {
-                            color: '#fff'
-                        },
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Create the Investment chart
-        const ctxInvestment = document.getElementById('investmentChart').getContext('2d');
-        investmentChart = new Chart(ctxInvestment, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Total Investments',
-                    data: investmentData,
-                    color: '#fff',
-                    borderColor: '#fff',
-                    backgroundColor: '#4a8ef3',
-                    borderWidth: 2,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#fff'
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#fff'
-                        },
-                        grid: {
-                            color: '#fff'
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: '#fff'
-                        },
-                        grid: {
-                            color: '#fff'
-                        },
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Create the ROI chart
-        const ctxROI = document.getElementById('roiChart').getContext('2d');
-        roiChart = new Chart(ctxROI, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Total ROI',
-                    data: roiData,
-                    color: '#fff',
-                    borderColor: '#fff',
-                    backgroundColor: '#4a8ef3',
-                    borderWidth: 2,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: '#fff'
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#fff'
-                        },
-                        grid: {
-                            color: '#fff'
-                        }
-                    },
-                    y: {
-                        ticks: {
-                            color: '#fff'
-                        },
-                        grid: {
-                            color: '#fff'
-                        },
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-
-    initialData();
-    createCharts();
-
-    // Function to update chart data dynamically
-    function updateChartData(type, value) {
-        if (type === 'user') {
-            userData.push(userData[userData.length - 1] + 1);  // Add 1 for new user
-            usersChart.update();
-        }
-        else if (type === 'investment') {
-            investmentData.push(investmentData[investmentData.length - 1] + value);  // Add invested amount
-            investmentChart.update();
-        }
-        else if (type === 'roi') {
-            roiData.push(roiData[roiData.length - 1] + value);  // Add ROI amount
-            roiChart.update();
-        }
-    }
-
     const dashNavs = document.querySelectorAll('.dash-navs');
     const dashTabs = document.querySelectorAll('.dash-tabs');
 
@@ -201,6 +24,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (activeLink) {
             activeLink.classList.add('active');
         }
+
+        const activeTable = localStorage.getItem('active-table');
+        if (activeTable) {
+            refreshSection(activeTable);
+        }
+        if (targetId == 'dashboard_tab'){
+            refreshSection('dash-cards');
+            refreshSection('dash-users-table');
+            refreshSection('dash-transactions-table');
+        }
     }
 
     dashNavs.forEach(dashNav => {
@@ -209,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetId = this.id.replace('goto_', '');
             setActiveSection(targetId);
             localStorage.setItem('activeNavLink', targetId);
-            getActive();
             $('#sidebar_trigger').show();
             $('#sidebar_trigger2').removeClass('active');
             $('.sidebar').removeClass('active');
@@ -223,29 +55,19 @@ document.addEventListener('DOMContentLoaded', function() {
         setActiveSection('dashboard_tab');
     }
 
-    function getActive() {
-        let activeTable = localStorage.getItem('active-table');
-        if (activeTable) {
-            refreshSection(activeTable);
-        }
-    }
-    
     function refreshSection(element) {
         let selector = element.startsWith('#') ? element : '.' + element;
+
         $(selector).load(location.href + ' ' + selector + ' > *', function() {
-            $('#lean_overlay2').css({
-                'display': 'none',
-            });
+            $('#lean_overlay2').css({'display': 'none'});
             console.log('Refreshed ' + element);
         });
     }
-    
-    // setInterval(function() {
-    //     getActive();
-    // }, 10000);
 
+    setInterval(function() {
+        refreshSection('dash-cards');
+    }, 60000);
 
-    //wallet details dropdown
     $(document).on('click', '.custom-select-trigger2', function () {
         $('.custom-options').toggleClass('d-block');
     });
@@ -266,22 +88,250 @@ document.addEventListener('DOMContentLoaded', function() {
             $('.custom-options').removeClass('d-block');
         }
     });
+
+
+    // CHART FUNCTIONALITY
+    let combinedChart;
+    let userChart;
+
+    function showSpinner() {
+        document.getElementById('chartSpinner').style.display = 'block';
+    }
+
+    function hideSpinner() {
+        document.getElementById('chartSpinner').style.display = 'none';
+    }
+
+    // Function to fetch data from the Django backend
+    function fetchChartData() {
+        showSpinner();
+        $.ajax({
+            url: '/account/api/fuckof/@/fuckof/get-chart-data/', 
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                updateChart(response);
+                hideSpinner();
+            },
+            error: function (xhr, status, error) {
+                // console.error('Error fetching chart data:', error);
+            }
+        });
+    }
+
+    function fetchUserChartData() {
+        showSpinner();
+        $.ajax({
+            url: '/account/api/fuckof/@/fuckof/get-user-chart-data/', 
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                updateUserChart(response);
+                hideSpinner();
+            },
+            error: function (xhr, status, error) {
+                // console.error('Error fetching chart data:', error);
+            }
+        });
+    }
+
+    // Function to update the chart with the fetched data
+    function updateChart(data) {
+        const labels = data.labels;
+        const usersData = data.users;
+        const investmentsData = data.investments;
+        const roiData = data.roi;
+
+        console.log('Users Data:', usersData); // Add console log to verify users data
+        console.log('Investments Data:', investmentsData); // Add console log to verify investments data
+        console.log('ROI Data:', roiData); // Add console log to verify ROI data
+
+        // Update Combined Chart
+        if (combinedChart) {
+            combinedChart.data.labels = labels;
+            combinedChart.data.datasets[0].data = usersData;
+            combinedChart.data.datasets[1].data = investmentsData;
+            combinedChart.data.datasets[2].data = roiData;
+            combinedChart.update();
+        } else {
+            const ctxCombined = document.getElementById('combinedChart').getContext('2d');
+            combinedChart = new Chart(ctxCombined, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Total Users',
+                            data: usersData,
+                            borderColor: '#4a8ef3',
+                            backgroundColor: 'rgba(74, 142, 243, 0.2)',
+                            borderWidth: 2,
+                            fill: true
+                        },
+                        {
+                            label: 'Total Investments',
+                            data: investmentsData,
+                            borderColor: '#4caf50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                            borderWidth: 2,
+                            fill: true
+                        },
+                        {
+                            label: 'Total ROI',
+                            data: roiData,
+                            borderColor: '#ff9800',
+                            backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                            borderWidth: 2,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#000'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#000'
+                            },
+                            grid: {
+                                color: '#ccc'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#000'
+                            },
+                            grid: {
+                                color: '#ccc'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function updateUserChart(data) {
+        const labels = data.labels;
+        const investmentsData = data.investments;
+        const roiData = data.roi;
+
+        console.log('User Investments Data:', investmentsData); // Add console log to verify investments data
+        console.log('User ROI Data:', roiData); // Add console log to verify ROI data
+
+        // Update User Chart
+        if (userChart) {
+            userChart.data.labels = labels;
+            userChart.data.datasets[0].data = investmentsData;
+            userChart.data.datasets[1].data = roiData;
+            userChart.update();
+        } else {
+            const ctxUser = document.getElementById('userChart').getContext('2d');
+            userChart = new Chart(ctxUser, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'User Investments',
+                            data: investmentsData,
+                            borderColor: '#4caf50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                            borderWidth: 2,
+                            fill: true
+                        },
+                        {
+                            label: 'User ROI',
+                            data: roiData,
+                            borderColor: '#ff9800',
+                            backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                            borderWidth: 2,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#000'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#000'
+                            },
+                            grid: {
+                                color: '#ccc'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#000'
+                            },
+                            grid: {
+                                color: '#ccc'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+
+    // Function to get CSRF token
+    function getCSRFToken() {
+        let csrfToken = null;
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith('csrftoken=')) {
+                csrfToken = cookie.substring('csrftoken='.length, cookie.length);
+                break;
+            }
+        }
+        return csrfToken;
+    }
+
+    // Function to update ROI every 30 seconds
+    function updateROIdaily() {
+        const csrfToken = getCSRFToken();
+        $.ajax({
+            url: '/account/api/update-roi/', 
+            type: 'POST',
+            dataType: 'json',
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            success: function (response) {
+                console.log('ROI update response:', response);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error updating ROI:', error);
+            }
+        });
+    }    
+
+
+    fetchChartData();
+    fetchUserChartData();
+    setInterval(fetchChartData, 60000);
+    setInterval(fetchUserChartData, 60000);
+    setInterval(updateROIdaily, 60000);
 });
-// function FetchDashboardData() {
-//     $.ajax({
-//         method: 'GET',
-//         url: '/account/fuckoff@75109090@fuckoff/',
-//         success: function(data) {
-//             $('dashboard').html(JSON.stringify(data));
-//             console.log('Fetch successful');
-//             console.log(data);
-//         },
-//         error: function(xhr, status, error) {
-//             console.error('Error:', error);
-//         }
-//     });
-// }
-
-
-
 
