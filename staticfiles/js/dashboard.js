@@ -293,7 +293,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-
     // Function to get CSRF token
     function getCSRFToken() {
         let csrfToken = null;
@@ -308,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return csrfToken;
     }
 
-    // Function to update ROI every 30 seconds
+    // Function to update ROI every 60 seconds
     function updateROIdaily() {
         const csrfToken = getCSRFToken();
         $.ajax({
@@ -319,10 +318,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 'X-CSRFToken': csrfToken
             },
             success: function (response) {
-                console.log('ROI update response:', response);
+                // console.log('ROI update response:', response);
             },
             error: function (xhr, status, error) {
-                console.error('Error updating ROI:', error);
+                // console.error('Error updating ROI:', error);
             }
         });
     }    

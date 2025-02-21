@@ -17,6 +17,7 @@ from django.contrib.auth import update_session_auth_hash
 from datetime import datetime
 from django.utils.timezone import now
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 from home.models import *
 import random
 import string
@@ -248,31 +249,26 @@ def dashboard(request):
         withdrawals = Withdrawal.objects.all()
         total_users = User.objects.filter(is_superuser=False)
         
-        total_amount = Investments.objects.aggregate(Sum('amount'))['amount__sum']
-        total_roi = Investments.objects.aggregate(Sum('roi'))['roi__sum']
+        total_amount = Investments.objects.filter(Q(active=True) | Q(closed=True)).aggregate(Sum('amount'))['amount__sum']
+        total_roi = Investments.objects.filter(Q(active=True) | Q(closed=True)).aggregate(Sum('roi'))['roi__sum']
         
-        user_amount = Investments.objects.filter(user=request.user)
-        user_roi = Investments.objects.filter(user=request.user)
-        user_withdraw = Withdrawal.objects.filter(user=request.user, completed=True)
-        user_total_amount = user_amount.aggregate(Sum('amount'))['amount__sum']
-        user_total_roi = user_roi.aggregate(Sum('roi'))['roi__sum']
-        user_withdrawal = user_withdraw.aggregate(Sum('amount'))['amount__sum']
-        if total_amount == None:
-            total_amount = 0
-        if total_roi == None:
-            total_roi = 0
-        if user_total_amount == None:
-            user_total_amount = 0
-        if user_total_roi == None:
-            user_total_roi = 0
+        user_amount = Investments.objects.filter(Q(active=True) | Q(closed=True), user=request.user).aggregate(Sum('amount'))['amount__sum']
+        user_roi = Investments.objects.filter(Q(active=True) | Q(closed=True), user=request.user).aggregate(Sum('roi'))['roi__sum']
+        user_withdraw = Withdrawal.objects.filter(user=request.user, completed=True).aggregate(Sum('amount'))['amount__sum']
+
+        total_amount = total_amount or 0
+        total_roi = total_roi or 0
+        user_amount = user_amount or 0
+        user_roi = user_roi or 0
+        user_withdraw = user_withdraw or 0
 
         context = {
             'users':users, 'payments':payments, 'packages':packages,
             'transactions':transactions, 'investments':investments,
             'withdrawals':withdrawals, 'total_amount':total_amount,
-            'total_roi':total_roi, 'user_total_amount':user_total_amount,
-            'user_total_roi':user_total_roi, 'total_users':total_users,
-            'user_withdrawal':user_withdrawal
+            'total_roi':total_roi, 'user_amount':user_amount,
+            'user_roi':user_roi, 'total_users':total_users,
+            'user_withdraw':user_withdraw
         }
         
         return render(request, 'account/dashboard.html', context)
@@ -323,11 +319,6 @@ def add_user(request):
             phone = request.POST['phone']
             password = request.POST['password']
             is_admin = request.POST['makeUserAdmin']
-            
-            print(is_admin)
-            print(is_admin)
-            print(is_admin)
-            print(is_admin)
             
             if User.objects.filter(email__iexact=email).exists():
                 return JsonResponse({'error':"User already exist"})
@@ -461,11 +452,13 @@ def reject_transaction(request):
             if transaction.rejected:
                 investment.active = False
                 investment.pending = False
-                investment.closed = True
+                investment.closed = False
+                investment.rejected = True
             else: 
                 investment.pending = True
                 investment.active = False
                 investment.closed = False
+                investment.rejected = False
 
             investment.save()
 
@@ -489,6 +482,7 @@ def withdraw(request):
             investment.pending = False
             investment.active = False
             investment.closed = True
+            investment.rejected = False
             investment.save()
             
             w_amount = float(investment.amount)
@@ -541,19 +535,19 @@ def get_chart_data(request):
     # Example: Count of users per month
     user_counts = []
     for month in range(1, 13):
-        count = User.objects.filter(date_joined__year=2025, date_joined__month=month).count()
+        count = User.objects.filter(is_superuser=False, is_verified=True, date_joined__year=2025, date_joined__month=month).count()
         user_counts.append(count)
 
     # Example: Sum of investments per month
     investment_sums = []
     for month in range(1, 13):
-        total = Investments.objects.filter(date__year=2025, date__month=month).aggregate(total=Sum('amount'))['total'] or 0
+        total = Investments.objects.filter(Q(active=True) | Q(closed=True), date__year=2025, date__month=month).aggregate(total=Sum('amount'))['total'] or 0
         investment_sums.append(total)
 
     # Example: Sum of ROI per month
     roi_sums = []
     for month in range(1, 13):
-        total = Investments.objects.filter(date__year=2025, date__month=month).aggregate(total=Sum('roi'))['total'] or 0
+        total = Investments.objects.filter(Q(active=True) | Q(closed=True), date__year=2025, date__month=month).aggregate(total=Sum('roi'))['total'] or 0
         roi_sums.append(total)
 
     return JsonResponse({
@@ -562,6 +556,7 @@ def get_chart_data(request):
         'investments': investment_sums,
         'roi': roi_sums
     })
+
 
 #Get user chart data
 def get_user_chart_data(request):
@@ -587,9 +582,8 @@ def get_user_chart_data(request):
     })
 
 #update ROI
-@csrf_exempt  # Remove this if using CSRF protection
+# @csrf_exempt  
 def update_roi(request):
-    """Update ROI for all active investments"""
     if request.method == 'POST':
         investments = Investments.objects.filter(active=True)
 

@@ -44,22 +44,22 @@
                             <div class="dash-card t-invest">
                                 <i class="fas fa-dollar-sign"></i>
                                 <h6>Total Investments</h6>
-                                <h3>${% if request.user.is_admin %}{{ total_amount|intcomma }}{% else %}{{ user_total_amount|intcomma }}{% endif %}</h3>
+                                <h3>${% if request.user.is_admin %}{{ total_amount|intcomma }}{% else %}{{ user_amount|intcomma }}{% endif %}</h3>
                             </div>
                             <div class="dash-card t-roi">
                                 <i class="fas fa-percent"></i>
                                 <h6>Total ROI</h6>
-                                <h3>%{% if request.user.is_admin %}{{ total_roi|intcomma }}{% else %}{{ user_total_roi|intcomma }}{% endif %}</h3>
+                                <h3>%{% if request.user.is_admin %}{{ total_roi|intcomma }}{% else %}{{ user_roi|intcomma }}{% endif %}</h3>
                             </div>
                             {% if not request.user.is_admin %}
                                 <div class="dash-card t-users">
                                     <i class="fas fa-money-check-alt"></i>
                                     <h6>Total Withdrawal</h6>
-                                    <h3>${% if user_withdrawal %}{{ user_withdrawal|intcomma }}{% else %}0{% endif %}</h3>
+                                    <h3>${{ user_withdraw|intcomma }}</h3>
                                 </div>
                             {% endif %}
                         </div>
-                        <div class="chart my-3">
+                        <div class="chart my-4">
                             <div class="row">
                                 <div class="col-md-12 position-relative">
                                     <i class="fas fa-spinner fa-spin chartSpinner" id="chartSpinner"></i>
@@ -94,7 +94,7 @@
                                                 <td>{{ inv.plan }}</td>
                                                 <td>${{ inv.amount|intcomma }}</td>
                                                 <td>{{ inv.roi|intcomma }}%</td>
-                                                <td>{% if inv.pending %} Pending {% elif inv.active %} Active {% else %} Closed {% endif %} </td>
+                                                <td>{% if inv.pending %} Pending {% elif inv.active %} Active {% elif inv.closed %} Closed {% else %} Rejected {% endif %} </td>
                                             </tr>
                                         {% endif %}
                                     {% endfor %}
@@ -388,7 +388,7 @@
                                                 <td>{{ investment.plan }}</td>
                                                 <td>${{ investment.amount|intcomma }}</td>
                                                 <td>${{ investment.roi|intcomma }}</td>
-                                                <td>{% if investment.pending %} Pending {% elif investment.active %} Active {% else %} Closed {% endif %} </td>
+                                                <td>{% if investment.pending %} Pending {% elif investment.active %} Active {% elif investment.closed %} Closed {% else %} Rejected {% endif %} </td>
                                                 <td>{{ investment.date|date:"Y/m/d" }}</td>
                                                 <td>
                                                     {% if request.user == investment.user %}
