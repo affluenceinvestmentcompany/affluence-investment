@@ -327,6 +327,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }    
 
 
+    // Function to enable withdraw buttons after 30 days
+    function enableWithdrawButtons() {
+        const withdrawButtons = document.querySelectorAll('.wbtn');
+        const now = new Date();
+
+        withdrawButtons.forEach(button => {
+            const activationDate = new Date(button.getAttribute('data-activation-date'));
+            const daysDifference = Math.floor((now - activationDate) / (1000 * 60 * 60 * 24));
+
+            if (daysDifference >= 120) {
+                button.disabled = false;
+                button.textContent = "Withdraw";
+            }
+
+            console.log(activationDate)
+            console.log(daysDifference)
+        });
+    }
+
+    // Check and enable withdraw buttons every 30 seconds
+    setInterval(enableWithdrawButtons, 3000);
+
+
     fetchChartData();
     fetchUserChartData();
     setInterval(fetchChartData, 60000);

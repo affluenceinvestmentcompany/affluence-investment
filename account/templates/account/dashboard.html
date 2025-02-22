@@ -47,9 +47,9 @@
                                 <h3>${% if request.user.is_admin %}{{ total_amount|intcomma }}{% else %}{{ user_amount|intcomma }}{% endif %}</h3>
                             </div>
                             <div class="dash-card t-roi">
-                                <i class="fas fa-percent"></i>
+                                <i class="fas fa-hand-holding-usd"></i>
                                 <h6>Total ROI</h6>
-                                <h3>%{% if request.user.is_admin %}{{ total_roi|intcomma }}{% else %}{{ user_roi|intcomma }}{% endif %}</h3>
+                                <h3>${% if request.user.is_admin %}{{ total_roi|intcomma }}{% else %}{{ user_roi|intcomma }}{% endif %}</h3>
                             </div>
                             {% if not request.user.is_admin %}
                                 <div class="dash-card t-users">
@@ -392,13 +392,9 @@
                                                 <td>{{ investment.date|date:"Y/m/d" }}</td>
                                                 <td>
                                                     {% if request.user == investment.user %}
-                                                        {% if investment.active %}
-                                                            <a class="position-relative dash-btn withdraw_investment_btn py-1" style="cursor:pointer;">withdraw</a>
-                                                        {% else %}
-                                                            <a class="position-relative dash-btn py-1" style="cursor:not-allowed;background:#999;" disabled>Unavailable</a>
-                                                        {% endif %}
+                                                        <button class="btn position-relative dash-btn withdraw_investment_btn wbtn py-0" data-activation-date="{{ investment.date|date:'Y-m-d H:i:s' }}" disabled>Unavailable</button>
                                                     {% else %}
-                                                        <a class="position-relative dash-btn withdraw_investment_btn py-1" style="cursor:not-allowed;background:#999;"></a>
+                                                        <a class="position-relative dash-btn withdraw_investment_btn py-1" style="cursor:not-allowed;background:#999;">Unavailable</a>
                                                     {% endif %}
                                                 </td>
                                             </tr>
