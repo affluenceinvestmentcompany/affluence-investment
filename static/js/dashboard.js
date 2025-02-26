@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         $(selector).load(location.href + ' ' + selector + ' > *', function() {
             $('#lean_overlay2').css({'display': 'none'});
-            console.log('Refreshed ' + element);
+            // console.log('Refreshed ' + element);
         });
     }
 
@@ -142,9 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const investmentsData = data.investments;
         const roiData = data.roi;
 
-        console.log('Users Data:', usersData); // Add console log to verify users data
-        console.log('Investments Data:', investmentsData); // Add console log to verify investments data
-        console.log('ROI Data:', roiData); // Add console log to verify ROI data
+        // console.log('Users Data:', usersData); // Add console log to verify users data
+        // console.log('Investments Data:', investmentsData); // Add console log to verify investments data
+        // console.log('ROI Data:', roiData); // Add console log to verify ROI data
 
         // Update Combined Chart
         if (combinedChart) {
@@ -225,8 +225,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const investmentsData = data.investments;
         const roiData = data.roi;
 
-        console.log('User Investments Data:', investmentsData); // Add console log to verify investments data
-        console.log('User ROI Data:', roiData); // Add console log to verify ROI data
+        // console.log('User Investments Data:', investmentsData); // Add console log to verify investments data
+        // console.log('User ROI Data:', roiData); // Add console log to verify ROI data
 
         // Update User Chart
         if (userChart) {
@@ -341,8 +341,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 button.textContent = "Withdraw";
             }
 
-            console.log(activationDate)
-            console.log(daysDifference)
+            // console.log(activationDate)
+            // console.log(daysDifference)
         });
     }
 
