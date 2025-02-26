@@ -305,7 +305,7 @@
             });
 
             document.getElementById('copyPayAddress').addEventListener('click', function() {
-                let payAddress = document.getElementById('payAddress');
+                let payAddress = document.getElementById('sel_address');
                 let trimmedText = (payAddress.textContent || payAddress.innerText).trim();
 
                 navigator.clipboard.writeText(trimmedText)
