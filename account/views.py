@@ -55,7 +55,6 @@ def register(request):
             cta_text = "Verify Email"
             logo_url = f"{get_current_site(request).domain}/static/images/logo2.png"
             company_name = "Stapfund"
-            website_url = 'https://192.168.43.88:8000'
             
             if User.objects.filter(email__iexact=email).exists():
                 return JsonResponse({'error':"Email already exist, try login..."})
@@ -82,8 +81,7 @@ def register(request):
                     'cta_url': f"{get_current_site(request).domain}/account/activate/{urlsafe_base64_encode(force_bytes(user.pk))}/{account_activation_token.make_token(user)}",
                     'cta_text': cta_text,
                     'logo_url': logo_url,
-                    'company_name': company_name,
-                    'website_url': website_url,
+                    'company_name': company_name
                 }),
                 to=[email],
             )
@@ -132,7 +130,6 @@ def resend_link(request):
         cta_text = "Verify Email"
         logo_url = f"{get_current_site(request).domain}/static/images/logo2.png"
         company_name = "Stapfund"
-        website_url = 'https://192.168.43.88:8000'
         
         verification_email = EmailMessage(
             subject=subject,
@@ -146,7 +143,6 @@ def resend_link(request):
                 'cta_text': cta_text,
                 'logo_url': logo_url,
                 'company_name': company_name,
-                'website_url': website_url,
             }),
             to=[email],
         )
