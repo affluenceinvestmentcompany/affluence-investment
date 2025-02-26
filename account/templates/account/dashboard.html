@@ -144,12 +144,16 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="border-0">
-                                                <tr>
-                                                    <td>John Doe</td>
-                                                    <td>$5,000</td>
-                                                    <td>Completed</td>
-                                                    <td>2024-01-12</td>
-                                                </tr>
+                                                {% for withdrawal in withdrawals %}
+                                                    {% if request.user.is_admin %}
+                                                        <tr>
+                                                            <td>{{ withdrawal.user.full_name }}</td>
+                                                            <td>${{ withdrawal.amount|intcomma }}</td>
+                                                            <td>{% if withdrawal.completed %}Completed{% elif withdrawal.rejected %}Rejected{% else %}Processing{% endif %}</td>
+                                                            <td>{{ withdrawal.date|date:"Y/m/d" }}</td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
                                             </tbody>
                                         </table>
                                     </div>
