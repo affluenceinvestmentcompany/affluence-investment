@@ -85,10 +85,11 @@
                             </div>
                             
                             <div class="scr csr">
-                                <ul>
-                                    <li class="fw-bold">$<b id="sel_amount"></b></li>
-                                    <li class="fw-normal" id="sel_method">N/A</li>
-                                    <li class="fw-normal" style="word-wrap: break-word;line-height:28px;"><span id="sel_address">N/A</span> <i class="fas fa-copy" id="copyPayAddress" style="cursor:pointer;"></i></li>
+                                <ul class="position-relative">
+                                    <li class="fw-bold">$<b id="sel_amount">3500</b></li>
+                                    <li class="fw-normal"><span id="sel_method"><!--N/A-->PayPal</span></li>
+                                    <li class="fw-normal" style="word-wrap: break-word;line-height:28px;"><span id="sel_address" style="text-transform:none;"><!--N/A-->paypal@affluence.com</span> <i class="fas fa-copy" id="copyPayAddress" style="cursor:pointer;"></i></li>
+                                    <a href="#" id="pwp" class="position-absolute top-100 left-100 bg-primary text-white py-1 px-3 rounded-3 shadow" target="_blank">Continue with PayPal <i class="fab fa-paypal"></i></a>
                                 </ul>
                             </div>
                         </div>
@@ -146,6 +147,15 @@
                     customSelect.classList.remove('open');
                     document.getElementById('pay__id').value = payment_id;
                     setImage();
+
+                    if (["paypal"].includes(method.toLowerCase())) {
+                        const amount = document.getElementById("sel_amount").innerText;
+                        document.getElementById('pwp').style.display = "block";
+                        const paypalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=${encodeURIComponent(address)}&amount=${encodeURIComponent(amount)}&item_name=Payment`;
+                        document.getElementById("pwp").href = paypalUrl;
+                    } else {
+                        document.getElementById('pwp').style.display = "none";
+                    }
                 });
             });
             window.addEventListener('click', function(e) {
@@ -273,7 +283,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-
             const inputField = document.getElementById("amount");
             const errorMessage = document.getElementById("error-message");
 
@@ -318,8 +327,8 @@
                     .catch(function(error) {
                         alertify.error("Error copying text: " + error);
                     });
-                        });
-                    });
+            });
+        });
     </script>
 
 {% endblock %}
