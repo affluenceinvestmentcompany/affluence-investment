@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 import dj_database_url
+import cloudinary
 
 load_dotenv()
 
@@ -30,10 +31,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = os.environ.get('DEBUG_VALUE')
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '*']
-
 
 # Application definition
 
@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary',
+    'storages',
     'django.contrib.humanize',
     
     'home',
@@ -139,11 +141,18 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/') 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Configuration       
+cloudinary.config( 
+    cloud_name = os.environ.get('cloud_name'), 
+    api_key = os.environ.get('api_key'), 
+    api_secret = os.environ.get('api_secret'),
+    secure=True
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

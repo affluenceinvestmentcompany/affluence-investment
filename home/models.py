@@ -15,8 +15,7 @@ SIXTY_SECOND_PERCENTAGE_RATES = {
 class Payments(models.Model):
     method = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    
-    # qrcode = models.ImageField(upload_to='profile_pics')
+    file = models.URLField()
     
     class Meta:
         ordering = ['id']
@@ -72,9 +71,6 @@ class Investments(models.Model):
         self.roi += new_roi
         self.last_updated = current_time
         self.save()
-        # print('\n||||||||||||||||||||||||||||||\n')
-        # print(f"Updated {self.plan}: +{new_roi}, New ROI: {self.roi}")
-        # print('\n||||||||||||||||||||||||||||||\n')
 
     def __str__(self):
         return f"{self.user.full_name} -- {self.plan} -- {self.amount}"

@@ -26,4 +26,7 @@ urlpatterns = [
     path('about/', include('about.urls')),
     path('privacy-policy/', include('privacyPolicy.urls')),
     path('terms-conditions/', include('termsConditions.urls')),
-] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+] 
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

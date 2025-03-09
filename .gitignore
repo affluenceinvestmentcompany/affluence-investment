@@ -1,0 +1,58 @@
+# Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual environment directories
+env/
+venv/
+.env/
+*.env
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+__pycache__/
+db.sqlite3
+db.sqlite3-journal
+
+# Django migrations
+*/migrations/
+
+# static files
+/static/
+
+/media/
+
+# VS Code settings
+.vscode/
+
+# PyCharm settings
+.idea/
+
+# MySQL or PostgreSQL database dumps
+*.sql
+
+# User-specific configuration files
+*.bak
+*.swp
+*.swo
+
+# IDE files
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# macOS Finder directory attributes
+.DS_Store
+
+# Windows image file thumbs
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# local development environment files
+local_settings.py

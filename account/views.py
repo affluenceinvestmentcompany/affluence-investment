@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.models import auth, User
 from django.contrib.auth import authenticate
@@ -21,7 +21,11 @@ from django.db.models import Q
 from home.models import *
 import random
 import string
-import secrets
+import secrets 
+import uuid
+import os
+import cloudinary.uploader
+
 
 def activate(request, uidb64, token):
     # user = User()
@@ -154,7 +158,6 @@ def resend_link(request):
         #     return JsonResponse({'error': 'Error sending email'}, status=500)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-
 def generate_secret(length=64):
     secret = ''.join(random.choices(string.ascii_letters + string.digits, k=length))
     return secret
@@ -245,6 +248,9 @@ def dashboard(request):
         withdrawals = Withdrawal.objects.all()
         total_users = User.objects.filter(is_superuser=False)
         
+        # for pay in payments:
+        #     print(pay.file.url)
+        
         total_amount = Investments.objects.filter(Q(active=True) | Q(closed=True)).aggregate(Sum('amount'))['amount__sum']
         total_roi = Investments.objects.filter(Q(active=True) | Q(closed=True)).aggregate(Sum('roi'))['roi__sum']
         
@@ -294,17 +300,30 @@ def get_dashboard_data(request):
 #Add Payment
 def add_payment(request):
     if request.method == 'POST':
+        method = request.POST.get('method')
+        address = request.POST.get('address')
+        file = request.FILES.get('file')
+        
+        if not method or not address or not file:
+            return JsonResponse({'error': 'Method, address, or file missing.'})
         try:
-            method = request.POST['method']
-            address = request.POST['address']
+            public_id = str(uuid.uuid4())
+            upload_file = cloudinary.uploader.upload(file, public_id=public_id)
+            file_url = upload_file["secure_url"]
+            print(file_url)
+            
             payment = Payments.objects.create(
-                method=method, address=address, 
+                method=method,
+                address=address,
+                file=file_url
             )
-            payment.save()
-            return JsonResponse({"success": 'Payment added successfully'})
+            return JsonResponse({"success": 'Payment added successfully'}, status=201)
         except Exception as e:
             print(e)
-            return JsonResponse({'error': 'An error occurred...'})
+            return JsonResponse({"error": 'An error occurred during the payment process.'}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request method, expected POST.'}, status=405)
+
 
 #Add User
 def add_user(request):

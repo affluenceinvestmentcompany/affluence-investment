@@ -773,7 +773,14 @@ document.addEventListener('DOMContentLoaded', function () {
             var button = this;
             var method = $('input[name=pay_method]').val()
             var address = $('input[name=pay_address]').val()
-            var token = $('input[name=csrfmiddlewaretoken]').val()
+            var file = $('#file')[0].files[0]
+
+            console.log(file)
+
+            var formData = new FormData();
+            formData.append('method', method);
+            formData.append('address', address);
+            formData.append('file', file);
 
             if (method == "" || method.length < 2) {
                 document.getElementById('pm_err').innerHTML = 'Enter a valid method'
@@ -787,19 +794,26 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 document.getElementById('add_err').innerHTML = "."
             }
+            if (file == null) {
+                document.getElementById('file_err').innerHTML = 'Upload QR code or payment icon'
+                return false
+            } else {
+                document.getElementById('file_err').innerHTML = "."
+            }
 
             showSpinner(button);
 
             $.ajax({
-                method: 'POST',
+                type: 'POST',
                 url: '/account/dashboard/add-payment/',
-                data: {
-                    'method': method, 'address': address,
-                    csrfmiddlewaretoken: token
-                },
+                data: formData,
+                processData: false, 
+                contentType: false, 
+                headers: {'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()},
                 success: function (response) {
                     if (response.success) {
                         alertify.success(response.success)
+                        console.log(response.signed_url)
                         refreshSection('payments-table');
                         $('#add_payment_form')[0].reset();
                         $(".modal_close6").click();

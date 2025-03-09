@@ -48,7 +48,7 @@
                                 <div class="custom-select-trigger" id="selectTrigger">Select an option</div>
                                 <div class="custom-options" id="customOptions">
                                     {% for payment in payments %}
-                                        <div class="custom-option" data-method="{{ payment.method }}" data-address="{{ payment.address }}">{{ payment.method }}</div>
+                                        <div class="custom-option" data-id="{{ payment.id }}" data-method="{{ payment.method }}" data-address="{{ payment.address }}">{{ payment.method }}</div>
                                     {% endfor %}
                                 </div>
                                 <div class="error" id="error-message2"></div>
@@ -70,10 +70,20 @@
                         <h3>Payment</h3>
                         <div class="slider-content d-block d-md-flex justify-content-around align-items-center">
                             <div class="pay-img-wrp csl">
-                                <img src="{% static 'images/btc.png' %}" alt="image" data-plan="Bitcoin (BTC)" class="pay-img img-fluid">
-                                <img src="{% static 'images/usdt.png' %}" alt="image" data-plan="USDT Tether (TRC20)" class="pay-img img-fluid">
-                                <img src="{% static 'images/bnb.png' %}" alt="image" data-plan="BNB Smart Chain (BEP20)" class="pay-img img-fluid">
+                                <img src="" alt="image" id="pay__img" class="d-block img-fluid"/>
+                                <input type="hidden" value="" id="pay__id"/>
+                                <script>
+                                    function setImage() {
+                                        let pay_id = document.getElementById('pay__id').value;
+                                        {% for payment in payments %}
+                                            if (pay_id == "{{ payment.id }}") {
+                                                document.getElementById('pay__img').setAttribute('src', "{{ payment.file }}");
+                                            }
+                                        {% endfor %}
+                                    }                            
+                                </script>
                             </div>
+                            
                             <div class="scr csr">
                                 <ul>
                                     <li class="fw-bold">$<b id="sel_amount"></b></li>
@@ -110,14 +120,13 @@
             let amount = document.getElementById('amount');
             let min_amount = document.getElementById('minAmount');
             let method, address;
+            let payment_id = document.getElementById("payment_id");
             let errorMessage = document.getElementById("error-message");
             let errorMessage2 = document.getElementById("error-message2");
 
             let selectTrigger = document.getElementById('selectTrigger');
             let customOptions = document.getElementById('customOptions');
             let customSelect = document.querySelector('.custom-select');
-
-            let payImgs = document.querySelectorAll(".pay-img");
 
             const paidBtn = document.getElementById("paid");
             let timer;
@@ -130,10 +139,13 @@
             const options = document.querySelectorAll('.custom-option');
             options.forEach(option => {
                 option.addEventListener('click', function() {
+                    payment_id = this.getAttribute('data-id');
                     method = this.getAttribute('data-method');
                     address = this.getAttribute('data-address');
                     selectTrigger.textContent = method;
                     customSelect.classList.remove('open');
+                    document.getElementById('pay__id').value = payment_id;
+                    setImage();
                 });
             });
             window.addEventListener('click', function(e) {
@@ -198,15 +210,6 @@
             }
 
             function retrieveSelection() {
-                payImgs.forEach((img) => {
-                    const plan = img.getAttribute('data-plan');
-                    if (method == plan) {
-                        img.style.display = 'block'; 
-                    } else {
-                        img.style.display = 'none'; 
-                    }
-                });
-
                 document.getElementById('sel_method').textContent = method;
                 document.getElementById('sel_address').textContent = address;
                 document.getElementById('sel_amount').textContent = amount.value;
@@ -241,7 +244,7 @@
                     }
                     startCountdown();
                 }
-            });
+            }); 
 
             back2.addEventListener('click', function () {
                 slider2.classList.add('slide-out-right');

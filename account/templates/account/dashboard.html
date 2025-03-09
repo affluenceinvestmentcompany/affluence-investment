@@ -224,7 +224,7 @@
                                                 <td>{{ forloop.counter }}</td>
                                                 <td>{{ payment.method }}</td>
                                                 <td class="email-col">{{ payment.address }}</td>
-                                                <td><img src="" alt="qr code" class="img-fluid" style="width:50px;"/></td>
+                                                <td><img src="{{ payment.file }}" alt="image" class="img-fluid" style="width:50px;"/></td>
                                                 <td><i class="fas fa-trash-alt delete_payment_btn"></i></td>
                                             </tr>
                                         {% endfor %}
@@ -655,8 +655,7 @@
                                     <span class="modal_close6"><i class="fas fa-times"></i></span>
                                     <div class="screen__content">
                                         <h3>Add Payment</h4>
-                                        <form id="add_payment_form" class="login">
-                                            {% csrf_token %}
+                                        <form id="add_payment_form" class="login" enctype="multipart/form-data">                           {% csrf_token %}
                                             <div class="login__field">
                                                 <i class="fas fa-money-bill"></i>
                                                 <input name="pay_method" type="text" class="login__input" placeholder="Payment method">
@@ -666,6 +665,11 @@
                                                 <i class="fab fa-bitcoin"></i>
                                                 <input name="pay_address" type="text" class="login__input" placeholder="Address">
                                                 <p id="add_err"></p>
+                                            </div>
+                                            <div class="login__field">
+                                                <i class="fab fa-file"></i>
+                                                <input name="file" type="file" id="file" class="login__input">
+                                                <p id="file_err"></p>
                                             </div>
                                             <div class="make-payment-btn mt-3">
                                                 <button class="w-100 form_buttons" id="addPaymentBtn">Add Payment &nbsp;<i class="fas fa-wallet"></i></button>
